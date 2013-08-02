@@ -1,27 +1,26 @@
 <!DOCTYPE html>
 <html ng-app="powiadamiacz" >
-
 <head>
     <title>Powiadomienia</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="css/bootstrap.css" rel="stylesheet" media="screen">
-    <script src="js/libs/angular.js"></script>
-    <script src="js/controllers.js"></script>
-    <script src="js/app.js"></script>
 </head>
-
 <body>
-<script src="js/libs/bootstrap.js"></script>
 
-
-<div class="navbar" style="background-color: #bce8f1; color: #000000">
+<div class="navbar">
     <ul class="nav navbar-nav" >
-        <li  class="active"><a href="index.html">Powiadomienia</a></li>
-        <li><a href="partials/page1.html">Link1</a></li>
-        <li><a href="partials/page2.html">Link2</a></li>
+        <li><a href="#">Powiadomienia</a></li>
+        <li><a href="#/page1">Link1</a></li>
+        <li><a href="#/page2">Link2</a></li>
     </ul>
  </div>
 
 <div ng-view></div>
 
+<script src="js/libs/jquery/jquery-2.0.3.js"></script>
+<script src="js/libs/bootstrap.js"></script>
+<script src="js/libs/angular.js"></script>
+<script src="js/controllers.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>

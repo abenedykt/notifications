@@ -17,3 +17,7 @@ $scope.messages = [
      "message" : "Nic"}
 ]
 }
+
+function DefaultCtrl($scope) {
+
+}

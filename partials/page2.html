@@ -1,34 +1,8 @@
-<!DOCTYPE html>
-<html ng-app>
-<head>
-    <title>Page 2</title>
-    <link href="../css/bootstrap.css" rel="stylesheet" media="screen">
-    <script src="../js/libs/angular.js"></script>
-    <script src="../js/controllers.js"></script>
-    <script src="../js/libs/bootstrap.js"></script>
-</head>
-<body ng-controller="MessageListCtrl">
-
-<!-- menu -->
-<div class="navbar" style="background-color: #bce8f1; color: #000000">
-    <ul class="nav navbar-nav" >
-        <li ><a href="../index.html">Powiadomienia</a></li>
-        <li ><a href="page1.html">Link1</a></li>
-        <li class="active"><a href="page2.html">Link2</a></li>
-    </ul>
-</div>
-
-
-<!-- wyswietlanie -->
-<div >
-    <ul ng-repeat="m in messages">
+<div ng-controller="MessageListCtrl">
+<ul ng-repeat="m in messages">
               <div class="alert alert-success" style="width: 500px;">
             <strong>{{m.name}} </strong>
             <p>{{m.message}}</p>
               </div>
     </ul>
 </div>
-
-
-</body>
-</html>
