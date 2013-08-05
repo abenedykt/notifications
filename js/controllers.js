@@ -19,5 +19,17 @@ $scope.messages = [
 }
 
 function DefaultCtrl($scope) {
-
 }
+
+function ChatCtrl($scope){
+    $scope.user = {};
+    $scope.users = [{ name:"John", text:"Hello!"}]
+    $scope.add = function () {
+
+        $scope.users.push($scope.user);
+        $scope.user = {"name": $scope.user.name
+        };
+    }
+}
+
+
