@@ -1,15 +1,17 @@
-﻿using MVCnotifications.Hubs;
-using MVCnotifications.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
+using BusinessLogic;
 
 namespace MVCnotifications.Controllers
 {
     public class HomeController : Controller
     {
+        private Factory _factory;
+
+        public HomeController()
+        {
+            _factory = new Factory();
+        }
+
         public ActionResult Index()
         {
             return View();

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Web;
-using Microsoft.AspNet.SignalR;
-using System.Threading;
+﻿using Microsoft.AspNet.SignalR;
 
-namespace MVCnotifications
+namespace MVCnotifications.Hubs
 {
     public class ChatHub : Hub
     {
