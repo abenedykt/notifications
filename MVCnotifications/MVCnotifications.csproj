@@ -470,9 +470,9 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Scripts\jquery\jquery-1.9.1.min.map" />
-    <Content Include="Views\Home\Page1.cshtml" />
-    <Content Include="Views\Home\Page2.cshtml" />
-    <Content Include="Views\Home\Default.cshtml" />
+    <Content Include="Views\Home\Powiadomienia.cshtml" />
+    <Content Include="Views\Home\Logowanie.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -485,9 +485,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_Layout.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj">

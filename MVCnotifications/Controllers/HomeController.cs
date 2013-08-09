@@ -1,36 +1,32 @@
 ﻿using System.Web.Mvc;
-using BusinessLogic;
+//using BusinessLogic;
 
 namespace MVCnotifications.Controllers
 {
     public class HomeController : Controller
     {
-        private Factory _factory;
+        //private Factory _factory;
 
-        public HomeController()
-        {
-            _factory = new Factory();
-        }
+        //public HomeController()
+        //{
+        //    _factory = new Factory();
+        //}
 
         public ActionResult Index()
         {
             return View();
         }
 
-          public ActionResult Default()
+          public ActionResult Logowanie()
         {
             return PartialView();
         }
 
-        public ActionResult Page1()
+        public ActionResult Powiadomienia()
         {
             return PartialView();
         }
 
-        public ActionResult Page2()
-        {
-            return PartialView();
-        }
     }
     
 }

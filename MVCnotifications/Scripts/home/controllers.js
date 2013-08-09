@@ -1,84 +1,16 @@
-function DefaultCtrl($scope) {
-
-    var notice = $.connection.noticeHub;
-
-    notice.client.addNewMessageToPage = function (name, message) {
-        var encodedName = $('<div />').text(name).html();
-        var encodedMsg = $('<div />').text(message).html();
-
-        $('#broadcasting').append('<h4 class="list-group-item-heading">' + encodedName
-            + '</h4><p class="list-group-item-text"> ' + encodedMsg + '</p>');
-
-        if (navigator.userAgent.indexOf("Chrome") > -1) {
-            if (window.webkitNotifications.checkPermission() == 0) {
-                window.webkitNotifications.createNotification(null, encodedName, encodedMsg).show();
-            }
-            else {
-                window.webkitNotifications.requestPermission();
-            }
-        }
-        else {
-            $.pnotify({
-                title: encodedName,
-                text: encodedMsg,
-                hide: false,
-                sticker: false
-            });
-        }
-    }
-
-
-    $.connection.hub.start().done(function () {
-        notice.server.send(); 
-    });  
-    
-}
-
-
-
-
-
-function MessageListCtrl($scope) {
+function LogCtrl($scope) {
  
-   $scope.send = function () {
-
-        if (navigator.userAgent.indexOf("Chrome") > -1) {
-            if (window.webkitNotifications.checkPermission() == 0) {
-                window.webkitNotifications.createNotification(null, 'Powiadomienie!', 'Masz nowa wiadomosc- dokument zostal zatwierdzony/odrzucony').show();
-            }
-            else {
-                window.webkitNotifications.requestPermission();
-            }
-        }
-        else {
-            $.pnotify({
-                title: 'Powiadomienie!',
-                text: 'Masz nowa wiadomosc- dokument zostal zatwierdzony/odrzucony',
-                hide: false,
-                sticker: false        
-            });
-        }
+   $scope.login = function () {
+       userId = $scope.user.id;
+       userName = $scope.user.name;
     }
 }
 
-function ChatCtrl($scope) {
+var userId;
+var userName;
 
-    var chat = $.connection.chatHub;
-    
-    chat.client.addNewMessageToPage = function (name, message) {
-        var encodedName = $('<div />').text(name).html();
-        var encodedMsg = $('<div />').text(message).html();
-        $('#discussion').append('<h4 class="list-group-item-heading">' + encodedName
-            + '</h4><p class="list-group-item-text"> ' + encodedMsg + '</p>');     
-    }
-    
-    $.connection.hub.start().done(function () {
-        $scope.add = function () {
-            chat.server.send($scope.user.name, $scope.user.text);
-            $('#message').val('');
-        }
-    });
-    
+function NoticeCtrl($scope) {
+
+    $scope.id = userId;
+    $scope.name = userName;
 }
-
-
