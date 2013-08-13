@@ -6,7 +6,7 @@ namespace UnitTests
     {
         public IDataRepository GetDataRepository()
         {
-            return new InMemmoryRepository();
+            return new SQLRepository();
         }
     }
 }
