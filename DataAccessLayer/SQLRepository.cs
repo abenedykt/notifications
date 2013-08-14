@@ -8,10 +8,28 @@ namespace DataAccessLayer
         ContextNotifications context = new ContextNotifications();
 
 
+        public List<Employee> getLogin()
+        {
+            var result = (from item in context.Employees
+                          where item.IfLogin == true
+                          select item).ToList();
+            return result;
+
+        }
+
+
+
         public void addNotification(Notification notification)
         {
             using(context)
             {
+                var result = (from item in context.Employees
+                              where item.EmployeeId == notification.SenderId 
+                              select item).FirstOrDefault();
+
+
+                notification.Sender = result;
+
                 context.Notifications.Add(notification);
                 context.SaveChanges();
 
@@ -31,10 +49,9 @@ namespace DataAccessLayer
         {
             using (context)
             {
-                var result = (from item in context.ReceiversOfNotification
-                              join note in context.Notifications on item.ReceiveNotificationId equals note.NotificationId
-                              where item.ReceiverId == ReceiverId
-                              select note).ToList();
+               var result = (from item in context.Employees
+                              where item.EmployeeId == ReceiverId
+                              select item.ReceiveNotification).FirstOrDefault();
                 return result;
             }  
         }

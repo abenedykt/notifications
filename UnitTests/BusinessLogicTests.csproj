@@ -67,7 +67,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Fakes Include="Fakes\NSubstitute.fakes" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

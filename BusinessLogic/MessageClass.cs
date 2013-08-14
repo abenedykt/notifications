@@ -22,7 +22,7 @@ namespace BusinessLogic
         public void addMessage()
         {
             var factory = new Factory();
-            factory.addMessage(this);
+            //factory.addMessage(this);
         }
 
 
