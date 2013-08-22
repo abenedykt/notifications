@@ -61,6 +61,7 @@
     <Compile Include="SqlEmployee.cs" />
     <Compile Include="SqlMessage.cs" />
     <Compile Include="SqlNotification.cs" />
+    <Compile Include="SqlReceiversOfNotification.cs" />
     <Compile Include="SQLRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

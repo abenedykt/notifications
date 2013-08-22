@@ -18,7 +18,7 @@ namespace Notifications.Mvc.Tests
             controller.Example();
 
             //assert
-            application.ReceivedWithAnyArgs().BrodcastNotification("Hello",new []{1,2,4});
+            application.ReceivedWithAnyArgs().BrodcastNotification("Hello",new []{1,2,4}, 2);
         }
     }
 }

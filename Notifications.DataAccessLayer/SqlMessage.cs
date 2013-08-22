@@ -4,13 +4,6 @@ namespace Notifications.DataAccessLayer
 {
     public class SqlMessage
     {
-        public SqlMessage()
-        {
-            Date = DateTime.Now;
-            Sender = new SqlEmployee();
-            Receiver = new SqlEmployee();
-        }
-
         public int MessageId { get; set; }
         public DateTime Date { get; set; }
         public string Content { get; set; }

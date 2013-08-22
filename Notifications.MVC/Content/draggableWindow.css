@@ -1,2 +1,51 @@
-﻿body {
+﻿
+.draggable
+{
+    position: absolute;
+    border: #5f9482 solid 1px !important;
+    width: 250px;
 }
+
+    .draggable .header
+    {
+        cursor: move;
+        background-color: #d7e5e4;
+        border-bottom: #5f9482 solid 1px;
+        color: #1e4638;
+    }
+
+    .draggable .selText
+    {
+        color: black;
+        padding: 4px;
+    }
+
+    .draggable .messageArea
+    {
+        width: 250px;
+        overflow-y: scroll;
+        height: 200px;
+        border-bottom: #5f9482 solid 1px;
+    }
+
+        .draggable .messageArea .message
+        {
+            padding: 4px;
+        }
+
+    .draggable .buttonBar
+    {
+        width: 250px;
+       padding:4px;
+    }
+
+        .draggable .buttonBar .msgText
+        {
+            width: 172px;
+        }
+
+        .draggable .buttonBar .button
+        {
+           margin-left:4px;
+            width: 55px;
+        }

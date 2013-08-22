@@ -5,6 +5,12 @@ namespace Notifications.DataAccessLayer
 {
     public class SqlNotification
     {
+        public SqlNotification()
+        {
+
+            Receivers = new List<SqlReceiversOfNotification>();
+
+        }
         public int NotificationId { get; set; }
         public DateTime Date { get; set; }
         public string Content { get; set; }
@@ -12,6 +18,6 @@ namespace Notifications.DataAccessLayer
         public SqlEmployee Sender { get; set; }
         public int SenderId { get; set; }
 
-        public virtual List<SqlEmployee> Receivers { get; set; }
+        public List<SqlReceiversOfNotification> Receivers { get; set; }
     }
 }

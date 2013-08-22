@@ -15,7 +15,7 @@ namespace Notifications.BusiessLogic
         public string Content { get; set; }
         public DateTime Date { get; set; }
         public int SenderId { get; set; }
-        public int RecepientId { get; set; }
+        public int ReceiverId { get; set; }
     }
 
 

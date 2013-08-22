@@ -19,7 +19,7 @@ namespace Notifications.Mvc.Controllers
 
         public ActionResult Example()
         {
-            _application.BrodcastNotification("hello",new []{1,2,3,4,5});
+            _application.BrodcastNotification("hello",new []{1,2,3,4,5}, 2);
             return View("Index");
         }
 
@@ -30,6 +30,7 @@ namespace Notifications.Mvc.Controllers
 
         public ActionResult Powiadomienia()
         {
+
             return PartialView();
         }
 

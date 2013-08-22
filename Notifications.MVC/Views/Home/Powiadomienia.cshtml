@@ -1,46 +1,43 @@
-﻿<h1><center> Powiadomienia </center> </h1>        
-
-<div class="container" >
-            <div class="row">
-               
-                    <div class="span3">
-                        <h3>Dostępni użytkownicy</h3>
-
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <input type="checkbox" />Emil <br />
-                                <input type="checkbox" />Kamila <br />
-                                <input type="checkbox" />Anna <br />
-                                <input type="checkbox" />Zygmunt <br />
-                            </span>
-                        </div>
-                    </div>
-                    <div class="span6">
-                        <h3>Wysyłanie powiadomienia</h3>
-                        <textarea class="form-control" rows="3"></textarea>
-                        <br />
-                        <button type="button" class="btn btn-default"> Wyślij</button>
-                    </div>
-                </div>
+﻿<div class="container alert alert-warning " style="margin-top:30px;">
+    <h1><center> Powiadomienia </center> </h1>
+    <br />
+    <center><p> Witaj, <strong>{{name}}</strong>. Na tej stronie możesz wysyłać powiadomienia do zalogowanych uzytkowników.</p></center>
+    <br />
 </div>
-          
-<div style="height: 100px;"></div>
-
-<div class="container">
-    <div class="row">
-        <div class="span6">
-            <h3>Historia otrzymanych powiadomień</h3>
-            <ul id="receivedNotice"></ul>
-        </div>
-        <div class="span6">
-            <h3>Historia wysłanych powiadomień</h3>
-            <ul id="sendNotice"></ul>
+  
+<div id="divDraggable">
+    <div class="container alert alert-warning ">
+        <div class="row">
+            <div class="span4">
+                <h3>Dostępni użytkownicy</h3>
+                <br />
+                <div id="ActiveUsersNotification" class="input-group"> </div>
+            </div>
+            <div class="span8">
+                <h3>Wysyłanie powiadomienia</h3>
+                <textarea id="txtNotification" class="form-control" rows="5"></textarea>
+                <br />
+                <button type="button" class="btn btn-warning" ng-click="sendNotification()"> Wyślij</button>
+            </div>
         </div>
     </div>
-
-    <div style="position: fixed; right: 20px; bottom: 0; ">
-
-        <button class="btn btn-success" type="button"> Chat(5) </button>
+    <div class="container alert alert-warning" style="min-height: 150px;">
+        <div class="row">
+            <div class="span6">
+                <h3>Historia otrzymanych powiadomień</h3>
+                <br />
+                <ul id="receivedNotifications"></ul>
+            </div>
+            <div class="span6">
+                <h3>Historia wysłanych powiadomień</h3>
+                <br />
+                <ul id="sendNotifications"></ul>
+            </div>
+        </div>
+        <div style="position: fixed; right: 10px; bottom: 0; width: 108px">
+            <ul class="label label-warning" id="ActiveUsersChat" ng-show="showChatList" style="margin: 0px; width: 100px; padding-top: 10px; padding-bottom:10px; background-color:#ccf285"></ul>
+            <button class="btn btn-success" type="button" style="width: 108px; height:30px; vertical-align: center" ng-click="showChatList= !showChatList"> <p id="paragraph"> </p> </button>
+        </div>
     </div>
-
 </div>
+

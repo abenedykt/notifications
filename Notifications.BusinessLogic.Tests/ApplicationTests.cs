@@ -14,7 +14,7 @@ namespace Notifications.BusiessLogic.Tests
             var application = new Application(repository);
             
             //act
-            application.BrodcastNotification("Hello",new []{1,2,3,4,5});
+            application.BrodcastNotification("Hello",new []{1,2,3,4,5}, 2);
 
             //assert
 
@@ -57,7 +57,7 @@ namespace Notifications.BusiessLogic.Tests
             //    ReceiverId = 5,
             //    SenderId = 1
             //});
-            //w repozytorium powinny się pojawić powiadomienia dla kazdego z odbiotrców
+            //w repozytorium powinny się pojawić powiadomienia dla kazdego z odbiorców
         }
     }
 

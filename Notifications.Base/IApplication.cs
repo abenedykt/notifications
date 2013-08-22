@@ -2,6 +2,6 @@
 {
     public interface IApplication
     {
-        void BrodcastNotification(string text, int[] recipientsIDs);
+        void BrodcastNotification(string text, int[] recipientsIDs, int senderID);
     }
 }

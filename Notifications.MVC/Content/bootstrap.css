@@ -8,6 +8,7 @@
  * Designed and built with all the love in the world @twitter by @mdo and @fat.
  */
 
+
 .clearfix {
   *zoom: 1;
 }
@@ -231,14 +232,14 @@ body {
 }
 
 a {
-  color: #0088cc;
+  color: #000000;
   text-decoration: none;
 }
 
 a:hover,
 a:focus {
-  color: #005580;
-  text-decoration: underline;
+  color: #FFFFFF;
+  
 }
 
 .img-rounded {
