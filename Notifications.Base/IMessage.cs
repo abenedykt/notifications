@@ -6,7 +6,8 @@ namespace Notifications.Base
     {
         string Content { get; set; }
         DateTime Date { get; set; }
-        int SenderId { get; set; }
+        int SenderId { get; set; }     
         int ReceiverId { get; set; }
+        
     }
 }

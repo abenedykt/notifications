@@ -8,29 +8,13 @@ namespace Notifications.DataAccessLayer
 {
     public class SqlRepository : IDataRepository
     {
-        readonly ContextNotifications _context = new ContextNotifications();
-
-
-        public List<IEmployee> GetLogin()
-        {
-            var LoginEmployees = (from item in _context.Employees
-                where item.IfLogin
-                select new Employee
-                {
-
-                }).Cast<IEmployee>().ToList();
-            return LoginEmployees;
-
-        }
-
+        ContextNotifications2 _context = new ContextNotifications2();
 
 
         public void AddNotification(INotification notification)
-        {
-            
+        {           
                 var sender = _context.Employees.Find(notification.SenderId);
-                    
-                 
+                   
                 var sqlNotification = new SqlNotification
                 {
                     Sender = sender,
@@ -44,7 +28,13 @@ namespace Notifications.DataAccessLayer
                 foreach (var i in notification.ReceiversIds)
                 {
                     var receiver = _context.Employees.Find(i);
-                    SqlReceiversOfNotification receiverOfNotification = new SqlReceiversOfNotification { Receiver = receiver, ReceivingNotification = sqlNotification};
+
+                    SqlReceiversOfNotification receiverOfNotification = new SqlReceiversOfNotification
+                    {
+                        Receiver = receiver,
+                        ReceivingNotification = sqlNotification
+                    };
+
                     sqlNotification.Receivers.Add(receiverOfNotification);
                     _context.ReceiversOfNotifications.Add(receiverOfNotification);
                     _context.SaveChanges();
@@ -56,20 +46,24 @@ namespace Notifications.DataAccessLayer
 
         public void AddMessage(IMessage message)
         {
-            
-                var sender = _context.Employees.Find(message.SenderId);
-                var recepient = _context.Employees.Find(message.ReceiverId);
+            var sender = _context.Employees.Find(1);
+            var recepient = _context.Employees.Find(2);
 
-                _context.Messages.Add(new SqlMessage
-                {
-                    Content = message.Content,
-                    Date =  message.Date,
-                    Receiver = recepient,
-                    Sender = sender
-                });
-                _context.SaveChanges();
+            var sqlMessage = new SqlMessage
+            {
+                Content = message.Content,
+                Date = message.Date,
+                Receiver = recepient,
+                Sender = sender
+            };
+
+            _context.Messages.Add(sqlMessage);
+            _context.SaveChanges();
             
         }
+
+
+
 
         public List<INotification> GetReceiveNotifications(int receiverId)
         {
@@ -108,7 +102,10 @@ namespace Notifications.DataAccessLayer
                               where ((item.SenderId == employeeId1 && item.ReceiverId == employeeId2) ||( item.SenderId == employeeId2 && item.ReceiverId == employeeId1))
                               select new Message
                               {
-                                  
+                                  //Content = item.Content,
+                                  //Date = item.Date,
+                                  //SenderId = item.SenderId,
+                                  //ReceiverId = item.ReceiverId                            
                               }).Cast<IMessage>().ToList();
                 return result;
              

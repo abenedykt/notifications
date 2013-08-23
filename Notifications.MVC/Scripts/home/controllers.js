@@ -2,11 +2,13 @@ function LogCtrl($scope) {
  
    $scope.login = function () {
        userName = $scope.user.name;
+       userId = $scope.user.id;
     }
 }
 
 var userName;
 var ActiveUsersCount;
+var userId;
 
 function NoticeCtrl($scope) {
 
@@ -19,7 +21,7 @@ function NoticeCtrl($scope) {
 
     $.connection.hub.start().done(function () {
 
-        chatHub.server.connect(userName);    
+        chatHub.server.connect(userName, userId);    
 
         $scope.sendNotification = function () {
             var users = [];
@@ -38,12 +40,14 @@ function NoticeCtrl($scope) {
 
     
 function registerClientMethods(chatHub) {
-   
+
+    //count of active users
     chatHub.client.onlineUsers = function (count) {
 
-        $("#paragraph").text('Chat('+ count +')');
+        $("#counter").text('Chat('+ count +')');
     };
 
+    //send notification 
     chatHub.client.sendNotificationBroadcast = function (notification, name) {
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             if (window.webkitNotifications.checkPermission() == 0) {
@@ -75,7 +79,7 @@ function registerClientMethods(chatHub) {
 
         for (i = 0; i < allUsers.length; i++) {
 
-            AddUser(chatHub, allUsers[i].ConnectionId, allUsers[i].UserName, id);
+            AddUser(chatHub, allUsers[i].ConnectionId, allUsers[i].Name, id);
         }
     }
 
@@ -88,12 +92,14 @@ function registerClientMethods(chatHub) {
         $('#' + ctrId).remove();
     }
 
-    chatHub.client.sendPrivateMessage = function (toUserId, fromName, message) {
+
+    //send message
+    chatHub.client.sendPrivateMessage = function (toUserId, fromName, message, time) {
 
         var windowId = 'private_' + toUserId;
         if ($('#' + windowId).length == 0) createPrivateChatWindow(chatHub, toUserId, windowId, fromName);
-        var time = new Date();
-        $('#' + windowId).find('#divMessage').append('<div><strong>' + fromName + '</strong>(' + time.toLocaleTimeString() + '): ' + message + '</div>');
+        
+        $('#' + windowId).find('#divMessage').append('<div class="message"><strong>' + fromName + '</strong>(' + time + '): ' + message + '</div>');
 
         // set scrollbar
         var height = $('#' + windowId).find('#divMessage')[0].scrollHeight;
@@ -101,6 +107,8 @@ function registerClientMethods(chatHub) {
     }
 }
    
+
+//add div with user to active users for notification and chat
     function AddUser(chatHub, id, name, actualId) {
         var userChat = "";
         var userNotification = "";
@@ -119,6 +127,8 @@ function registerClientMethods(chatHub) {
         $("#ActiveUsersNotification").append(userNotification);
     }
 
+
+//create new window if don't create
     function OpenPrivateChatWindow(chatHub, id, name) {
 
         var windowId = 'private_' + id;
@@ -127,9 +137,10 @@ function registerClientMethods(chatHub) {
 
     }
 
+//create window for chat between two person
     function createPrivateChatWindow(chatHub, id, windowId, name) {
 
-        var div = '<div id="' + windowId + '" class="ui-widget-content draggable" rel="0">' +
+        var div = '<div id="' + windowId + '" class="ui-widget-content draggable label label-warning" rel="0">' +
                    '<div class="header">' +
                       '<div  style="float:right;">' +
                           '<img id="imgDelete"  style="cursor:pointer;" src="/Content/jqueryUI/delete.png"/>' +
@@ -141,12 +152,14 @@ function registerClientMethods(chatHub) {
 
                    '</div>' +
                    '<div class="buttonBar">' +
-                      '<input id="txtPrivateMessage" class="msgText" type="text"   />' +
-                      '<input id="btnSendMessage" class="submitButton button" type="button" value="Send"   />' +
+                      '<input id="txtPrivateMessage" class="msgText form-control" type="text"   />' +
+                      '<input id="btnSendMessage" class="submitButton button btn btn-warning" type="button" value="Send"   />' +
                    '</div>' +
                 '</div>';
 
         var $div = $(div);
+
+       
 
         // DELETE BUTTON IMAGE
         $div.find('#imgDelete').click(function () {

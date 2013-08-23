@@ -2,12 +2,15 @@
 using System.Web.Mvc;
 using System.Web.Routing;
 using Autofac;
-using Autofac.Integration.Mvc;
-using Autofac.Integration.WebApi;
+//using Autofac.Integration.Mvc;
+//using Autofac.Integration.WebApi;
+using Autofac.Integration.SignalR;
 using Notifications.Base;
 using Notifications.BusiessLogic;
 using Notifications.DataAccessLayer;
 using Notifications.Mvc.App_Start;
+using System.Reflection;
+using Microsoft.AspNet.SignalR;
 
 namespace Notifications.Mvc
 {
@@ -29,15 +32,23 @@ namespace Notifications.Mvc
         private static void AutofacConfiguration()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterControllers(typeof(MvcApplication).Assembly);
-            builder.RegisterApiControllers(typeof(MvcApplication).Assembly);
-
+          
+            //builder.RegisterControllers(typeof(MvcApplication).Assembly);
+           //builder.RegisterApiControllers(typeof(MvcApplication).Assembly);
+            builder.RegisterHubs(Assembly.GetExecutingAssembly());
+           
             builder.RegisterType<SqlRepository>().As<IDataRepository>();
             builder.RegisterType<Application>().As<IApplication>();
 
+            //var container = builder.Build();
+            //DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+            //GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+
             var container = builder.Build();
-            DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
-            GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+            var resolver = new AutofacDependencyResolver(container);
+            GlobalHost.DependencyResolver = resolver;
+
+
         }
     }
 

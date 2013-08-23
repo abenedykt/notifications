@@ -1,25 +1,32 @@
 ﻿using Microsoft.AspNet.SignalR;
-using Notifications.Mvc.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using Notifications.BusiessLogic;
+using Notifications.Base;
+using System.Web.Mvc;
 
 namespace Notifications.Mvc.Hubs
 {
     public class ChatHub : Hub
     {
-        static List<UserDetail> ConnectedUsers = new List<UserDetail>();
-       // static List<MessageDetail> CurrentMessage = new List<MessageDetail>();
+        private readonly IApplication _application;
+        public ChatHub(IApplication application)
+        {
+            _application = application;
+        }
 
-        public void Connect(string userName)
+        static List<Employee> ConnectedUsers = new List<Employee>();
+
+        public void Connect(string userName, int userId)
         {
             var id = Context.ConnectionId;
 
             if (ConnectedUsers.Count(x => x.ConnectionId == id) == 0)
             {
-                ConnectedUsers.Add(new UserDetail { ConnectionId = id, UserName = userName });
+                ConnectedUsers.Add(new Employee { ConnectionId = id, Name = userName, EmployeeId= userId });
 
                 // send list of active person to caller
                 Clients.Caller.onConnected(id, userName, ConnectedUsers);
@@ -40,7 +47,7 @@ namespace Notifications.Mvc.Hubs
                 ConnectedUsers.Remove(item);
 
                 var id = Context.ConnectionId;
-                Clients.All.onUserDisconnected(id, item.UserName);
+                Clients.All.onUserDisconnected(id, item.Name);
             }
 
             //send actual number of available users
@@ -51,32 +58,40 @@ namespace Notifications.Mvc.Hubs
 
         public void SendPrivateMessage(string toUserId, string message)
         {
-
             string fromUserId = Context.ConnectionId;
 
             var toUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == toUserId);
             var fromUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == fromUserId);
 
+            DateTime date = DateTime.Now;
+
             if (toUser != null && fromUser != null)
             {
                 // send to 
-                Clients.Client(toUserId).sendPrivateMessage(fromUserId, fromUser.UserName, message);
+                Clients.Client(toUserId).sendPrivateMessage(fromUserId, fromUser.Name, message, date.ToLongTimeString());
 
                 // send to caller user
-                Clients.Caller.sendPrivateMessage(toUserId, fromUser.UserName, message);
+                Clients.Caller.sendPrivateMessage(toUserId, fromUser.Name, message, date.ToLongTimeString());
+
+
+                //_application.SendMessage(message, fromUser.EmployeeId, toUser.EmployeeId, date);
+
+
             }
         }
  
         public async Task Broadcasting(string[] users, string notification, string userName)
         {
+            
             foreach (var item in users) 
-                await this.Groups.Add(item, "grupa"); 
-         
+                await this.Groups.Add(item, "grupa");  
+     
             await Clients.Group("grupa").sendNotificationBroadcast(notification, userName);
 
             foreach (var item in users) 
                 await   this.Groups.Remove(item, "grupa");  
-        }      
+        }
 
+     
     }
 }

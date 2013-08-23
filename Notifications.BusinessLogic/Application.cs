@@ -1,5 +1,6 @@
 ﻿using Notifications.Base;
 using System;
+using System.Collections.Generic;
 
 namespace Notifications.BusiessLogic
 {
@@ -12,18 +13,36 @@ namespace Notifications.BusiessLogic
             _repository = repository;
         }
 
-        public void BrodcastNotification(string text, int[] recipientsIDs, int senderID)
+        public void BrodcastNotification(string content, int senderId, List<int> recipientsIds, DateTime date)
         {
 
             INotification notification = new Notification(){ 
-                Content= text, 
-                Date= DateTime.Now, 
-                SenderId= senderID, 
-                ReceiversIds= recipientsIDs
+                Content= content, 
+                Date= date, 
+                SenderId= senderId, 
+                ReceiversIds= recipientsIds
             };
            
             _repository.AddNotification(notification);
 
+        }
+
+        public void SendMessage(string content, int senderId, int receiverId, DateTime date)
+        {
+            IMessage message = new Message()
+            {
+                Content = content,
+                SenderId = senderId,
+                ReceiverId = receiverId,
+                Date = date
+            };
+            _repository.AddMessage(message);
+
+        }
+
+        public List<IMessage> GetMessages(int employeeId1, int employeeId2)
+        {
+            return _repository.GetMessages(employeeId1, employeeId2);
         }
     }
 }

@@ -4,6 +4,6 @@
     {
         int EmployeeId { get; set; }
         string Name { get; set; }
-        bool IfLogin { get; set; }
+        string ConnectionId { get; set; }
     }
 }

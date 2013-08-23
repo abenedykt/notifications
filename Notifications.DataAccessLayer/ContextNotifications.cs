@@ -2,7 +2,7 @@
 
 namespace Notifications.DataAccessLayer
 {
-    public class ContextNotifications : DbContext
+    public class ContextNotifications2 : DbContext
     {
         public DbSet<SqlEmployee> Employees { get; set; }
         public DbSet<SqlNotification> Notifications { get; set; }

@@ -8,7 +8,11 @@ namespace Notifications.BusiessLogic
     
     public class Notification : INotification
     {
-        public List<int> ReceiversId;
+
+        public int SenderId { get; set; }
+        public DateTime Date { get; set; }
+        public string Content { get; set; }
+        public List<int> ReceiversIds { get; set; }
 
   
         public void AddNotification(DateTime date,int senderId,string content, List<int> receiversId)
@@ -16,17 +20,13 @@ namespace Notifications.BusiessLogic
             Date = date;
             SenderId = senderId;
             Content = content;
-            ReceiversId = receiversId;
+            ReceiversIds = receiversId;
 
             var factory = new Factory();
             factory.AddNotification(this);
         }
 
 
-        public int SenderId { get; set; }
-        public DateTime Date { get; set; }
-        public string Content { get; set; }
-        public int[] ReceiversIds { get; set; }
     }
 
 
