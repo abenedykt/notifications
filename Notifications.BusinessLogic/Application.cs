@@ -6,24 +6,23 @@ namespace Notifications.BusiessLogic
 {
     public class Application : IApplication
     {
-        private IDataRepository _repository;
+        private IFactory _factory;
 
-        public Application(IDataRepository repository)
+        public Application(IFactory factory)
         {
-            _repository = repository;
+            _factory = factory;
         }
 
-        public void BrodcastNotification(string content, int senderId, List<int> recipientsIds, DateTime date)
+        public void BrodcastNotification(string content, int senderId, List<int> receiversIds, DateTime date)
         {
-
             INotification notification = new Notification(){ 
                 Content= content, 
                 Date= date, 
-                SenderId= senderId, 
-                ReceiversIds= recipientsIds
+                SenderId= senderId,
+                ReceiversIds = receiversIds
             };
            
-            _repository.AddNotification(notification);
+            _factory.AddNotification(notification);
 
         }
 
@@ -36,13 +35,28 @@ namespace Notifications.BusiessLogic
                 ReceiverId = receiverId,
                 Date = date
             };
-            _repository.AddMessage(message);
 
+            _factory.AddMessage(message);
+
+        }
+
+
+        public List<INotification> GetReceiveNotifications(int employeeId)
+        {
+            return _factory.GetReceiveNotifications(employeeId);
+        }
+        public List<INotification> GetSendNotifications(int employeeId)
+        {
+            return _factory.GetSendNotifications(employeeId);
         }
 
         public List<IMessage> GetMessages(int employeeId1, int employeeId2)
         {
-            return _repository.GetMessages(employeeId1, employeeId2);
+            return _factory.GetMessages(employeeId1, employeeId2);
         }
+
+
+
+
     }
 }

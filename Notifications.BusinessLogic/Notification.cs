@@ -15,16 +15,16 @@ namespace Notifications.BusiessLogic
         public List<int> ReceiversIds { get; set; }
 
   
-        public void AddNotification(DateTime date,int senderId,string content, List<int> receiversId)
-        {
-            Date = date;
-            SenderId = senderId;
-            Content = content;
-            ReceiversIds = receiversId;
+        //public void AddNotification(DateTime date,int senderId,string content, List<int> receiversId)
+        //{
+        //    Date = date;
+        //    SenderId = senderId;
+        //    Content = content;
+        //    ReceiversIds = receiversId;
 
-            var factory = new Factory();
-            factory.AddNotification(this);
-        }
+        //    var factory = new Factory();
+        //    factory.AddNotification(this);
+        //}
 
 
     }

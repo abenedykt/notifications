@@ -39,7 +39,7 @@ namespace Notifications.Mvc
            
             builder.RegisterType<SqlRepository>().As<IDataRepository>();
             builder.RegisterType<Application>().As<IApplication>();
-
+            builder.RegisterType<Factory>().As<IFactory>();
             //var container = builder.Build();
             //DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
             //GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);

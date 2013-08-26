@@ -1,9 +1,16 @@
 ﻿using System.Data.Entity;
+using System.Diagnostics;
 
 namespace Notifications.DataAccessLayer
 {
-    public class ContextNotifications2 : DbContext
+    public class ContextNotifications : DbContext
     {
+        public ContextNotifications() :base("Data Source=(localdb)\\v11.0;Initial Catalog=Notifications.DataAccessLayer.ContextNotifications;Integrated Security=True;MultipleActiveResultSets=True;")
+        {
+
+        }
+       
+        
         public DbSet<SqlEmployee> Employees { get; set; }
         public DbSet<SqlNotification> Notifications { get; set; }
         public DbSet<SqlMessage> Messages { get; set; }

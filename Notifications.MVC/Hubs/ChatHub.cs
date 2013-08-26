@@ -26,16 +26,19 @@ namespace Notifications.Mvc.Hubs
 
             if (ConnectedUsers.Count(x => x.ConnectionId == id) == 0)
             {
-                ConnectedUsers.Add(new Employee { ConnectionId = id, Name = userName, EmployeeId= userId });
+                ConnectedUsers.Add(new Employee { ConnectionId = id, Name = userName, EmployeeId = userId });
 
                 // send list of active person to caller
                 Clients.Caller.onConnected(id, userName, ConnectedUsers);
 
                 // send to all except caller client
                 Clients.AllExcept(id).onNewUserConnected(id, userName);
-             
+
                 //send actual number of available users
-                Clients.All.onlineUsers(ConnectedUsers.Count-1);
+                Clients.All.onlineUsers(ConnectedUsers.Count - 1);
+
+
+               
             }
         }
 
@@ -52,7 +55,7 @@ namespace Notifications.Mvc.Hubs
 
             //send actual number of available users
             Clients.All.onlineUsers(ConnectedUsers.Count - 1);
-            
+
             return base.OnDisconnected();
         }
 
@@ -74,24 +77,34 @@ namespace Notifications.Mvc.Hubs
                 Clients.Caller.sendPrivateMessage(toUserId, fromUser.Name, message, date.ToLongTimeString());
 
 
-                //_application.SendMessage(message, fromUser.EmployeeId, toUser.EmployeeId, date);
-
-
+                _application.SendMessage(message, fromUser.EmployeeId, toUser.EmployeeId, date);
             }
         }
- 
+
         public async Task Broadcasting(string[] users, string notification, string userName)
         {
-            
-            foreach (var item in users) 
-                await this.Groups.Add(item, "grupa");  
-     
+            string fromUserId = Context.ConnectionId;
+            var fromUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == fromUserId);
+
+            DateTime date = DateTime.Now;
+
+            var receivers = new List<int>();
+
+            foreach (var item in users)
+            {
+                await this.Groups.Add(item, "grupa");
+
+                var toUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == item);
+                receivers.Add(toUser.EmployeeId);
+            }
+
             await Clients.Group("grupa").sendNotificationBroadcast(notification, userName);
 
-            foreach (var item in users) 
-                await   this.Groups.Remove(item, "grupa");  
+            _application.BrodcastNotification(notification, fromUser.EmployeeId, receivers, date);
+
+            foreach (var item in users)
+                await this.Groups.Remove(item, "grupa");
         }
 
-     
     }
 }
