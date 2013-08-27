@@ -17,7 +17,7 @@ namespace Notifications.BusiessLogic.Tests
             //arrange
             var factory = Substitute.For<IFactory>();
             var application = new Application(factory);
-            
+
             //act
             application.BrodcastNotification(content, senderId, receiversIds, date);
 
@@ -54,6 +54,7 @@ namespace Notifications.BusiessLogic.Tests
             });
         }
 
+       
     }
 
 }

@@ -13,7 +13,6 @@ namespace Notifications.DataAccessLayer
     {
         ContextNotifications _context = new ContextNotifications();
 
-
         public void AddNotification(INotification notification)
         {           
                 var sender = _context.Employees.Find(notification.SenderId);
@@ -35,16 +34,16 @@ namespace Notifications.DataAccessLayer
                     SqlReceiversOfNotification receiverOfNotification = new SqlReceiversOfNotification
                     {
                         Receiver = receiver,
-                        ReceivingNotification = sqlNotification
+                        ReceiverId = receiver.EmployeeId,
+                        ReceivingNotification = sqlNotification,
+                        NotificationId = sqlNotification.NotificationId,
+                        WhenRead = DateTime.Now
                     };
 
                     sqlNotification.Receivers.Add(receiverOfNotification);
                     _context.ReceiversOfNotifications.Add(receiverOfNotification);
                     _context.SaveChanges();
-                }
-
-
-            
+                }            
         }
 
         public void AddMessage(IMessage message)
@@ -60,30 +59,51 @@ namespace Notifications.DataAccessLayer
                 Receiver = recepient,
                 Sender = sender
             };
-
             _context.Messages.Add(sqlMessage);
             _context.SaveChanges();            
         }
 
         public List<INotification> GetReceiveNotifications(int receiverId)
         {
-            var result = (from item in _context.Employees
-                          join item2 in _context.ReceiversOfNotifications on item.EmployeeId equals item2.ReceiverId
-                          where item.EmployeeId == receiverId
+            var result = (from item in _context.ReceiversOfNotifications
+                          join notes in _context.Notifications on item.NotificationId equals notes.NotificationId
+                          join employees in _context.Employees on notes.SenderId equals employees.EmployeeId
+                          where item.ReceiverId == receiverId
                           select new Notification
                           {
-                          }).Cast<INotification>().ToList();
-            return result;
-            
+                              Content = notes.Content,
+                              Date = notes.Date,    
+                              SenderName = employees.Name
+                              
+                          }).AsEnumerable().Cast<INotification>().ToList();
+            return result;      
         }
 
         public List<INotification> GetSendNotifications(int senderId)
         {
-            var result = (from item in _context.Notifications
-                          where item.SenderId == senderId
+            var result = (from notes in _context.Notifications
+                          where notes.SenderId == senderId
                           select new Notification
                           {
-                          }).Cast<INotification>().ToList();
+                              NotificationId=notes.NotificationId,
+                              Content = notes.Content,
+                              Date = notes.Date                             
+                          }).AsEnumerable().Cast<INotification>().ToList();
+
+            foreach(var notes in result)
+            {
+                notes.ReceiversNames = GetReceivers(notes.NotificationId);
+            }
+
+
+            return result;
+        }
+
+        public List<string> GetReceivers(int notesId)
+        {
+            var result = (from item in _context.ReceiversOfNotifications
+                          where item.NotificationId == notesId
+                          select item.Receiver.Name).ToList();
             return result;
 
         }
@@ -94,10 +114,13 @@ namespace Notifications.DataAccessLayer
             var result = (from item in _context.Messages
                           where ((item.SenderId == employeeId1 && item.ReceiverId == employeeId2) || (item.SenderId == employeeId2 && item.ReceiverId == employeeId1))
                           select new Message
-                          {                         
-                          }).Cast<IMessage>().ToList();
+                          {       
+                  Date= item.Date,
+                  Content = item.Content,
+                  SenderName = item.Sender.Name,
+                  ReceiverName = item.Receiver.Name
+                          }).AsEnumerable().Cast<IMessage>().ToList();
             return result;
-
         }
     }
 }

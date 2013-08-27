@@ -21,25 +21,35 @@ function NoticeCtrl($scope) {
 
     $.connection.hub.start().done(function () {
 
-        chatHub.server.connect(userName, userId);    
+        chatHub.server.connect(userName, userId);
 
         $scope.sendNotification = function () {
-            var users = [];
+            var receivers = [];
 
             $(".chk:checked").each(function () {
-                users.push($(this).val());
+                receivers.push($(this).val());
             });
 
             var message = $("#txtNotification").val();
 
-            chatHub.server.broadcasting(users, message, userName);           
+            chatHub.server.broadcasting(receivers, message, userName);
         }  
     });  
 }
 
-
     
 function registerClientMethods(chatHub) {
+
+    chatHub.client.getReceivedNotifications = function (date, sender, content) {
+
+            $('#receivedNotifications').append('<li><strong>' + date + ' r., nadawca: ' + sender + '</strong><br/>' + content +'</li>')
+        };
+
+    chatHub.client.getSendNotifications = function (date, receivers, content) {
+
+        $('#sendNotifications').append('<li><strong>' + date + ' r., odbiorcy: ' + receivers + '</strong><br/>' + content + '</li>')
+    };
+
 
     //count of active users
     chatHub.client.onlineUsers = function (count) {
@@ -52,6 +62,7 @@ function registerClientMethods(chatHub) {
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             if (window.webkitNotifications.checkPermission() == 0) {
                 window.webkitNotifications.createNotification(null, "Nowe powiadomienie od: " + name, notification).show();
+                
             }
             else {
                 window.webkitNotifications.requestPermission();
@@ -65,8 +76,16 @@ function registerClientMethods(chatHub) {
                 sticker: false
             });
         }
+      
 
     }
+
+    chatHub.client.confirmation = function(){
+        alert("Potwierdzenie zostalo wyslane");
+        $("#txtNotification").val('');
+
+    }
+
 
     // send to all except caller client
     chatHub.client.onNewUserConnected = function (id, name) {
@@ -75,7 +94,6 @@ function registerClientMethods(chatHub) {
 
     // send list of active person to caller
     chatHub.client.onConnected = function (id, name, allUsers) {
-
 
         for (i = 0; i < allUsers.length; i++) {
 
@@ -134,7 +152,6 @@ function registerClientMethods(chatHub) {
         var windowId = 'private_' + id;
         if ($('#' + windowId).length > 0) return;
         createPrivateChatWindow(chatHub, id, windowId, name);
-
     }
 
 //create window for chat between two person
@@ -145,21 +162,19 @@ function registerClientMethods(chatHub) {
                       '<div  style="float:right;">' +
                           '<img id="imgDelete"  style="cursor:pointer;" src="/Content/jqueryUI/delete.png"/>' +
                        '</div>' +
-
                        '<span class="selText" rel="0">' + name + '</span>' +
                    '</div>' +
                    '<div id="divMessage" class="messageArea">' +
-
                    '</div>' +
                    '<div class="buttonBar">' +
                       '<input id="txtPrivateMessage" class="msgText form-control" type="text"   />' +
-                      '<input id="btnSendMessage" class="submitButton button btn btn-warning" type="button" value="Send"   />' +
+                      '<input id="btnSendMessage" class="submitButton button btn btn-warning" type="button" value="Wyslij"   />' +
                    '</div>' +
                 '</div>';
 
         var $div = $(div);
 
-       
+
 
         // DELETE BUTTON IMAGE
         $div.find('#imgDelete').click(function () {
@@ -192,7 +207,6 @@ function registerClientMethods(chatHub) {
             stop: function () {
             }
         });
-
     }
 
     

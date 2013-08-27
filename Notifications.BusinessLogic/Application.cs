@@ -41,13 +41,47 @@ namespace Notifications.BusiessLogic
         }
 
 
-        public List<INotification> GetReceiveNotifications(int employeeId)
+        public string[,] GetReceiveNotifications(int employeeId)
         {
-            return _factory.GetReceiveNotifications(employeeId);
+            List<INotification> noteList = _factory.GetReceiveNotifications(employeeId);
+            string[,] notifications= new string[noteList.Count,3];
+            int i=0;
+
+            foreach (var note in noteList)
+            {
+                notifications[i, 0] = note.Date.ToLongTimeString() + ", " + note.Date.ToLongDateString();
+                notifications[i, 1] = note.SenderName;
+                notifications[i, 2] = note.Content; 
+                i++;
+            }
+
+            return notifications;
         }
-        public List<INotification> GetSendNotifications(int employeeId)
+
+        public string[,] GetSendNotifications(int employeeId)
         {
-            return _factory.GetSendNotifications(employeeId);
+            List<INotification> noteList = _factory.GetSendNotifications(employeeId);
+
+            string[,] notifications = new string[noteList.Count, 3];
+            int i = 0;
+
+            foreach (var note in noteList)
+            {
+                string receivers= "";
+                notifications[i, 0] = note.Date.ToLongTimeString() + ", " + note.Date.ToLongDateString();
+
+                if(note.ReceiversNames.Count>0)
+                    receivers = note.ReceiversNames[0];
+                for (int j = 1; j < note.ReceiversNames.Count; j++)
+                    receivers += ", " + note.ReceiversNames[j];
+
+                notifications[i, 1] = receivers;
+
+                notifications[i, 2] = note.Content;
+                i++;
+            }
+
+            return notifications;
         }
 
         public List<IMessage> GetMessages(int employeeId1, int employeeId2)

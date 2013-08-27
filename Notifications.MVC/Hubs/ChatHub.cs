@@ -38,7 +38,13 @@ namespace Notifications.Mvc.Hubs
                 Clients.All.onlineUsers(ConnectedUsers.Count - 1);
 
 
-               
+                string[,] receiveNotes = _application.GetReceiveNotifications(userId);              
+                for(int i=0; i< receiveNotes.GetLength(0); i++)
+                    Clients.Caller.getReceivedNotifications(receiveNotes[i, 0], receiveNotes[i, 1], receiveNotes[i, 2]);
+
+                string[,] sendNotes = _application.GetSendNotifications(userId);
+                for (int i = 0; i < sendNotes.GetLength(0); i++)
+                    Clients.Caller.getSendNotifications(sendNotes[i, 0], sendNotes[i, 1], sendNotes[i, 2]);
             }
         }
 
@@ -76,7 +82,6 @@ namespace Notifications.Mvc.Hubs
                 // send to caller user
                 Clients.Caller.sendPrivateMessage(toUserId, fromUser.Name, message, date.ToLongTimeString());
 
-
                 _application.SendMessage(message, fromUser.EmployeeId, toUser.EmployeeId, date);
             }
         }
@@ -89,6 +94,7 @@ namespace Notifications.Mvc.Hubs
             DateTime date = DateTime.Now;
 
             var receivers = new List<int>();
+            var receiversName = "";
 
             foreach (var item in users)
             {
@@ -96,6 +102,9 @@ namespace Notifications.Mvc.Hubs
 
                 var toUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == item);
                 receivers.Add(toUser.EmployeeId);
+
+                if (receiversName != "") receiversName += ", " + toUser.Name;
+                else receiversName = toUser.Name;
             }
 
             await Clients.Group("grupa").sendNotificationBroadcast(notification, userName);
@@ -103,7 +112,14 @@ namespace Notifications.Mvc.Hubs
             _application.BrodcastNotification(notification, fromUser.EmployeeId, receivers, date);
 
             foreach (var item in users)
+            {
+                Clients.Client(item).getReceivedNotifications(date.ToLongTimeString() + ", " + date.ToLongDateString(), receiversName, notification);
+
                 await this.Groups.Remove(item, "grupa");
+            }
+   
+               Clients.Caller.getSendNotifications(date.ToLongTimeString() + ", " + date.ToLongDateString(), userName, notification);
+               Clients.Caller.confirmation();
         }
 
     }
