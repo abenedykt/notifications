@@ -59,10 +59,15 @@ function registerClientMethods(chatHub) {
 
     //send notification 
     chatHub.client.sendNotificationBroadcast = function (notification, name) {
+        var notification;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             if (window.webkitNotifications.checkPermission() == 0) {
-                window.webkitNotifications.createNotification(null, "Nowe powiadomienie od: " + name, notification).show();
-                
+                notification = window.webkitNotifications.createNotification(null, "Nowe powiadomienie od: " + name, notification);
+                notification.show();
+                //notification.onclick = function () {
+                //    window.focus();
+                //    this.cancel();
+                //};
             }
             else {
                 window.webkitNotifications.requestPermission();
@@ -75,17 +80,19 @@ function registerClientMethods(chatHub) {
                 hide: false,
                 sticker: false
             });
+            //$.pnotify.onclick = function () {
+            //    window.focus();
+            //    this.cancel();
+            //};
         }
-      
-
     }
+
 
     chatHub.client.confirmation = function(){
         alert("Potwierdzenie zostalo wyslane");
         $("#txtNotification").val('');
 
     }
-
 
     // send to all except caller client
     chatHub.client.onNewUserConnected = function (id, name) {
@@ -124,7 +131,8 @@ function registerClientMethods(chatHub) {
         $('#' + windowId).find('#divMessage').scrollTop(height);
     }
 }
-   
+
+
 
 //add div with user to active users for notification and chat
     function AddUser(chatHub, id, name, actualId) {
@@ -172,9 +180,10 @@ function registerClientMethods(chatHub) {
                    '</div>' +
                 '</div>';
 
+        chatHub.server.getMessages(id);
+
+        
         var $div = $(div);
-
-
 
         // DELETE BUTTON IMAGE
         $div.find('#imgDelete').click(function () {

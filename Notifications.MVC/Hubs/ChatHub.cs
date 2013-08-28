@@ -38,14 +38,32 @@ namespace Notifications.Mvc.Hubs
                 Clients.All.onlineUsers(ConnectedUsers.Count - 1);
 
 
-                string[,] receiveNotes = _application.GetReceiveNotifications(userId);              
-                for(int i=0; i< receiveNotes.GetLength(0); i++)
-                    Clients.Caller.getReceivedNotifications(receiveNotes[i, 0], receiveNotes[i, 1], receiveNotes[i, 2]);
+                List<INotification> receiveNotes = _application.GetReceiveNotifications(userId);
+                foreach (var note in receiveNotes)
+                    Clients.Caller.getReceivedNotifications(note.Date.ToLongTimeString() + ", " + note.Date.ToLongDateString(), note.SenderName, note.Content);
 
-                string[,] sendNotes = _application.GetSendNotifications(userId);
-                for (int i = 0; i < sendNotes.GetLength(0); i++)
-                    Clients.Caller.getSendNotifications(sendNotes[i, 0], sendNotes[i, 1], sendNotes[i, 2]);
+                List<INotification> sendNotes = _application.GetSendNotifications(userId);
+                foreach(var note in sendNotes)
+                
+                    Clients.Caller.getSendNotifications(note.Date.ToLongTimeString() + ", " + note.Date.ToLongDateString(), GetReceiversString(note.ReceiversNames), note.Content);
+                }
+                    
             }
+        
+
+        string GetReceiversString(List<string> receiversList)
+        {
+            
+                var receivers = "";
+
+                if (receiversList.Count > 0)
+                    receivers = receiversList[0];
+
+                for (int j = 1; j < receiversList.Count; j++)
+                    receivers += ", " + receiversList[j];
+
+                return receivers;
+                
         }
 
         public override Task OnDisconnected()
@@ -113,14 +131,35 @@ namespace Notifications.Mvc.Hubs
 
             foreach (var item in users)
             {
-                Clients.Client(item).getReceivedNotifications(date.ToLongTimeString() + ", " + date.ToLongDateString(), receiversName, notification);
+                Clients.Client(item).getReceivedNotifications(date.ToLongTimeString() + ", " + date.ToLongDateString(), userName, notification);
 
                 await this.Groups.Remove(item, "grupa");
             }
-   
-               Clients.Caller.getSendNotifications(date.ToLongTimeString() + ", " + date.ToLongDateString(), userName, notification);
+
+            Clients.Caller.getSendNotifications(date.ToLongTimeString() + ", " + date.ToLongDateString(), receiversName, notification);
                Clients.Caller.confirmation();
         }
 
+        public async Task GetMessages(string toUserId)
+        {
+            string fromUserId = Context.ConnectionId;
+
+            var toUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == toUserId);
+            var fromUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == fromUserId);
+
+            var messages = _application.GetMessages(toUser.EmployeeId, fromUser.EmployeeId);
+            foreach (var m in messages)
+            { var date="";
+            if (m.Date.ToShortDateString() == DateTime.Now.ToShortDateString())
+                    date = "Dziś " + m.Date.ToLongTimeString();
+                else
+                    date = m.Date.ToString();
+
+                await Clients.Caller.sendPrivateMessage(toUserId, m.SenderName, m.Content, date);
+                
+            }
+        }
+
+        //public void AddTimeOfReading() { }
     }
 }

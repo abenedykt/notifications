@@ -3,7 +3,7 @@
 {
     position: absolute;
     background-color: #f89406;
-    width: 250px;
+    width: 350px;
 }
 
     .draggable .header
@@ -17,7 +17,7 @@
 
     .draggable .messageArea
     {
-        width: 250px;
+        width: 350px;
         overflow-y: scroll;
         height: 200px;
         border-bottom: #5f9482 solid 1px;
@@ -33,13 +33,13 @@
 
     .draggable .buttonBar
     {
-        width: 250px;
+        width: 350px;
        padding:4px;
     }
 
         .draggable .buttonBar .msgText
         {
-            width: 172px;
+            width: 272px;
             margin-bottom:0px;
         }
 
