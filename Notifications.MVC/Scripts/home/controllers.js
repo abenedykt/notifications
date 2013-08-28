@@ -42,14 +42,13 @@ function registerClientMethods(chatHub) {
 
     chatHub.client.getReceivedNotifications = function (date, sender, content) {
 
-            $('#receivedNotifications').append('<li><strong>' + date + ' r., nadawca: ' + sender + '</strong><br/>' + content +'</li>')
+            $('#receivedNotifications').append('<li><strong>' + date + ', nadawca: ' + sender + '</strong><br/>' + content +'</li>')
         };
 
     chatHub.client.getSendNotifications = function (date, receivers, content) {
 
-        $('#sendNotifications').append('<li><strong>' + date + ' r., odbiorcy: ' + receivers + '</strong><br/>' + content + '</li>')
+        $('#sendNotifications').append('<li><strong>' + date + ', odbiorcy: ' + receivers + '</strong><br/>' + content + '</li>')
     };
-
 
     //count of active users
     chatHub.client.onlineUsers = function (count) {
@@ -87,7 +86,6 @@ function registerClientMethods(chatHub) {
         }
     }
 
-
     chatHub.client.confirmation = function(){
         alert("Potwierdzenie zostalo wyslane");
         $("#txtNotification").val('');
@@ -119,10 +117,20 @@ function registerClientMethods(chatHub) {
 
 
     //send message
-    chatHub.client.sendPrivateMessage = function (toUserId, fromName, message, time) {
+    chatHub.client.createNewWindow = function (toUserId, fromName, message) {
 
         var windowId = 'private_' + toUserId;
-        if ($('#' + windowId).length == 0) createPrivateChatWindow(chatHub, toUserId, windowId, fromName);
+        if ($('#' + windowId).length == 0) {
+            createPrivateChatWindow(chatHub, toUserId, windowId, fromName);
+            chatHub.server.sendMessage(true, toUserId, fromName, message);
+        }
+        else chatHub.server.sendMessage(false, toUserId, fromName, message);
+    }
+
+
+    chatHub.client.addMessage = function (toUserId, fromName, message, time) {
+
+        var windowId = 'private_' + toUserId;
         
         $('#' + windowId).find('#divMessage').append('<div class="message"><strong>' + fromName + '</strong>(' + time + '): ' + message + '</div>');
 
@@ -131,7 +139,6 @@ function registerClientMethods(chatHub) {
         $('#' + windowId).find('#divMessage').scrollTop(height);
     }
 }
-
 
 
 //add div with user to active users for notification and chat
@@ -158,8 +165,11 @@ function registerClientMethods(chatHub) {
     function OpenPrivateChatWindow(chatHub, id, name) {
 
         var windowId = 'private_' + id;
-        if ($('#' + windowId).length > 0) return;
-        createPrivateChatWindow(chatHub, id, windowId, name);
+        if ($('#' + windowId).length == 0) {
+            createPrivateChatWindow(chatHub, id, windowId, name);
+            chatHub.server.getMessages(id);
+        }
+        
     }
 
 //create window for chat between two person
@@ -180,9 +190,9 @@ function registerClientMethods(chatHub) {
                    '</div>' +
                 '</div>';
 
-        chatHub.server.getMessages(id);
-
         
+       
+         
         var $div = $(div);
 
         // DELETE BUTTON IMAGE

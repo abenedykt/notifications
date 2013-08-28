@@ -28,42 +28,34 @@ namespace Notifications.Mvc.Hubs
             {
                 ConnectedUsers.Add(new Employee { ConnectionId = id, Name = userName, EmployeeId = userId });
 
-                // send list of active person to caller
-                Clients.Caller.onConnected(id, userName, ConnectedUsers);
+                Clients.Caller.onConnected(id, userName, ConnectedUsers); // send list of active person to caller
 
-                // send to all except caller client
-                Clients.AllExcept(id).onNewUserConnected(id, userName);
+                Clients.AllExcept(id).onNewUserConnected(id, userName); // send to all except caller client
 
-                //send actual number of available users
-                Clients.All.onlineUsers(ConnectedUsers.Count - 1);
+                Clients.All.onlineUsers(ConnectedUsers.Count - 1); //send actual number of available users
 
-
-                List<INotification> receiveNotes = _application.GetReceiveNotifications(userId);
+                List<INotification> receiveNotes = _application.GetReceiveNotifications(userId); //get history of received messages
                 foreach (var note in receiveNotes)
-                    Clients.Caller.getReceivedNotifications(note.Date.ToLongTimeString() + ", " + note.Date.ToLongDateString(), note.SenderName, note.Content);
+                    Clients.Caller.getReceivedNotifications(GetDateTimeString(note.Date), note.SenderName, note.Content);
 
-                List<INotification> sendNotes = _application.GetSendNotifications(userId);
-                foreach(var note in sendNotes)
-                
-                    Clients.Caller.getSendNotifications(note.Date.ToLongTimeString() + ", " + note.Date.ToLongDateString(), GetReceiversString(note.ReceiversNames), note.Content);
-                }
-                    
+                List<INotification> sendNotes = _application.GetSendNotifications(userId); //get history of send messages
+                foreach(var note in sendNotes)             
+                    Clients.Caller.getSendNotifications(GetDateTimeString(note.Date), GetReceiversString(note.ReceiversNames), note.Content);
+                }                
             }
         
 
-        string GetReceiversString(List<string> receiversList)
-        {
-            
-                var receivers = "";
+        string GetReceiversString(List<string> receiversList) //method for history of send messages
+        {           
+            var receivers = "";
 
-                if (receiversList.Count > 0)
-                    receivers = receiversList[0];
+            foreach(var receiver in receiversList)
+            {
+                if (receivers != "") receivers += ", " + receiver;
+                else receivers += receiver;
+            }
 
-                for (int j = 1; j < receiversList.Count; j++)
-                    receivers += ", " + receiversList[j];
-
-                return receivers;
-                
+            return receivers;              
         }
 
         public override Task OnDisconnected()
@@ -77,32 +69,42 @@ namespace Notifications.Mvc.Hubs
                 Clients.All.onUserDisconnected(id, item.Name);
             }
 
-            //send actual number of available users
-            Clients.All.onlineUsers(ConnectedUsers.Count - 1);
+            Clients.All.onlineUsers(ConnectedUsers.Count - 1); //send actual number of available users
 
             return base.OnDisconnected();
         }
 
-        public void SendPrivateMessage(string toUserId, string message)
+        public async Task SendPrivateMessage(string toUserId, string message)
         {
             string fromUserId = Context.ConnectionId;
 
             var toUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == toUserId);
             var fromUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == fromUserId);
 
-            DateTime date = DateTime.Now;
-
             if (toUser != null && fromUser != null)
             {
-                // send to 
-                Clients.Client(toUserId).sendPrivateMessage(fromUserId, fromUser.Name, message, date.ToLongTimeString());
-
-                // send to caller user
-                Clients.Caller.sendPrivateMessage(toUserId, fromUser.Name, message, date.ToLongTimeString());
-
-                _application.SendMessage(message, fromUser.EmployeeId, toUser.EmployeeId, date);
-            }
+                await Clients.Client(toUserId).createNewWindow(fromUserId, fromUser.Name, message);
+            } 
         }
+
+        public async Task SendMessage(bool newWindow, string toUserId, string fromUserName, string message)
+        {
+            string fromUserId = Context.ConnectionId;
+
+            var toUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == toUserId);
+            var fromUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == fromUserId);
+            DateTime date = DateTime.Now;
+            if (newWindow) 
+            {
+                await GetMessages(toUserId);
+            }
+            await Clients.Caller.addMessage(toUserId, fromUserName, message, GetDateTimeString(date)); // send to caller user
+
+            await Clients.Client(toUserId).addMessage(fromUserId, fromUserName, message, GetDateTimeString(date)); // send to 
+
+            _application.SendMessage(message, fromUser.EmployeeId, toUser.EmployeeId, date);
+        }
+
 
         public async Task Broadcasting(string[] users, string notification, string userName)
         {
@@ -131,13 +133,23 @@ namespace Notifications.Mvc.Hubs
 
             foreach (var item in users)
             {
-                Clients.Client(item).getReceivedNotifications(date.ToLongTimeString() + ", " + date.ToLongDateString(), userName, notification);
+                Clients.Client(item).getReceivedNotifications(GetDateTimeString(date), userName, notification);
 
                 await this.Groups.Remove(item, "grupa");
             }
 
-            Clients.Caller.getSendNotifications(date.ToLongTimeString() + ", " + date.ToLongDateString(), receiversName, notification);
+            Clients.Caller.getSendNotifications(GetDateTimeString(date), receiversName, notification);
                Clients.Caller.confirmation();
+        }
+
+
+        string GetDateTimeString(DateTime date)
+        {
+            if (date.ToShortDateString() == DateTime.Now.ToShortDateString())
+                return  String.Format("Dzisiaj, {0}",  date.ToLongTimeString());
+            else
+                return String.Format("{0}r., {1}", date.ToString("dd.MM.yyyy"), date.ToLongTimeString());
+          
         }
 
         public async Task GetMessages(string toUserId)
@@ -149,17 +161,10 @@ namespace Notifications.Mvc.Hubs
 
             var messages = _application.GetMessages(toUser.EmployeeId, fromUser.EmployeeId);
             foreach (var m in messages)
-            { var date="";
-            if (m.Date.ToShortDateString() == DateTime.Now.ToShortDateString())
-                    date = "Dziś " + m.Date.ToLongTimeString();
-                else
-                    date = m.Date.ToString();
-
-                await Clients.Caller.sendPrivateMessage(toUserId, m.SenderName, m.Content, date);
-                
+            {
+                await Clients.Caller.addMessage(toUserId, m.SenderName, m.Content, GetDateTimeString(m.Date));
             }
         }
 
-        //public void AddTimeOfReading() { }
-    }
+          }
 }
