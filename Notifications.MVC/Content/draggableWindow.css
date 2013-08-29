@@ -1,14 +1,14 @@
-﻿
-.draggable
+﻿.draggable
 {
     position: absolute;
     background-color: #f89406;
     width: 350px;
+    z-index:1;
+    
 }
 
     .draggable .header
     {
-        cursor: move;
         background-color: #945f0c;
         height: 15px;
         color: #ffffff;
@@ -21,14 +21,13 @@
         overflow-y: scroll;
         height: 200px;
         border-bottom: #5f9482 solid 1px;
-         font-weight:normal;
-            text-shadow:none;
+        font-weight:normal;
+        text-shadow:none;
     }
 
         .draggable .messageArea .message
         {
-            padding: 4px;
-           
+            padding: 4px;        
         }
 
     .draggable .buttonBar
@@ -48,3 +47,10 @@
            margin-left:4px;
             width: 55px;
         }
+
+.top {
+    z-index: 2;
+}
+.bottom {
+    z-index: 1;
+}

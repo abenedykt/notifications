@@ -39,25 +39,11 @@ namespace Notifications.Mvc.Hubs
                     Clients.Caller.getReceivedNotifications(GetDateTimeString(note.Date), note.SenderName, note.Content);
 
                 List<INotification> sendNotes = _application.GetSendNotifications(userId); //get history of send messages
-                foreach(var note in sendNotes)             
-                    Clients.Caller.getSendNotifications(GetDateTimeString(note.Date), GetReceiversString(note.ReceiversNames), note.Content);
-                }                
+                foreach (var note in sendNotes)
+                    Clients.Caller.getSendNotifications(GetDateTimeString(note.Date), GetReceiversNamesString(note.ReceiversNames), note.Content);
             }
-        
-
-        string GetReceiversString(List<string> receiversList) //method for history of send messages
-        {           
-            var receivers = "";
-
-            foreach(var receiver in receiversList)
-            {
-                if (receivers != "") receivers += ", " + receiver;
-                else receivers += receiver;
-            }
-
-            return receivers;              
         }
-
+      
         public override Task OnDisconnected()
         {
             var item = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
@@ -74,7 +60,7 @@ namespace Notifications.Mvc.Hubs
             return base.OnDisconnected();
         }
 
-        public async Task SendPrivateMessage(string toUserId, string message)
+        public async Task PrivateMessage(string toUserId, string message)
         {
             string fromUserId = Context.ConnectionId;
 
@@ -84,7 +70,7 @@ namespace Notifications.Mvc.Hubs
             if (toUser != null && fromUser != null)
             {
                 await Clients.Client(toUserId).createNewWindow(fromUserId, fromUser.Name, message);
-            } 
+            }
         }
 
         public async Task SendMessage(bool newWindow, string toUserId, string fromUserName, string message)
@@ -93,43 +79,42 @@ namespace Notifications.Mvc.Hubs
 
             var toUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == toUserId);
             var fromUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == fromUserId);
+
             DateTime date = DateTime.Now;
-            if (newWindow) 
+
+            if (newWindow)
             {
-                await GetMessages(toUserId);
+                await GetHistory(toUserId);
             }
+
             await Clients.Caller.addMessage(toUserId, fromUserName, message, GetDateTimeString(date)); // send to caller user
 
             await Clients.Client(toUserId).addMessage(fromUserId, fromUserName, message, GetDateTimeString(date)); // send to 
 
-            _application.SendMessage(message, fromUser.EmployeeId, toUser.EmployeeId, date);
+            _application.SendMessage(message, toUser.EmployeeId, fromUser.EmployeeId, date);
         }
-
 
         public async Task Broadcasting(string[] users, string notification, string userName)
         {
-            string fromUserId = Context.ConnectionId;
-            var fromUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == fromUserId);
+            var fromUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
 
             DateTime date = DateTime.Now;
 
-            var receivers = new List<int>();
-            var receiversName = "";
+            var receiversIds = new List<int>();
+            var receiversNames = new List<string>();
 
             foreach (var item in users)
             {
                 await this.Groups.Add(item, "grupa");
 
                 var toUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == item);
-                receivers.Add(toUser.EmployeeId);
-
-                if (receiversName != "") receiversName += ", " + toUser.Name;
-                else receiversName = toUser.Name;
+                receiversIds.Add(toUser.EmployeeId);
+                receiversNames.Add(toUser.Name);
             }
 
             await Clients.Group("grupa").sendNotificationBroadcast(notification, userName);
 
-            _application.BrodcastNotification(notification, fromUser.EmployeeId, receivers, date);
+            _application.BrodcastNotification(notification, fromUser.EmployeeId, receiversIds, date);
 
             foreach (var item in users)
             {
@@ -138,21 +123,11 @@ namespace Notifications.Mvc.Hubs
                 await this.Groups.Remove(item, "grupa");
             }
 
-            Clients.Caller.getSendNotifications(GetDateTimeString(date), receiversName, notification);
-               Clients.Caller.confirmation();
+            Clients.Caller.getSendNotifications(GetDateTimeString(date), GetReceiversNamesString(receiversNames), notification);
+            Clients.Caller.notificationConfirm();
         }
 
-
-        string GetDateTimeString(DateTime date)
-        {
-            if (date.ToShortDateString() == DateTime.Now.ToShortDateString())
-                return  String.Format("Dzisiaj, {0}",  date.ToLongTimeString());
-            else
-                return String.Format("{0}r., {1}", date.ToString("dd.MM.yyyy"), date.ToLongTimeString());
-          
-        }
-
-        public async Task GetMessages(string toUserId)
+        public async Task GetHistory(string toUserId)
         {
             string fromUserId = Context.ConnectionId;
 
@@ -166,5 +141,27 @@ namespace Notifications.Mvc.Hubs
             }
         }
 
-          }
+        string GetDateTimeString(DateTime date)
+        {
+            if (date.ToShortDateString() == DateTime.Now.ToShortDateString())
+                return String.Format("Dzisiaj, {0}", date.ToLongTimeString());
+            else
+                return String.Format("{0}r., {1}", date.ToString("dd.MM.yyyy"), date.ToLongTimeString());
+
+        }
+
+        string GetReceiversNamesString(List<string> receiversList) //method for history of send messages
+        {
+            var receivers = "";
+
+            foreach (var receiver in receiversList)
+            {
+                if (receivers != "") receivers += ", " + receiver;
+                else receivers += receiver;
+            }
+
+            return receivers;
+        }
+
+    }
 }

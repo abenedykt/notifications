@@ -1,7 +1,7 @@
 ﻿<div class="container alert alert-warning " style="margin-top:30px;">
-    <h1><center> Powiadomienia </center> </h1>
+    <h1> <center> Powiadomienia </center> </h1>
     <br />
-    <center><p> Witaj, <strong>{{name}}</strong>. Na tej stronie możesz wysyłać powiadomienia do zalogowanych uzytkowników.</p></center>
+    <center> <p> Witaj, <strong>{{name}}</strong>. Na tej stronie możesz wysyłać powiadomienia do zalogowanych uzytkowników. </p> </center>
     <br />
 </div>
   
@@ -9,37 +9,37 @@
     <div class="container alert alert-warning ">
         <div class="row">
             <div class="span4">
-                <h3>Dostępni użytkownicy</h3>
+                <h3> <center> Dostępni użytkownicy </center> </h3>
                 <br />
                 <div id="ActiveUsersNotification" class="input-group"> </div>
             </div>
             <div class="span8">
-                <h3>Wysyłanie powiadomienia</h3>
-                <textarea id="txtNotification" class="form-control" rows="5"></textarea>
+                <h3> <center> Wysyłanie powiadomienia </center> </h3>
                 <br />
-                <button type="button" class="btn btn-warning" ng-click="sendNotification()"> Wyślij</button>
+                <center> <textarea id="txtNotification" class="form-control" rows="7" style="width: 370px;"> </textarea> </center>
+                <br />
+                <center> <button type="button" class="btn btn-warning" ng-click="sendNotification()"> Wyślij </button> </center>
             </div>
         </div>
     </div>
     <div class="container alert alert-warning" style="min-height: 150px;">
         <div class="row">
             <div class="span6">
-                <h3>Historia otrzymanych powiadomień</h3>
+                <h3> <center> Historia otrzymanych powiadomień </center> </h3>
                 <br />
-                <ul id="receivedNotifications">
-                   
-
-                </ul>
+                <ul id="receivedNotifications" />
             </div>
             <div class="span6">
-                <h3>Historia wysłanych powiadomień</h3>
+                <h3> <center> Historia wysłanych powiadomień </center> </h3>
                 <br />
-                <ul id="sendNotifications"></ul>
+                <ul id="sendNotifications" />
             </div>
         </div>
         <div style="position: fixed; right: 10px; bottom: 0; width: 108px">
             <ul class="label label-warning" id="ActiveUsersChat" ng-show="showChatList" style="margin: 0px; width: 100px; padding-top: 10px; padding-bottom:10px; background-color:#ccf285"></ul>
-            <button class="btn btn-success" type="button" style="width: 108px; height:30px; vertical-align: center" ng-click="showChatList= !showChatList"><p id="counter"> </p> </button>
+            <button class="btn btn-success" type="button" style="width: 108px; height:30px; vertical-align: central" ng-click="showChatList= !showChatList">
+                <p id="counter" /> 
+            </button>
         </div>
     </div>
 </div>

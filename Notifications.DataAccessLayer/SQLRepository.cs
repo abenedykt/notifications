@@ -113,13 +113,13 @@ namespace Notifications.DataAccessLayer
 
             var result = (from item in _context.Messages
                           where ((item.SenderId == employeeId1 && item.ReceiverId == employeeId2) || (item.SenderId == employeeId2 && item.ReceiverId == employeeId1))
-                          orderby item.Date 
+                          orderby item.Date
                           select new Message
-                          {       
-                  Date= item.Date,
-                  Content = item.Content,
-                  SenderName = item.Sender.Name,
-                  ReceiverName = item.Receiver.Name
+                          {
+                              Date = item.Date,
+                              Content = item.Content,
+                              SenderName = item.Sender.Name,
+                              ReceiverName = item.Receiver.Name
                           }).AsEnumerable().Cast<IMessage>().ToList();
             
             return result;

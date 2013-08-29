@@ -11,12 +11,9 @@ namespace Notifications.DataAccessLayer
         public SqlReceiversOfNotification()
         {
             ReceivingNotification = new SqlNotification();
-
-
         }
 
         public int ReceiversOfNotificationId { get; set; }
-
         public int NotificationId { get; set; }
         public int ReceiverId { get; set; }
 

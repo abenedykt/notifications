@@ -4,7 +4,6 @@ namespace Notifications.Base
     public interface IFactory
     {
         void AddNotification(INotification notification);
-
         void AddMessage(IMessage message);
         List<INotification> GetReceiveNotifications(int employeeId);
         List<INotification> GetSendNotifications(int employeeId);

@@ -23,7 +23,6 @@ namespace Notifications.BusiessLogic
             };
            
             _factory.AddNotification(notification);
-
         }
 
         public void SendMessage(string content, int senderId, int receiverId, DateTime date)
@@ -37,9 +36,7 @@ namespace Notifications.BusiessLogic
             };
 
             _factory.AddMessage(message);
-
         }
-
 
         public List<INotification> GetReceiveNotifications(int employeeId)
         {

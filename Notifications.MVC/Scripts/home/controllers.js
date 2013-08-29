@@ -1,23 +1,23 @@
-function LogCtrl($scope) {
- 
-   $scope.login = function () {
-       userName = $scope.user.name;
-       userId = $scope.user.id;
+function LogCtrl($scope, $location) {
+    $scope.login = function () {
+        userName = $scope.user.name;
+        userId = $scope.user.id;
     }
 }
 
 var userName;
 var ActiveUsersCount;
 var userId;
+var zIndex = 0;
 
 function NoticeCtrl($scope) {
 
-    $scope.showChatList =false;  
+    $scope.showChatList = false;
     $scope.name = userName;
- 
+
     var chatHub = $.connection.chatHub;
 
-    registerClientMethods(chatHub);
+    addClientMethods(chatHub);
 
     $.connection.hub.start().done(function () {
 
@@ -32,13 +32,15 @@ function NoticeCtrl($scope) {
 
             var message = $("#txtNotification").val();
 
-            chatHub.server.broadcasting(receivers, message, userName);
-        }  
-    });  
+            if (receivers.length != 0)
+                chatHub.server.broadcasting(receivers, message, userName);
+            else
+                alert("Zaznacz przynajmniej jedna osobe!");
+        }
+    });
 }
-
-    
-function registerClientMethods(chatHub) {
+  
+function addClientMethods(chatHub) {
 
     chatHub.client.getReceivedNotifications = function (date, sender, content) {
 
@@ -58,15 +60,9 @@ function registerClientMethods(chatHub) {
 
     //send notification 
     chatHub.client.sendNotificationBroadcast = function (notification, name) {
-        var notification;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             if (window.webkitNotifications.checkPermission() == 0) {
-                notification = window.webkitNotifications.createNotification(null, "Nowe powiadomienie od: " + name, notification);
-                notification.show();
-                //notification.onclick = function () {
-                //    window.focus();
-                //    this.cancel();
-                //};
+                var notification = window.webkitNotifications.createNotification(null, "Nowe powiadomienie od: " + name, notification).show();
             }
             else {
                 window.webkitNotifications.requestPermission();
@@ -79,17 +75,12 @@ function registerClientMethods(chatHub) {
                 hide: false,
                 sticker: false
             });
-            //$.pnotify.onclick = function () {
-            //    window.focus();
-            //    this.cancel();
-            //};
         }
     }
 
-    chatHub.client.confirmation = function(){
+    chatHub.client.notificationConfirm = function () {
         alert("Potwierdzenie zostalo wyslane");
         $("#txtNotification").val('');
-
     }
 
     // send to all except caller client
@@ -115,7 +106,6 @@ function registerClientMethods(chatHub) {
         $('#' + ctrId).remove();
     }
 
-
     //send message
     chatHub.client.createNewWindow = function (toUserId, fromName, message) {
 
@@ -127,19 +117,17 @@ function registerClientMethods(chatHub) {
         else chatHub.server.sendMessage(false, toUserId, fromName, message);
     }
 
-
-    chatHub.client.addMessage = function (toUserId, fromName, message, time) {
+    chatHub.client.addMessage = function (toUserId, fromName, message, date) {
 
         var windowId = 'private_' + toUserId;
         
-        $('#' + windowId).find('#divMessage').append('<div class="message"><strong>' + fromName + '</strong>(' + time + '): ' + message + '</div>');
+        $('#' + windowId).find('#divMessages').append('<div class="message"><strong>' + fromName + '</strong>(<i>' + date + '</i>): ' + message + '</div>');
 
         // set scrollbar
-        var height = $('#' + windowId).find('#divMessage')[0].scrollHeight;
-        $('#' + windowId).find('#divMessage').scrollTop(height);
+        var height = $('#' + windowId).find('#divMessages')[0].scrollHeight;
+        $('#' + windowId).find('#divMessages').scrollTop(height);
     }
 }
-
 
 //add div with user to active users for notification and chat
     function AddUser(chatHub, id, name, actualId) {
@@ -160,72 +148,79 @@ function registerClientMethods(chatHub) {
         $("#ActiveUsersNotification").append(userNotification);
     }
 
-
 //create new window if don't create
-    function OpenPrivateChatWindow(chatHub, id, name) {
+    function OpenPrivateChatWindow(chatHub, toUserId, name) {
 
-        var windowId = 'private_' + id;
+        var windowId = 'private_' + toUserId;
         if ($('#' + windowId).length == 0) {
-            createPrivateChatWindow(chatHub, id, windowId, name);
-            chatHub.server.getMessages(id);
-        }
-        
+            createPrivateChatWindow(chatHub, toUserId, windowId, name);
+            chatHub.server.getHistory(toUserId);
+        }       
     }
 
 //create window for chat between two person
-    function createPrivateChatWindow(chatHub, id, windowId, name) {
+    function createPrivateChatWindow(chatHub, toUserId, windowId, name) {
 
-        var div = '<div id="' + windowId + '" class="ui-widget-content draggable label label-warning" rel="0">' +
+        var div = '<div id="' + windowId + '" class="ui-widget-content draggable label label-warning" rel="0" style="z-index:' + (zIndex++) + '; position:absolute;">' +
                    '<div class="header">' +
                       '<div  style="float:right;">' +
-                          '<img id="imgDelete"  style="cursor:pointer;" src="/Content/jqueryUI/delete.png"/>' +
+                          '<img id="imgClose"  style="cursor:pointer;" src="/Content/jqueryUI/close.png"/>' +
                        '</div>' +
                        '<span class="selText" rel="0">' + name + '</span>' +
                    '</div>' +
-                   '<div id="divMessage" class="messageArea">' +
+                   '<div id="divMessages" class="messageArea">' +
                    '</div>' +
                    '<div class="buttonBar">' +
-                      '<input id="txtPrivateMessage" class="msgText form-control" type="text"   />' +
+                      '<input id="txtMessage" class="msgText form-control" type="text"   />' +
                       '<input id="btnSendMessage" class="submitButton button btn btn-warning" type="button" value="Wyslij"   />' +
                    '</div>' +
                 '</div>';
-
-        
-       
          
         var $div = $(div);
 
         // DELETE BUTTON IMAGE
-        $div.find('#imgDelete').click(function () {
+        $div.find('#imgClose').click(function () {
             $('#' + windowId).remove();
         });
 
         // Send Button event
         $div.find("#btnSendMessage").click(function () {
 
-            $textBox = $div.find("#txtPrivateMessage");
-            var msg = $textBox.val();
-            if (msg.length > 0) {
+            $textBox = $div.find("#txtMessage");
+            var message = $textBox.val();
+            if (message.length > 0) {
 
-                chatHub.server.sendPrivateMessage(id, msg);
+                chatHub.server.privateMessage(toUserId, message);
                 $textBox.val('');
             }
         });
 
         // Text Box event
-        $div.find("#txtPrivateMessage").keypress(function (e) {
+        $div.find("#txtMessage").keypress(function (e) {
             if (e.which == 13) {
                 $div.find("#btnSendMessage").click();
             }
         });
 
         $('#divDraggable').prepend($div);
+   
         $div.draggable({
-
+            start: function (event, ui) {
+                $(this).css("z-index", zIndex++);
+            },
             handle: ".header",
+            cursor: 'move', 
+            opacity: 0.65,
+            stack: $div,
             stop: function () {
             }
         });
+
+        $div.click(function () {
+            $(this).addClass('top').removeClass('bottom');
+            $(this).siblings().removeClass('top').addClass('bottom');
+            $(this).css("z-index", zIndex++);
+        });      
     }
 
     
