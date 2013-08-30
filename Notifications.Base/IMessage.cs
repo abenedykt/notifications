@@ -9,6 +9,6 @@ namespace Notifications.Base
         int SenderId { get; set; }
         string SenderName { get; set; }
         int ReceiverId { get; set; }
-        string ReceiverName { get; set; }      
+        string ReceiverName { get; set; }
     }
 }

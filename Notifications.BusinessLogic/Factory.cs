@@ -1,11 +1,11 @@
-﻿using Notifications.Base;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Notifications.Base;
 
 namespace Notifications.BusiessLogic
 {
     public class Factory : IFactory
     {
-        private IDataRepository _repository;
+        private readonly IDataRepository _repository;
 
         public Factory(IDataRepository repository)
         {
@@ -17,6 +17,7 @@ namespace Notifications.BusiessLogic
         {
             _repository.AddNotification(notification);
         }
+
         public void AddMessage(IMessage message)
         {
             _repository.AddMessage(message);
@@ -26,6 +27,7 @@ namespace Notifications.BusiessLogic
         {
             return _repository.GetReceiveNotifications(employeeId);
         }
+
         public List<INotification> GetSendNotifications(int employeeId)
         {
             return _repository.GetSendNotifications(employeeId);

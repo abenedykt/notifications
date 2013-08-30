@@ -1,4 +1,4 @@
-﻿<div class="container alert alert-warning " style="margin-top:30px;">
+﻿<div class="container alert alert-warning " style="margin-top: 30px;">
     <h1> <center> Powiadomienia </center> </h1>
     <br />
     <center> <p> Witaj, <strong>{{name}}</strong>. Na tej stronie możesz wysyłać powiadomienia do zalogowanych uzytkowników. </p> </center>
@@ -35,12 +35,11 @@
                 <ul id="sendNotifications" />
             </div>
         </div>
-        <div style="position: fixed; right: 10px; bottom: 0; width: 108px">
-            <ul class="label label-warning" id="ActiveUsersChat" ng-show="showChatList" style="margin: 0px; width: 100px; padding-top: 10px; padding-bottom:10px; background-color:#ccf285"></ul>
-            <button class="btn btn-success" type="button" style="width: 108px; height:30px; vertical-align: central" ng-click="showChatList= !showChatList">
+        <div style="bottom: 0; position: fixed; right: 10px; width: 108px">
+            <ul class="label label-warning" id="ActiveUsersChat" ng-show="showChatList" style="background-color: #ccf285; margin: 0px; padding-bottom: 10px; padding-top: 10px; width: 100px;"></ul>
+            <button class="btn btn-success" type="button" style="height: 30px; vertical-align: central; width: 108px;" ng-click="showChatList= !showChatList">
                 <p id="counter" /> 
             </button>
         </div>
     </div>
 </div>
-

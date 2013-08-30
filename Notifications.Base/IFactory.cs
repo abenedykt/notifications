@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 namespace Notifications.Base
 {
     public interface IFactory

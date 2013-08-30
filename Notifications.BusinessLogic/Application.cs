@@ -1,12 +1,12 @@
-﻿using Notifications.Base;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Notifications.Base;
 
 namespace Notifications.BusiessLogic
 {
     public class Application : IApplication
     {
-        private IFactory _factory;
+        private readonly IFactory _factory;
 
         public Application(IFactory factory)
         {
@@ -15,19 +15,20 @@ namespace Notifications.BusiessLogic
 
         public void BrodcastNotification(string content, int senderId, List<int> receiversIds, DateTime date)
         {
-            INotification notification = new Notification(){ 
-                Content= content, 
-                Date= date, 
-                SenderId= senderId,
+            INotification notification = new Notification
+            {
+                Content = content,
+                Date = date,
+                SenderId = senderId,
                 ReceiversIds = receiversIds
             };
-           
+
             _factory.AddNotification(notification);
         }
 
         public void SendMessage(string content, int senderId, int receiverId, DateTime date)
         {
-            IMessage message = new Message()
+            IMessage message = new Message
             {
                 Content = content,
                 SenderId = senderId,
@@ -40,7 +41,7 @@ namespace Notifications.BusiessLogic
 
         public List<INotification> GetReceiveNotifications(int employeeId)
         {
-           return _factory.GetReceiveNotifications(employeeId);
+            return _factory.GetReceiveNotifications(employeeId);
         }
 
         public List<INotification> GetSendNotifications(int employeeId)
@@ -52,11 +53,5 @@ namespace Notifications.BusiessLogic
         {
             return _factory.GetMessages(employeeId1, employeeId2);
         }
-
-
-       
-
-
-
     }
 }

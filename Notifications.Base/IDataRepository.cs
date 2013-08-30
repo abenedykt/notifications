@@ -3,7 +3,7 @@
 namespace Notifications.Base
 {
     public interface IDataRepository
-    {    
+    {
         void AddNotification(INotification notification);
         void AddMessage(IMessage message);
         List<INotification> GetReceiveNotifications(int receiverId);
@@ -11,5 +11,5 @@ namespace Notifications.Base
         List<IMessage> GetMessages(int employeeId1, int employeeId2);
 
         List<string> GetReceivers(int notesId);
-     }
+    }
 }

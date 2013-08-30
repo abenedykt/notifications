@@ -8,7 +8,6 @@
  * Designed and built with all the love in the world @twitter by @mdo and @fat.
  */
 
-
 .clearfix {
   *zoom: 1;
 }
@@ -232,14 +231,14 @@ body {
 }
 
 a {
-  color: #000000;
+  color: #0088cc;
   text-decoration: none;
 }
 
 a:hover,
 a:focus {
-  color: #FFFFFF;
-  
+  color: #005580;
+  text-decoration: underline;
 }
 
 .img-rounded {
@@ -266,7 +265,6 @@ a:focus {
 
 .row {
   margin-left: -20px;
-  text-align: justify;
   *zoom: 1;
 }
 
@@ -4369,11 +4367,6 @@ input[type="submit"].btn.btn-mini {
   *z-index: 2;
   margin-bottom: 20px;
   overflow: visible;
-  min-height: 50px;
-      padding-right: 15px;
-padding-left: 15px;
-border-radius: 4px;
-
 }
 
 .navbar-inner {
@@ -4606,8 +4599,6 @@ border-radius: 4px;
   display: block;
   float: left;
   margin: 0 10px 0 0;
-      background-color: #eeeeee;
-
 }
 
 .navbar .nav.pull-right {

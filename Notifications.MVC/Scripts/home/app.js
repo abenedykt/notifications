@@ -1,5 +1,5 @@
 angular.module('notifications', []).
-    config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+    config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
         $routeProvider.
             when('/logowanie', { templateUrl: '/Home/Logowanie', controller: 'LogCtrl', }).
             when('/powiadomienia', { templateUrl: '/Home/Powiadomienia', controller: 'NoticeCtrl', }).
@@ -7,5 +7,3 @@ angular.module('notifications', []).
 
         $locationProvider.html5Mode(false).hashPrefix('!');
     }]);
-
-   

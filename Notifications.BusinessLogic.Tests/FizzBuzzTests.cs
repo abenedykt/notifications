@@ -13,10 +13,10 @@ namespace Notifications.BusiessLogic.Tests
             var game = new Game();
 
             //act
-            var result = game.Play(1);
+            string result = game.Play(1);
 
             //assert
-            Assert.Equal("1",result);
+            Assert.Equal("1", result);
         }
 
         [Fact]
@@ -26,7 +26,7 @@ namespace Notifications.BusiessLogic.Tests
             var game = new Game();
 
             //act
-            var result = game.Play(2);
+            string result = game.Play(2);
 
             //assert
             Assert.Equal("1, 2", result);
@@ -45,11 +45,10 @@ namespace Notifications.BusiessLogic.Tests
             var game = new Game();
 
             //act
-            var result = game.Play(n);
+            string result = game.Play(n);
 
             //assert
             Assert.Equal(expected, result);
-            
         }
     }
 
@@ -57,8 +56,8 @@ namespace Notifications.BusiessLogic.Tests
     {
         public string Play(int n)
         {
-            var result = "1";
-            for (var i = 2; i <= n; i++)
+            string result = "1";
+            for (int i = 2; i <= n; i++)
             {
                 if (i%3 == 0)
                 {
@@ -72,7 +71,7 @@ namespace Notifications.BusiessLogic.Tests
                 else
                     result += ", " + Convert.ToString(i);
             }
-            
+
             return result;
         }
     }
@@ -80,9 +79,9 @@ namespace Notifications.BusiessLogic.Tests
     public class PersonTests
     {
         [Theory]
-        [InlineData("Jan","Kowalski","Jan Kowalski")]
-        [InlineData("","Kowalski","Kowalski")]
-        [InlineData("Jan","","Jan")]
+        [InlineData("Jan", "Kowalski", "Jan Kowalski")]
+        [InlineData("", "Kowalski", "Kowalski")]
+        [InlineData("Jan", "", "Jan")]
         public void ToString_Returns_Name_And_Surname(string name, string surname, string exptected)
         {
             var person = new Person
@@ -102,7 +101,7 @@ namespace Notifications.BusiessLogic.Tests
 
         public override string ToString()
         {
-            return string.Format("{0} {1}",Name,Surname).Trim();
+            return string.Format("{0} {1}", Name, Surname).Trim();
         }
     }
 }

@@ -1,9 +1,4 @@
-﻿using Notifications.Base;
-using Notifications.Mvc.Controllers;
-using NSubstitute;
-using Xunit;
-
-namespace Notifications.Mvc.Tests
+﻿namespace Notifications.Mvc.Tests
 {
     public class HomeControllerTests
     {

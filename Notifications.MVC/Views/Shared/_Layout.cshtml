@@ -5,20 +5,20 @@
 <!DOCTYPE html>
 <html ng-app="notifications" class="no-js">
 
-<head>
-    <title>@ViewBag.Title </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap/bootstrap.css" />
-    <link rel="stylesheet" type="text/css" href="~/Content/jquery/jquery.pnotify.css" />
-    <link rel="stylesheet" type="text/css" href="~/Content/jquery/jquery.pnotify.icons.css" />
-    <link rel="stylesheet" type="text/css" href="~/Content/draggableWindow.css" />
-    <link rel="stylesheet" type="text/css" href="~/Content/jqueryUI/themes/base/jquery.ui.all.css" />
-   </head>
+    <head>
+        <title>@ViewBag.Title </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
+        <link rel="stylesheet" href="~/Content/bootstrap-responsive.css" />
+        <link rel="stylesheet" type="text/css" href="~/Content/jquery.pnotify.css" />
+        <link rel="stylesheet" type="text/css" href="~/Content/jquery.pnotify.icons.css" />
+        <link rel="stylesheet" type="text/css" href="~/Content/draggableWindow.css" />
+        <link rel="stylesheet" type="text/css" href="~/Content/jqueryUI/themes/base/jquery.ui.all.css" />
+    </head>
 
-<body>
-    @RenderBody()
-    @RenderSection("scripts", required: false)
-</body>
+    <body>
+        @RenderBody()
+        @RenderSection("scripts", false)
+    </body>
 
 </html>
-

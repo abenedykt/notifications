@@ -1,20 +1,18 @@
-﻿using Notifications.Base;
-using NSubstitute;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Notifications.Base;
+using NSubstitute;
 using Xunit.Extensions;
 
 namespace Notifications.BusiessLogic.Tests
 {
-    class FactoryTests
+    internal class FactoryTests
     {
         [Theory]
-        [InlineData("Hello", 1, new List<int> { 1, 2, 3 }, DateTime.Now)]
-        [InlineData("wiadomosc", 4, new List<int> { 5, 3, 2 }, new DateTime(1000))]
-        public void Application_BrodcastNotification_should_send_notification_for_each_receivers_to_repository(string content, int senderId, List<int> receiversIds, DateTime date)
+        [InlineData("Hello", 1, new List<int> {1, 2, 3}, DateTime.Now)]
+        [InlineData("wiadomosc", 4, new List<int> {5, 3, 2}, new DateTime(1000))]
+        public void Application_BrodcastNotification_should_send_notification_for_each_receivers_to_repository(
+            string content, int senderId, List<int> receiversIds, DateTime date)
         {
             //arrange
             var repository = Substitute.For<IDataRepository>();
@@ -30,7 +28,7 @@ namespace Notifications.BusiessLogic.Tests
                 ReceiversIds = receiversIds,
                 Date = date
             });
-            
+
             //assert
 
             repository.Received().AddNotification(new Notification
@@ -46,7 +44,8 @@ namespace Notifications.BusiessLogic.Tests
         [Theory]
         [InlineData("Hello", 1, 3, DateTime.Now)]
         [InlineData("wiadomosc", 2, 4, DateTime.Now)]
-        public void Application_SendMessage_should_send_notification_for_each_receivers_to_repository(string content, int senderId, int receiverId, DateTime date)
+        public void Application_SendMessage_should_send_notification_for_each_receivers_to_repository(string content,
+            int senderId, int receiverId, DateTime date)
         {
             //arrange
             var repository = Substitute.For<IDataRepository>();
@@ -72,6 +71,5 @@ namespace Notifications.BusiessLogic.Tests
                 Date = date
             });
         }
-
     }
 }

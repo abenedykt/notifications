@@ -13,5 +13,5 @@ namespace Notifications.BusiessLogic
         public string Content { get; set; }
         public List<int> ReceiversIds { get; set; }
         public List<string> ReceiversNames { get; set; }
-    } 
+    }
 }
