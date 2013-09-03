@@ -19,33 +19,31 @@ namespace Notifications.DataAccessLayer
         public RavenRepository()
         {
 
-            
+
         }
 
 
 
         public void Init()
         {
-            try
-            {
+            
                 documentStore = new EmbeddableDocumentStore
                 {
 
-                    DataDirectory = @"App_data\data",
+                    DataDirectory = @"~\bin\data",
 
                 };
 
                 documentStore.Initialize();
 
                 _session = documentStore.OpenSession();
-            }
-            catch (Exception e)
-            {
 
-            }
+
+            
         }
+    
 
-        public void AddNotification(INotification notification)
+    public void AddNotification(INotification notification)
         {
             var sender = _session.Query<RavenEmployee>().FirstOrDefault(x => x.EmployeeId == notification.SenderId);
 
@@ -168,6 +166,7 @@ namespace Notifications.DataAccessLayer
 
         public void AddEmployee(IEmployee employee)
         {
+           
             var result = _session.Query<RavenEmployee>().FirstOrDefault(x => x.EmployeeId == employee.EmployeeId);
 
 
