@@ -31,7 +31,7 @@ namespace Notifications.DataAccessLayer
                 documentStore = new EmbeddableDocumentStore
                 {
 
-                    DataDirectory = @"App_data\data",
+                    DataDirectory = @"App_data",
 
                 };
 
@@ -168,6 +168,7 @@ namespace Notifications.DataAccessLayer
 
         public void AddEmployee(IEmployee employee)
         {
+            Init();
             var result = _session.Query<RavenEmployee>().FirstOrDefault(x => x.EmployeeId == employee.EmployeeId);
 
 
@@ -182,6 +183,7 @@ namespace Notifications.DataAccessLayer
                 _session.SaveChanges();
 
             }
+
         }
     }
 }
