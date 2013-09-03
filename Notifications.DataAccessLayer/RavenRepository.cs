@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Notifications.Base;
 using Notifications.DataAccessLayer.RavenClass;
@@ -26,17 +27,25 @@ namespace Notifications.DataAccessLayer
 
         public void Init()
         {
-            
+            try
+            {
                 documentStore = new EmbeddableDocumentStore
                 {
 
-                    DataDirectory = @"~\bin\data",
+                    DataDirectory = @"App_Data",
 
                 };
 
                 documentStore.Initialize();
 
                 _session = documentStore.OpenSession();
+            }
+            catch (Exception e)
+            {
+                
+                Debug.WriteLine(e.Message);
+            }
+                
 
 
             
@@ -166,7 +175,7 @@ namespace Notifications.DataAccessLayer
 
         public void AddEmployee(IEmployee employee)
         {
-           
+            Init();
             var result = _session.Query<RavenEmployee>().FirstOrDefault(x => x.EmployeeId == employee.EmployeeId);
 
 
@@ -174,6 +183,7 @@ namespace Notifications.DataAccessLayer
             {
                 var newEmployee = new RavenEmployee()
                 {
+                    EmployeeId = employee.EmployeeId,
                     Name = employee.Name
                 };
 
