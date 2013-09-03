@@ -24,7 +24,11 @@ namespace Notifications.Mvc.Hubs
 
             if (ConnectedUsers.Count(x => x.ConnectionId == id) == 0)
             {
-                ConnectedUsers.Add(new Employee {ConnectionId = id, Name = userName, EmployeeId = userId});
+                var employee = new Employee {ConnectionId = id, Name = userName, EmployeeId = userId};
+                ConnectedUsers.Add(employee);
+
+                _application.AddEmployee(employee);
+
 
                 Clients.Caller.onConnected(id, userName, ConnectedUsers); // send list of active person to caller
 
@@ -32,16 +36,16 @@ namespace Notifications.Mvc.Hubs
 
                 Clients.All.onlineUsers(ConnectedUsers.Count - 1); //send actual number of available users
 
-                List<INotification> receiveNotes = _application.GetReceiveNotifications(userId);
+                //List<INotification> receiveNotes = _application.GetReceiveNotifications(userId);
                     //get history of received messages
-                foreach (INotification note in receiveNotes)
-                    Clients.Caller.getReceivedNotifications(GetDateTimeString(note.Date), note.SenderName, note.Content);
+                //foreach (INotification note in receiveNotes)
+               //     Clients.Caller.getReceivedNotifications(GetDateTimeString(note.Date), note.SenderName, note.Content);
 
-                List<INotification> sendNotes = _application.GetSendNotifications(userId);
+               // List<INotification> sendNotes = _application.GetSendNotifications(userId);
                     //get history of send messages
-                foreach (INotification note in sendNotes)
-                    Clients.Caller.getSendNotifications(GetDateTimeString(note.Date),
-                        GetReceiversNamesString(note.ReceiversNames), note.Content);
+                //foreach (INotification note in sendNotes)
+                //    Clients.Caller.getSendNotifications(GetDateTimeString(note.Date),
+                  //      GetReceiversNamesString(note.ReceiversNames), note.Content);
             }
         }
 

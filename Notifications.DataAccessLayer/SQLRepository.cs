@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Notifications.Base;
 using Notifications.BusiessLogic;
+using Raven.Database.Indexing.Collation.Cultures;
 
 namespace Notifications.DataAccessLayer
 {
@@ -12,7 +13,7 @@ namespace Notifications.DataAccessLayer
 
         public void AddNotification(INotification notification)
         {
-            SqlEmployee sender = _context.Employees.Find(notification.SenderId);
+            var sender = _context.Employees.Find(notification.SenderId);
 
             var sqlNotification = new SqlNotification
             {
@@ -24,19 +25,15 @@ namespace Notifications.DataAccessLayer
             _context.Notifications.Add(sqlNotification);
             _context.SaveChanges();
 
-            foreach (int i in notification.ReceiversIds)
+            foreach (var receiverOfNotification in notification.ReceiversIds.Select(i => _context.Employees.Find(i)).Select(receiver => new SqlReceiversOfNotification
             {
-                SqlEmployee receiver = _context.Employees.Find(i);
-
-                var receiverOfNotification = new SqlReceiversOfNotification
-                {
-                    Receiver = receiver,
-                    ReceiverId = receiver.EmployeeId,
-                    ReceivingNotification = sqlNotification,
-                    NotificationId = sqlNotification.NotificationId,
-                    WhenRead = DateTime.Now
-                };
-
+                Receiver = receiver,
+                ReceiverId = receiver.EmployeeId,
+                ReceivingNotification = sqlNotification,
+                NotificationId = sqlNotification.NotificationId,
+                WhenRead = DateTime.Now
+            }))
+            {
                 sqlNotification.Receivers.Add(receiverOfNotification);
                 _context.ReceiversOfNotifications.Add(receiverOfNotification);
                 _context.SaveChanges();
@@ -45,8 +42,8 @@ namespace Notifications.DataAccessLayer
 
         public void AddMessage(IMessage message)
         {
-            SqlEmployee sender = _context.Employees.Find(message.SenderId);
-            SqlEmployee recepient = _context.Employees.Find(message.ReceiverId);
+            var sender = _context.Employees.Find(message.SenderId);
+            var recepient = _context.Employees.Find(message.ReceiverId);
 
             var sqlMessage = new SqlMessage
             {
@@ -61,7 +58,7 @@ namespace Notifications.DataAccessLayer
 
         public List<INotification> GetReceiveNotifications(int receiverId)
         {
-            List<INotification> result = (from item in _context.ReceiversOfNotifications
+            var result = (from item in _context.ReceiversOfNotifications
                 join notes in _context.Notifications on item.NotificationId equals notes.NotificationId
                 join employees in _context.Employees on notes.SenderId equals employees.EmployeeId
                 where item.ReceiverId == receiverId
@@ -76,7 +73,7 @@ namespace Notifications.DataAccessLayer
 
         public List<INotification> GetSendNotifications(int senderId)
         {
-            List<INotification> result = (from notes in _context.Notifications
+            var result = (from notes in _context.Notifications
                 where notes.SenderId == senderId
                 select new Notification
                 {
@@ -85,7 +82,7 @@ namespace Notifications.DataAccessLayer
                     Date = notes.Date
                 }).AsEnumerable().Cast<INotification>().ToList();
 
-            foreach (INotification notes in result)
+            foreach (var notes in result)
             {
                 notes.ReceiversNames = GetReceivers(notes.NotificationId);
             }
@@ -96,7 +93,7 @@ namespace Notifications.DataAccessLayer
 
         public List<string> GetReceivers(int notesId)
         {
-            List<string> result = (from item in _context.ReceiversOfNotifications
+            var result = (from item in _context.ReceiversOfNotifications
                 where item.NotificationId == notesId
                 select item.Receiver.Name).ToList();
             return result;
@@ -104,7 +101,7 @@ namespace Notifications.DataAccessLayer
 
         public List<IMessage> GetMessages(int employeeId1, int employeeId2)
         {
-            List<IMessage> result = (from item in _context.Messages
+            var result = (from item in _context.Messages
                 where
                     ((item.SenderId == employeeId1 && item.ReceiverId == employeeId2) ||
                      (item.SenderId == employeeId2 && item.ReceiverId == employeeId1))
@@ -118,6 +115,24 @@ namespace Notifications.DataAccessLayer
                 }).AsEnumerable().Cast<IMessage>().ToList();
 
             return result;
+        }
+
+
+        public void AddEmployee(IEmployee employee)
+        {
+            var result = _context.Employees.Find(employee.EmployeeId);
+
+            if (result == null)
+            {
+                var newEmployee = new SqlEmployee()
+                {
+                   Name = employee.Name
+                };
+                _context.Employees.Add(newEmployee);
+                _context.SaveChanges();
+                
+            }
+        
         }
     }
 }

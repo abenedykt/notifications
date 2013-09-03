@@ -28,7 +28,9 @@ namespace Notifications.Mvc
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-        }
+
+
+           }
 
         private static void AutofacConfiguration()
         {
@@ -38,7 +40,7 @@ namespace Notifications.Mvc
             //builder.RegisterApiControllers(typeof(MvcApplication).Assembly);
             builder.RegisterHubs(Assembly.GetExecutingAssembly());
 
-            builder.RegisterType<SqlRepository>().As<IDataRepository>();
+            builder.RegisterType<RavenRepository>().As<IDataRepository>();
             builder.RegisterType<Application>().As<IApplication>();
             builder.RegisterType<Factory>().As<IFactory>();
             //var container = builder.Build();

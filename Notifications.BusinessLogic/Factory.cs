@@ -37,5 +37,11 @@ namespace Notifications.BusiessLogic
         {
             return _repository.GetMessages(employeeId1, employeeId2);
         }
+
+
+        public void AddEmployee(IEmployee employee)
+        {
+            _repository.AddEmployee(employee);
+        }
     }
 }

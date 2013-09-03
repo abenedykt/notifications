@@ -10,6 +10,7 @@
     color: #ffffff;
     height: 15px;
     padding: 5px 5px;
+    cursor: move;
 }
 
 .draggable .messageArea {
@@ -17,7 +18,6 @@
     font-weight: normal;
     height: 200px;
     overflow-y: scroll;
-    text-shadow: none;
     width: 350px;
 }
 
@@ -29,7 +29,7 @@
 }
 
 .draggable .buttonBar .msgText {
-    margin-bottom: 0px;
+    margin-bottom: 0;
     width: 272px;
 }
 

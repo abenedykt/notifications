@@ -62,7 +62,7 @@ function addClientMethods(chatHub) {
     chatHub.client.sendNotificationBroadcast = function(notification, name) {
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             if (window.webkitNotifications.checkPermission() == 0) {
-                var notification = window.webkitNotifications.createNotification(null, "Nowe powiadomienie od: " + name, notification).show();
+                window.webkitNotifications.createNotification(null, "Nowe powiadomienie od: " + name, notification).show();
             } else {
                 window.webkitNotifications.requestPermission();
             }
@@ -75,20 +75,24 @@ function addClientMethods(chatHub) {
             });
         }
     };
+    
     chatHub.client.notificationConfirm = function() {
-        alert("Potwierdzenie zostalo wyslane");
+        alert("Powiadomienie zostalo wyslane");
         $("#txtNotification").val('');
     }; // send to all except caller client
+    
     chatHub.client.onNewUserConnected = function(id, name) {
         AddUser(chatHub, id, name);
     }; // send list of active person to caller
+    
     chatHub.client.onConnected = function(id, name, allUsers) {
 
-        for (i = 0; i < allUsers.length; i++) {
+        for (var i = 0; i < allUsers.length; i++) {
 
             AddUser(chatHub, allUsers[i].ConnectionId, allUsers[i].Name, id);
         }
     }; // remove from active list if client disconnect
+    
     chatHub.client.onUserDisconnected = function(id, name) {
         $('#' + id).remove();
         $('#active_' + id).remove();
@@ -96,6 +100,7 @@ function addClientMethods(chatHub) {
         var ctrId = 'private_' + id;
         $('#' + ctrId).remove();
     }; //send message
+    
     chatHub.client.createNewWindow = function(toUserId, fromName, message) {
 
         var windowId = 'private_' + toUserId;
@@ -104,6 +109,7 @@ function addClientMethods(chatHub) {
             chatHub.server.sendMessage(true, toUserId, fromName, message);
         } else chatHub.server.sendMessage(false, toUserId, fromName, message);
     };
+    
     chatHub.client.addMessage = function(toUserId, fromName, message, date) {
 
         var windowId = 'private_' + toUserId;
@@ -117,7 +123,6 @@ function addClientMethods(chatHub) {
 }
 
 //add div with user to active users for notification and chat
-
 function AddUser(chatHub, id, name, actualId) {
     var userChat = "";
     var userNotification = "";
@@ -136,8 +141,7 @@ function AddUser(chatHub, id, name, actualId) {
     $("#ActiveUsersNotification").append(userNotification);
 }
 
-//create new window if don't create
-
+//create new window if click to user (if don't create)
 function OpenChatWindow(chatHub, toUserId, name) {
 
     var windowId = 'private_' + toUserId;
@@ -148,7 +152,6 @@ function OpenChatWindow(chatHub, toUserId, name) {
 }
 
 //create window for chat between two person
-
 function createChatWindow(chatHub, toUserId, windowId, name) {
 
 
@@ -181,9 +184,9 @@ function createChatWindow(chatHub, toUserId, windowId, name) {
     });
 
     // Send Button event
-    $div.find("#btnSendMessage").click(function() {
+    $div.find('#btnSendMessage').click(function() {
 
-        $textBox = $div.find("#txtMessage");
+        $textBox = $div.find('#txtMessage');
         var message = $textBox.val();
         if (message.length > 0) {
 
@@ -193,9 +196,9 @@ function createChatWindow(chatHub, toUserId, windowId, name) {
     });
 
     // Text Box event
-    $div.find("#txtMessage").keypress(function(e) {
+    $div.find('#txtMessage').keypress(function(e) {
         if (e.which == 13) {
-            $div.find("#btnSendMessage").click();
+            $div.find('#btnSendMessage').click();
         }
     });
 

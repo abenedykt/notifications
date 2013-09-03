@@ -53,5 +53,11 @@ namespace Notifications.BusiessLogic
         {
             return _factory.GetMessages(employeeId1, employeeId2);
         }
+
+
+        public void AddEmployee(IEmployee employee)
+        {
+            _factory.AddEmployee(employee);
+        }
     }
 }

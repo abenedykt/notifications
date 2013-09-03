@@ -9,5 +9,7 @@ namespace Notifications.Base
         List<INotification> GetReceiveNotifications(int employeeId);
         List<INotification> GetSendNotifications(int employeeId);
         List<IMessage> GetMessages(int employeeId1, int employeeId2);
+
+        void AddEmployee(IEmployee employee);
     }
 }
