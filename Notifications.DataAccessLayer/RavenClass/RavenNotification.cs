@@ -5,10 +5,10 @@ namespace Notifications.DataAccessLayer.RavenClass
 {
     public class RavenNotification
     {
-        public RavenNotification()
-        {
-            Receivers = new List<RavenEmployee>();
-        }
+        //public RavenNotification()
+        //{
+        //    Receivers = new List<RavenEmployee>();
+        //}
 
         public int NotificationId { get; set; }
         public DateTime Date { get; set; }

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Metadata.Edm;
 using System.Diagnostics;
 using System.Linq;
 using Notifications.Base;
 using Notifications.DataAccessLayer.RavenClass;
-using Raven.Client.Embedded;
+using Raven.Client.Document;
 using Raven.Client;
 using Notifications.BusiessLogic;
 
@@ -13,27 +14,17 @@ namespace Notifications.DataAccessLayer
     public class RavenRepository : IDataRepository
     {
 
-        private EmbeddableDocumentStore documentStore;
+        private DocumentStore documentStore;
 
         private IDocumentSession _session;
 
         public RavenRepository()
         {
-
-
-        }
-
-
-
-        public void Init()
-        {
             try
             {
-                documentStore = new EmbeddableDocumentStore
+                documentStore = new DocumentStore
                 {
-
-                    DataDirectory = @"App_Data",
-
+                    Url = "http://localhost:8080"
                 };
 
                 documentStore.Initialize();
@@ -41,17 +32,11 @@ namespace Notifications.DataAccessLayer
                 _session = documentStore.OpenSession();
             }
             catch (Exception e)
-            {
-                
+            {        
                 Debug.WriteLine(e.Message);
             }
-                
-
-
-            
         }
     
-
     public void AddNotification(INotification notification)
         {
             var sender = _session.Query<RavenEmployee>().FirstOrDefault(x => x.EmployeeId == notification.SenderId);
@@ -60,8 +45,7 @@ namespace Notifications.DataAccessLayer
             {
                 Sender = sender,
                 Date = notification.Date,
-                Content = notification.Content,
-                
+                Content = notification.Content,              
             };
 
             _session.Store(ravenNotification);
@@ -76,8 +60,10 @@ namespace Notifications.DataAccessLayer
                 Notification = ravenNotification,
                 WhenRead = DateTime.Now
             }))
+
             {
                 _session.Store(receiverOfNotification);
+              receiverOfNotification.Receiver.ReceiveNotifications.Add(receiverOfNotification.Notification); 
                 _session.SaveChanges();
             }
         }
@@ -100,51 +86,42 @@ namespace Notifications.DataAccessLayer
 
         public List<INotification> GetReceiveNotifications(int receiverId)
         {
-            List<INotification> notifications = new List<INotification>();
-        
+            
+            
             var result = (from item in _session.Query<RavenReceiversOfNotification>()
                 where item.Receiver.EmployeeId == receiverId
-                select item).ToList();
-
-            foreach (var receiver in result)
-            {
-                var note =
-                    _session.Query<RavenNotification>().FirstOrDefault(x => x.NotificationId == receiver.Notification.NotificationId);
-                var employee =
-                    _session.Query<RavenEmployee>()
-                        .FirstOrDefault(x => x.EmployeeId == receiver.Receiver.EmployeeId);
-
-                Notification n = new Notification()
+                select new Notification()
                 {
-                    Content = note.Content,
-                    Date = note.Date,
-                    SenderName = employee.Name
-                };
-                notifications.Add(n);
-            }
+                    Content = item.Notification.Content,
+                    Date = item.Notification.Date,
+                    SenderName = item.Receiver.Name
+                }).AsEnumerable().Cast<INotification>().ToList();
 
-            return notifications;
+
+            return result;
         }
 
         public List<INotification> GetSendNotifications(int senderId)
         {
-            var result = (from notes in _session.Query<RavenNotification>()
-                          where notes.Sender.EmployeeId == senderId
-                          select new Notification
-                          {
-                               NotificationId = notes.NotificationId,
-                               Content = notes.Content,
-                               Date = notes.Date,
-                          }).AsEnumerable().Cast<INotification>().ToList();
 
-            foreach (var notes in result)
-            {
-                notes.ReceiversNames = GetReceivers(notes.NotificationId);
-            }
+            var result = (from item in _session.Query<RavenNotification>()
+               // where (item.Sender == null)
+                orderby item.NotificationId
+                //where item.NotificationId == 1002
+                select item).ToList();
+            var items = result.Count;
+            return null;
+            //foreach (var notes in result)
+            //{
+            //    notes.ReceiversNames = GetReceivers(notes.NotificationId);
+            //}
 
-            return result;
+            //return result;
 
+            // var result = (from item in _session.Query<RavenNotification>()
+            //             select item).ToList();
 
+            //return new List<INotification>();
         }
 
         public List<string> GetReceivers(int notesId)
@@ -175,22 +152,19 @@ namespace Notifications.DataAccessLayer
 
         public void AddEmployee(IEmployee employee)
         {
-            Init();
+            
             var result = _session.Query<RavenEmployee>().FirstOrDefault(x => x.EmployeeId == employee.EmployeeId);
 
+            if (result != null) return;
 
-            if (result == null)
+            var newEmployee = new RavenEmployee
             {
-                var newEmployee = new RavenEmployee()
-                {
-                    EmployeeId = employee.EmployeeId,
-                    Name = employee.Name
-                };
+                EmployeeId = employee.EmployeeId,
+                Name = employee.Name
+            };
 
-                _session.Store(newEmployee);
-                _session.SaveChanges();
-
-            }
+            _session.Store(newEmployee);
+            _session.SaveChanges();
         }
     }
 }
