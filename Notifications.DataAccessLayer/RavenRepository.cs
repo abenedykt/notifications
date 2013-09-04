@@ -104,24 +104,20 @@ namespace Notifications.DataAccessLayer
         public List<INotification> GetSendNotifications(int senderId)
         {
 
-            var result = (from item in _session.Query<RavenNotification>()
-               // where (item.Sender == null)
-                orderby item.NotificationId
-                //where item.NotificationId == 1002
-                select item).ToList();
-            var items = result.Count;
-            return null;
-            //foreach (var notes in result)
-            //{
-            //    notes.ReceiversNames = GetReceivers(notes.NotificationId);
-            //}
+            var result = (from item in _session.Query<RavenNotification>().Take(10)
+                          where item.Sender.EmployeeId == senderId
+                          select new Notification
+                          {
+                              NotificationId = item.NotificationId,
+                              Content = item.Content,
+                              Date = item.Date,
+                          }).AsEnumerable().Cast<INotification>().ToList();
 
-            //return result;
-
-            // var result = (from item in _session.Query<RavenNotification>()
-            //             select item).ToList();
-
-            //return new List<INotification>();
+            foreach (var notes in result)
+            {
+                notes.ReceiversNames = GetReceivers(notes.NotificationId);
+            }
+            return result;
         }
 
         public List<string> GetReceivers(int notesId)
