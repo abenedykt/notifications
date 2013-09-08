@@ -37,13 +37,11 @@ namespace Notifications.DataAccessLayer
             }
         }
     
-    public void AddNotification(INotification notification)
+        public void AddNotification(INotification notification)
         {
-            var sender = _session.Query<RavenEmployee>().FirstOrDefault(x => x.EmployeeId == notification.SenderId);
-
             var ravenNotification = new RavenNotification
             {
-                Sender = sender,
+                SenderId = "RavenEmployees/" + notification.SenderId,
                 Date = notification.Date,
                 Content = notification.Content,              
             };
@@ -51,34 +49,28 @@ namespace Notifications.DataAccessLayer
             _session.Store(ravenNotification);
             _session.SaveChanges();
 
-            foreach (var receiverOfNotification in notification.ReceiversIds
-                .Select(i => _session.Query<RavenEmployee>()
-                .FirstOrDefault(x => x.EmployeeId == i))
-                .Select(receiver => new RavenReceiversOfNotification
+            foreach (var receiver in notification.ReceiversIds)
             {
-                Receiver = receiver, 
-                Notification = ravenNotification,
-                WhenRead = DateTime.Now
-            }))
+                var receiverOfNotification = new RavenReceiversOfNotification()
+                {
+                    ReceiverId = "RavenReceiversOfNotifications/" + receiver,
+                    NotificationId = ravenNotification.Id,
+                    WhenRead = DateTime.Now
+                };
 
-            {
                 _session.Store(receiverOfNotification);
-              receiverOfNotification.Receiver.ReceiveNotifications.Add(receiverOfNotification.Notification); 
                 _session.SaveChanges();
             }
         }
 
         public void AddMessage(IMessage message)
         {
-            var sender = _session.Query<RavenEmployee>().FirstOrDefault(x => x.EmployeeId == message.SenderId);
-            var recepient = _session.Query<RavenEmployee>().FirstOrDefault(x => x.EmployeeId == message.ReceiverId);
-
             var ravenMessage = new RavenMessage
             {
                 Content = message.Content,
                 Date = message.Date,
-                Receiver = recepient,
-                Sender = sender
+                ReceiverId = "RavenEmployees/" + message.ReceiverId,
+                SenderId = "RavenEmployees/" + message.SenderId
             };
             _session.Store(ravenMessage);
             _session.SaveChanges();
@@ -86,63 +78,128 @@ namespace Notifications.DataAccessLayer
 
         public List<INotification> GetReceiveNotifications(int receiverId)
         {
-            
-            
-            var result = (from item in _session.Query<RavenReceiversOfNotification>()
-                where item.Receiver.EmployeeId == receiverId
-                select new Notification()
+            var receiver =  String.Format("RavenEmployees/{0}",receiverId);
+
+            var result = _session.Query<RavenReceiversOfNotification>()
+                .Customize(x => x.Include<RavenReceiversOfNotification>(o => o.ReceiverId))
+                .Customize(x => x.Include<RavenReceiversOfNotification>(o => o.NotificationId))
+                .Where(x => x.ReceiverId == receiver).ToList();
+
+            var lista = new List<INotification>();
+
+            foreach (var item in result)
+            {
+                var note = new Notification()
                 {
-                    Content = item.Notification.Content,
-                    Date = item.Notification.Date,
-                    SenderName = item.Receiver.Name
-                }).AsEnumerable().Cast<INotification>().ToList();
+                    Content = _session.Load<RavenNotification>(item.NotificationId).Content,
+                    Date = _session.Load<RavenNotification>(item.NotificationId).Date,
+                    SenderName = _session.Load<RavenEmployee>(item.ReceiverId).Name
+                };
+                lista.Add(note);
+            }
+
+            return lista;
+
+            
+            //var result = (from item in _session.Query<RavenReceiversOfNotification>()
+            //              from employee in _session.Query<RavenEmployee>()
+            //              from note in _session.Query<RavenNotification>()
+            //    where item.ReceiverId ==  String.Format("RavenEmployees/{0}",receiverId)
+            //    select new Notification()
+            //    {
+            //        Content = note.Content,
+            //        Date = note.Date,
+            //        SenderName = employee.Name
+            //    }).AsEnumerable().Cast<INotification>().ToList();
 
 
-            return result;
+            //return result;
         }
 
         public List<INotification> GetSendNotifications(int senderId)
         {
 
-            var result = (from item in _session.Query<RavenNotification>().Take(10)
-                          where item.Sender.EmployeeId == senderId
-                          select new Notification
-                          {
-                              NotificationId = item.NotificationId,
-                              Content = item.Content,
-                              Date = item.Date,
-                          }).AsEnumerable().Cast<INotification>().ToList();
-
+            var result = (from item in _session.Query<RavenNotification>()
+                          where item.SenderId == String.Format("RavenEmployees/{0}", senderId)
+                          select item).ToList();
+            
+            var lista = new List<INotification>();
+           
             foreach (var notes in result)
             {
-                notes.ReceiversNames = GetReceivers(notes.NotificationId);
-            }
-            return result;
+                var notifica = new Notification
+                {
+                    Content = notes.Content,
+                    Date = notes.Date,
+                    ReceiversNames = GetReceivers(notes.Id)
+                };
+                lista.Add(notifica);
+            }           
+            return lista;
         }
 
-        public List<string> GetReceivers(int notesId)
+        public List<string> GetReceivers(string notesId)
         {
-            var result = (from item in _session.Query<RavenReceiversOfNotification>()
-                                   where item.Notification.NotificationId == notesId
-                                   select item.Receiver.Name).ToList();
-            return result;
+            var result = _session.Query<RavenReceiversOfNotification>()
+                .Customize(x => x.Include<RavenReceiversOfNotification>(o => o.ReceiverId))
+                .Where(x => x.NotificationId == notesId)
+                .ToList();
+
+            var l = new List<string>();
+
+            foreach (var name in result)
+            { 
+                l.Add(_session.Load<RavenEmployee>(name.ReceiverId).Name);      
+            }
+            return l;
         }
 
         public List<IMessage> GetMessages(int employeeId1, int employeeId2)
         {
-            var result = (from item in _session.Query<RavenMessage>()
-                                     where
-                                         ((item.Sender.EmployeeId == employeeId1 && item.Receiver.EmployeeId == employeeId2) ||
-                                          (item.Sender.EmployeeId == employeeId2 && item.Receiver.EmployeeId == employeeId1))
-                                     orderby item.Date
-                                     select new Message
-                                     {
-                                         Date = item.Date,
-                                         Content = item.Content,
-                                         SenderName = item.Sender.Name,
-                                         ReceiverName = item.Receiver.Name
-                                     }).AsEnumerable().Cast<IMessage>().ToList();
-            return result;
+            var employee1 = String.Format("RavenEmployees/{0}", employeeId1);
+            var employee2 = String.Format("RavenEmployees/{0}", employeeId2);
+
+
+            var result = _session.Query<RavenMessage>()
+                .Customize(x => x.Include<RavenMessage>(o => o.ReceiverId))
+                .Customize(x => x.Include<RavenMessage>(o => o.SenderId))
+                .Where((x =>( x.ReceiverId == employee1 && x.SenderId == employee2) || (x.ReceiverId == employee2 && x.SenderId == employee1)))
+                .ToList();
+
+            var lista = new List<IMessage>();
+
+            foreach (var message in result)
+            {
+                var m = new Message
+                {
+                    Content = message.Content,
+                    Date = message.Date,
+                    ReceiverName = _session.Load<RavenEmployee>(message.ReceiverId).Name,
+                    SenderName = _session.Load<RavenEmployee>(message.SenderId).Name
+                };
+                
+                lista.Add(m);
+
+
+            }
+
+            return lista;
+
+
+        //    var result = (from item in _session.Query<RavenMessage>()
+        //                  from employee in _session.Query<RavenEmployee>()
+        //                             where
+        //                                 ((item.SenderId == employee1 && item.ReceiverId == employee2) ||
+        //                                  (item.SenderId == employee2 && item.ReceiverId == employee1))
+        //                             orderby item.Date
+        //                             select new Message
+        //                             {
+        //                                 Date = item.Date,
+        //                                 Content = item.Content,
+        //                                 SenderName = employee.Name,
+        //                                 ReceiverName = employee.Name
+        //                             }).AsEnumerable().Cast<IMessage>().ToList();
+        //    return result;
         }
 
 
@@ -158,7 +215,7 @@ namespace Notifications.DataAccessLayer
                 EmployeeId = employee.EmployeeId,
                 Name = employee.Name
             };
-
+            documentStore.Conventions.RegisterIdConvention<RavenEmployee>((dbname, commands, user) => "RavenEmployees/" + user.EmployeeId);
             _session.Store(newEmployee);
             _session.SaveChanges();
         }

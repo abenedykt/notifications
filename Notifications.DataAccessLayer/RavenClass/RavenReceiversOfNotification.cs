@@ -4,9 +4,9 @@ namespace Notifications.DataAccessLayer.RavenClass
 {
     public class RavenReceiversOfNotification
     {
-        public int ReceiversOfNotificationId { get; set; }
-        public RavenNotification Notification { get; set; }
-        public RavenEmployee Receiver { get; set; }
+        public string Id { get; set; }
+        public string NotificationId { get; set; }
+        public string ReceiverId { get; set; }
 
         public DateTime WhenRead { get; set; }
     }

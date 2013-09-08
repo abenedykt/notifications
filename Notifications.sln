@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.20623.1 VSUPREVIEW
+VisualStudioVersion = 12.0.20617.1 PREVIEW
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{53764CF8-70DB-4099-A343-D5B385EAC870}"
 	ProjectSection(SolutionItems) = preProject

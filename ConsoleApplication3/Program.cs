@@ -1,15 +1,10 @@
-﻿using Notifications.DataAccessLayer.RavenClass;
-using Raven.Client;
-using Raven.Client.Document;
-using Raven.Client.Connection;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-
-namespace ConsoleApplication1
+using Raven.
+namespace ConsoleApplication3
 {
     class Program
     {
@@ -24,13 +19,13 @@ namespace ConsoleApplication1
             documentStore.Initialize();
 
             //addMessages();
-            //addEmployees();
-           addNotifications();
+            addEmployees();
+            //addNotifications();
 
             Console.WriteLine("koniec!");
             Console.ReadLine();
         }
-      
+
         public static void addEmployees()
         {
 
@@ -43,8 +38,6 @@ namespace ConsoleApplication1
                         EmployeeId = i,
                         Name = string.Format("Adam{0}", i)
                     };
-                    documentStore.Conventions.RegisterIdConvention<RavenEmployee>((dbname, commands, user) => "RavenEmployees/" + i);
-
                     _session.Store(newEmployee);
                 }
                 _session.SaveChanges();
@@ -59,21 +52,19 @@ namespace ConsoleApplication1
             {
                 using (IDocumentSession _session = documentStore.OpenSession())
                 {
-                    var sender = _session.Query<RavenEmployee>().FirstOrDefault(x => x.EmployeeId == r.Next(1, 5000));
-                    var recepient = _session.Query<RavenEmployee>().FirstOrDefault(x => x.EmployeeId == r.Next(1, 5000));
+                    var sender = _session.Query<RavenEmployee>().FirstOrDefault(x => x.EmployeeId == r.Next(1, 1000));
+                    var recepient = _session.Query<RavenEmployee>().FirstOrDefault(x => x.EmployeeId == r.Next(1, 1000));
 
-                    for (int i = 1000*j; i < 1000*(j+1); i++)
+                    for (int i = 1; i < 1000; i++)
                     {
                         var ravenMessage = new RavenMessage
                         {
-                           
+                            MessageId = i,
                             Content = "wiadomosc nr" + i,
                             Date = new DateTime(2012, 11, 20),
-                            ReceiverId = String.Format("RavenEmployees/{0}",r.Next(1, 5000)),
-                            SenderId = String.Format("RavenEmployees/{0}", r.Next(1, 5000))
+                            Receiver = recepient,
+                            Sender = sender
                         };
-                        
-
                         _session.Store(ravenMessage);
                     }
 
@@ -82,40 +73,38 @@ namespace ConsoleApplication1
                 }
             }
 
-            //using (IDocumentSession _session = documentStore.OpenSession())
-            //{
-            //    var table = _session.Query<RavenMessage>().Take(10000).ToArray();
-            //    foreach (var ravenMessage in table)
-            //    {
-            //        Console.WriteLine(string.Format("nadawca: {1}, odbiorca: {2}, treść: {3}",
-            //             ravenMessage.Sender.Name, ravenMessage.Receiver.Name,
-            //            ravenMessage.Content));
-            //    }
-            //}
+            using (IDocumentSession _session = documentStore.OpenSession())
+            {
+                var table = _session.Query<RavenMessage>().Take(10000).ToArray();
+                foreach (var ravenMessage in table)
+                {
+                    Console.WriteLine(string.Format("{0}, nadawca: {1}, odbiorca: {2}, treść: {3}",
+                        ravenMessage.MessageId, ravenMessage.Sender.Name, ravenMessage.Receiver.Name,
+                        ravenMessage.Content));
+                }
+            }
         }
 
         public static void addNotifications()
         {
 
             Random r = new Random();
-           
 
-
-            for (int j = 1; j < 1000; j++)
+            for (int j = 1001; j < 100000; j++)
             {
                 using (IDocumentSession _session = documentStore.OpenSession())
                 {
-                    
+                    var sender = _session.Query<RavenEmployee>().FirstOrDefault(x => x.EmployeeId == r.Next(1, 1000));
 
                     var ravenNotification = new RavenNotification
                     {
-                        
+                        NotificationId = j,
                         Content = "powiadomienie nr" + j,
                         Date = new DateTime(2012, 11, 20),
-                        SenderId = String.Format("RavenEmployees/{0}", r.Next(1, 5000))
+                        Sender = sender
                     };
 
-                  _session.Store(ravenNotification);
+                    _session.Store(ravenNotification);
 
                     _session.SaveChanges();
 
@@ -123,14 +112,16 @@ namespace ConsoleApplication1
 
                     for (int i = 0; i < r.Next(1, 5); i++)
                     {
-                        
+                        recepient = _session.Query<RavenEmployee>().FirstOrDefault(x => x.EmployeeId == r.Next(1, 1000));
+                        ravenNotification.Receivers.Add(recepient);
+
                         var receiverOfNotification = new RavenReceiversOfNotification
                         {
-                            NotificationId = ravenNotification.Id,
-                            ReceiverId = String.Format("RavenEmployees/{0}", r.Next(1, 5000)),
-                           
+                            Notification = ravenNotification,
+                            Receiver = recepient,
+                            ReceiversOfNotificationId = j
                         };
-                        
+
                         _session.Store(receiverOfNotification);
                         _session.SaveChanges();
                     }
@@ -143,4 +134,5 @@ namespace ConsoleApplication1
         }
 
     }
+
 }
