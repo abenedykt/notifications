@@ -158,7 +158,7 @@ namespace Notifications.Mvc.Hubs
             return String.Format("{0}r., {1}", date.ToString("dd.MM.yyyy"), date.ToLongTimeString());
         }
 
-        private string GetReceiversNamesString(List<string> receiversList) //method for history of send messages
+        private string GetReceiversNamesString(IEnumerable<string> receiversList) //method for history of send messages
         {
             string receivers = "";
 

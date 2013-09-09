@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Notifications.DataAccessLayer
+namespace Notifications.DataAccessLayer.SqlClass
 {
     public class SqlMessage
     {

@@ -1,40 +1,36 @@
 ﻿using System.Linq;
 using Notifications.DataAccessLayer;
-using Notifications.DataAccessLayer.RavenClass;
 using Notifications.BusiessLogic;
 using Raven.Client;
 using Raven.Client.Document;
-using Raven.Client.Linq;
-using Xunit;
 using Xunit.Extensions;
 using Notifications.Base;
 using System;
-using System.Collections.Generic;
 
 namespace ExpensiveTests
 {
     public class ExpensiveTests
     {
-        private DocumentStore documentStore;
+        private DocumentStore _documentStore;
 
         private IDocumentSession _session;
 
-        private RavenRepository _ravenRepository = new RavenRepository();
+        private readonly RavenRepository _ravenRepository = new RavenRepository();
 
-        void Init()
-        {
-            documentStore = new DocumentStore
-            {
-                Url = "http://localhost:8080"
-            };
+       // void Init()
+        //{
+        //    _documentStore = new DocumentStore
+        //    {
+        //        Url = "http://localhost:8080"
+        //    };
 
-            documentStore.Initialize();
+        //    _documentStore.Initialize();
 
-            _session = documentStore.OpenSession();
-        }
+        //    _session = _documentStore.OpenSession();
+        //}
 
         [Theory]
-        [InlineData(680)]
+        [InlineData(1)]
         public void GetReceiveNotifications_ExpensiveTest(int receiverId)
         {    
            var result = _ravenRepository.GetReceiveNotifications(receiverId);  
@@ -42,7 +38,7 @@ namespace ExpensiveTests
         }
 
         [Theory]
-        [InlineData(4231)]
+        [InlineData(2)]
         public void GetSendNotifications_ExpensiveTest(int senderId)
         {
             var result = _ravenRepository.GetSendNotifications(senderId);
@@ -67,12 +63,7 @@ namespace ExpensiveTests
         [InlineData("notatka", 10, new int[]{3, 5, 6})]
         public void AddNotification_ExpensiveTest(string content, int senderId, int[] receiversIds)
         {
-            var lista = new List<int>();
-
-            foreach (var item in receiversIds)
-            {
-                lista.Add(item);                
-            }
+            var lista = receiversIds.ToList();
 
             INotification notification = new Notification
             {
@@ -101,7 +92,7 @@ namespace ExpensiveTests
         }
 
         [Theory]
-        [InlineData(4047,2156)]
+        [InlineData(3012,2244)]
         public void GetMessages_ExpensiveTest(int senderId, int receiverId)
         {
             var result= _ravenRepository.GetMessages(senderId, receiverId);

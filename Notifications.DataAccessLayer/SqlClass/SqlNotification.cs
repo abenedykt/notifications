@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Notifications.DataAccessLayer
+namespace Notifications.DataAccessLayer.SqlClass
 {
     public class SqlNotification
     {

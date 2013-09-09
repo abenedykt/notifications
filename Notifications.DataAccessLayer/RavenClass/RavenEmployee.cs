@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Notifications.DataAccessLayer.RavenClass
+﻿namespace Notifications.DataAccessLayer.RavenClass
 {
     public class RavenEmployee
     {

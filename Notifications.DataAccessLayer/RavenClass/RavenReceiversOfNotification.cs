@@ -8,6 +8,7 @@ namespace Notifications.DataAccessLayer.RavenClass
         public string NotificationId { get; set; }
         public string ReceiverId { get; set; }
 
+        public DateTime Date { get; set; }
         public DateTime WhenRead { get; set; }
     }
 }

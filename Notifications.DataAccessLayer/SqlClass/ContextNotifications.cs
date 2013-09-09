@@ -1,6 +1,6 @@
 ﻿using System.Data.Entity;
 
-namespace Notifications.DataAccessLayer
+namespace Notifications.DataAccessLayer.SqlClass
 {
     public class ContextNotifications : DbContext
     {

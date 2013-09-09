@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Notifications.Base;
 using Notifications.BusiessLogic;
-using Raven.Database.Indexing.Collation.Cultures;
+using Notifications.DataAccessLayer.SqlClass;
 
 namespace Notifications.DataAccessLayer
 {
