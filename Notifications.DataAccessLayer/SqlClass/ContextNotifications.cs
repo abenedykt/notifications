@@ -5,7 +5,9 @@ namespace Notifications.DataAccessLayer.SqlClass
     public class ContextNotifications : DbContext
     {
         public ContextNotifications()
-            : base("Data Source=(localdb)\\v11.0;Initial Catalog=Notifications.DataAccessLayer.ContextNotifications;Integrated Security=True;MultipleActiveResultSets=True;")
+            : base(
+                "Data Source=(localdb)\\v11.0;Initial Catalog=Notifications.DataAccessLayer.ContextNotifications;Integrated Security=True;MultipleActiveResultSets=True;"
+                )
         {
         }
 

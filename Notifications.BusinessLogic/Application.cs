@@ -13,7 +13,7 @@ namespace Notifications.BusiessLogic
             _factory = factory;
         }
 
-        public void BrodcastNotification(string content, int senderId, List<int> receiversIds, DateTime date)
+        public int BrodcastNotification(string content, int senderId, List<int> receiversIds, DateTime date)
         {
             INotification notification = new Notification
             {
@@ -23,7 +23,7 @@ namespace Notifications.BusiessLogic
                 ReceiversIds = receiversIds
             };
 
-            _factory.AddNotification(notification);
+           return  _factory.AddNotification(notification);
         }
 
         public void SendMessage(string content, int senderId, int receiverId, DateTime date)
@@ -54,10 +54,15 @@ namespace Notifications.BusiessLogic
             return _factory.GetMessages(employeeId1, employeeId2);
         }
 
+        public void AddTimeofReading(int notificationId, int receiverId)
+        {
+            _factory.AddTimeofReading(notificationId, receiverId);
+        }
 
         public void AddEmployee(IEmployee employee)
         {
             _factory.AddEmployee(employee);
         }
+
     }
 }

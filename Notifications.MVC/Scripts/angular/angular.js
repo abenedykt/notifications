@@ -8486,7 +8486,7 @@
 
             return {
                 // Android has history.pushState, but it does not update location correctly
-      // so let's not use the history API at all.
+                // so let's not use the history API at all.
       // http://code.google.com/p/android/issues/detail?id=17471
       // https://github.com/angular/angular.js/issues/904
                 history: !!($window.history && $window.history.pushState && !(android < 4)),
@@ -13809,7 +13809,7 @@
                         collection = scope.$eval(rhs),
                         cursor = iterStartElement, // current position of the node
                         // Same as lastOrder but it has the current state. It will become the
-            // lastOrder on the next iteration.
+                        // lastOrder on the next iteration.
                         nextOrder = new HashQueueMap(),
                         arrayBound,
                         childScope,
@@ -14601,7 +14601,7 @@
                     nullOption = false, // if false, user will not be able to select it (used by ngOptions)
                     emptyOption,
                     // we can't just jqLite('<option>') since jqLite is not smart enough
-          // to create it in <select> and IE barfs otherwise.
+                    // to create it in <select> and IE barfs otherwise.
                     optionTemplate = jqLite(document.createElement('option')),
                     optGroupTemplate = jqLite(document.createElement('optgroup')),
                     unknownOption = optionTemplate.clone();
@@ -14711,7 +14711,7 @@
                         valueFn = $parse(match[2] ? match[1] : valueName),
                         valuesFn = $parse(match[7]),
                         // This is an array of array of existing option groups in DOM. We try to reuse these if possible
-            // optionGroupsCache[0] is the options with no option group
+                        // optionGroupsCache[0] is the options with no option group
             // optionGroupsCache[?][0] is the parent: either the SELECT or OPTGROUP element
                         optionGroupsCache = [[{ element: selectElement, label: '' }]];
 

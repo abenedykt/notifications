@@ -70,10 +70,6 @@
       <Project>{be40aeb0-7337-4c7e-b781-3fdc4ae96fcb}</Project>
       <Name>Notifications.BusinessLogic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Notifications.DataAccessLayer\Notifications.DataAccessLayer.csproj">
-      <Project>{1DE08D5B-5B74-4B6A-A285-6D07931741FD}</Project>
-      <Name>Notifications.DataAccessLayer</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

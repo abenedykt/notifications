@@ -1,23 +1,23 @@
-﻿using System.Linq;
-using Notifications.DataAccessLayer;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Notifications.Base;
 using Notifications.BusiessLogic;
+using Notifications.DataAccessLayer;
 using Raven.Client;
 using Raven.Client.Document;
 using Xunit.Extensions;
-using Notifications.Base;
-using System;
 
 namespace ExpensiveTests
 {
     public class ExpensiveTests
     {
+        private readonly RavenRepository _ravenRepository = new RavenRepository();
         private DocumentStore _documentStore;
 
         private IDocumentSession _session;
 
-        private readonly RavenRepository _ravenRepository = new RavenRepository();
-
-       // void Init()
+        // void Init()
         //{
         //    _documentStore = new DocumentStore
         //    {
@@ -32,18 +32,18 @@ namespace ExpensiveTests
         [Theory]
         [InlineData(1)]
         public void GetReceiveNotifications_ExpensiveTest(int receiverId)
-        {    
-           var result = _ravenRepository.GetReceiveNotifications(receiverId);  
-           var items = result.Count;
+        {
+            List<INotification> result = _ravenRepository.GetReceiveNotifications(receiverId);
+            int items = result.Count;
         }
 
         [Theory]
         [InlineData(2)]
         public void GetSendNotifications_ExpensiveTest(int senderId)
         {
-            var result = _ravenRepository.GetSendNotifications(senderId);
+            List<INotification> result = _ravenRepository.GetSendNotifications(senderId);
 
-            var items = result.Count;
+            int items = result.Count;
         }
 
         [Theory]
@@ -56,14 +56,14 @@ namespace ExpensiveTests
                 EmployeeId = employeeId
             };
 
-           _ravenRepository.AddEmployee(employee);
+            _ravenRepository.AddEmployee(employee);
         }
 
         [Theory]
-        [InlineData("notatka", 10, new int[]{3, 5, 6})]
+        [InlineData("notatka", 10, new[] {3, 5, 6})]
         public void AddNotification_ExpensiveTest(string content, int senderId, int[] receiversIds)
         {
-            var lista = receiversIds.ToList();
+            List<int> lista = receiversIds.ToList();
 
             INotification notification = new Notification
             {
@@ -79,7 +79,7 @@ namespace ExpensiveTests
         [Theory]
         [InlineData("notatka", 10, 7)]
         public void AddMessage_ExpensiveTest(string content, int senderId, int receiverId)
-        {           
+        {
             IMessage message = new Message
             {
                 Content = content,
@@ -92,11 +92,22 @@ namespace ExpensiveTests
         }
 
         [Theory]
-        [InlineData(3012,2244)]
+        [InlineData(3012, 2244)]
         public void GetMessages_ExpensiveTest(int senderId, int receiverId)
         {
-            var result= _ravenRepository.GetMessages(senderId, receiverId);
+            List<IMessage> result = _ravenRepository.GetMessages(senderId, receiverId);
 
+            int items = result.Count;
+        }
+
+
+        [Theory]
+        [InlineData(5313, 3)]
+        public void AddTimeOfReading_ExpensiveTest(int notificationId, int receiverId)
+        {
+            _ravenRepository.AddTimeofReading(notificationId, receiverId);
+
+            var result = _ravenRepository.GetReceiveNotifications(receiverId);
             var items = result.Count;
         }
     }

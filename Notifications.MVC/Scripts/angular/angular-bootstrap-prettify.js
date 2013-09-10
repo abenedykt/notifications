@@ -1166,7 +1166,7 @@
        */
                 var REGEX_LITERAL = (
                     // A regular expression literal starts with a slash that is
-          // not followed by * or / so that it is not confused with
+                    // not followed by * or / so that it is not confused with
           // comments.
                     '/(?=[^/*])'
                         // and then contains any number of raw characters,
@@ -1739,7 +1739,7 @@
                     var className = cs.className;
                     if (prettyPrintRe.test(className)
                         // Don't redo this if we've already done it.
-            // This allows recalling pretty print to just prettyprint elements
+                        // This allows recalling pretty print to just prettyprint elements
             // that have been added to the page since last call.
                         && !prettyPrintedRe.test(className)) {
 

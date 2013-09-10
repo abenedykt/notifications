@@ -36,10 +36,9 @@ namespace Notifications.Mvc.Hubs
 
                 Clients.All.onlineUsers(ConnectedUsers.Count - 1); //send actual number of available users
 
-                
 
                 List<INotification> sendNotes = _application.GetSendNotifications(userId);
-                   // get history of send messages
+                // get history of send messages
                 foreach (INotification note in sendNotes)
                     Clients.Caller.getSendNotifications(GetDateTimeString(note.Date),
                         GetReceiversNamesString(note.ReceiversNames), note.Content);
@@ -95,10 +94,10 @@ namespace Notifications.Mvc.Hubs
             }
 
             await Clients.Caller.addMessage(toUserId, fromUserName, message, GetDateTimeString(date));
-                // send to caller user
+            // send to caller user
 
             await Clients.Client(toUserId).addMessage(fromUserId, fromUserName, message, GetDateTimeString(date));
-                // send to 
+            // send to 
 
             _application.SendMessage(message, toUser.EmployeeId, fromUser.EmployeeId, date);
         }
@@ -107,7 +106,7 @@ namespace Notifications.Mvc.Hubs
         {
             Employee fromUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
 
-            DateTime date = DateTime.Now;
+            var date = DateTime.Now;
 
             var receiversIds = new List<int>();
             var receiversNames = new List<string>();
@@ -121,18 +120,18 @@ namespace Notifications.Mvc.Hubs
                 receiversNames.Add(toUser.Name);
             }
 
-            await Clients.Group("broadcasting").sendNotificationBroadcast(notification, userName);
+            var notificationId = _application.BrodcastNotification(notification, fromUser.EmployeeId, receiversIds, date);
 
-            _application.BrodcastNotification(notification, fromUser.EmployeeId, receiversIds, date);
+            await Clients.Group("broadcasting").sendNotificationBroadcast(notificationId, notification, userName, fromUser.EmployeeId); 
 
             foreach (string item in users)
             {
-                Clients.Client(item).getReceivedNotifications(GetDateTimeString(date), userName, notification);
+                Clients.Client(item).addReceivedNotification(GetDateTimeString(date), userName, notification);
 
                 await Groups.Remove(item, "broadcasting");
             }
 
-            Clients.Caller.getSendNotifications(GetDateTimeString(date), GetReceiversNamesString(receiversNames),
+            Clients.Caller.addSendNotification(GetDateTimeString(date), GetReceiversNamesString(receiversNames),
                 notification);
             Clients.Caller.notificationConfirm();
         }
@@ -151,6 +150,26 @@ namespace Notifications.Mvc.Hubs
             }
         }
 
+       
+        public void AddTimeofReading(int notificationId, int senderId)
+        {
+            var UserId = Context.ConnectionId;
+            var User = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == UserId);
+
+            Employee sender = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == senderId);
+
+
+            _application.AddTimeofReading(notificationId, User.EmployeeId);
+
+            List<INotification> sendNotes = _application.GetSendNotifications(senderId);
+
+            Clients.Client(sender.ConnectionId).clearHistoryOfSendNotifications();
+            // get history of send messages
+            foreach (INotification note in sendNotes)
+                Clients.Client(sender.ConnectionId).getSendNotifications(GetDateTimeString(note.Date),
+                    GetReceiversNamesString(note.ReceiversNames), note.Content);
+        }
+
         private string GetDateTimeString(DateTime date)
         {
             if (date.ToShortDateString() == DateTime.Now.ToShortDateString())
@@ -164,11 +183,12 @@ namespace Notifications.Mvc.Hubs
 
             foreach (string receiver in receiversList)
             {
-                if (receivers != "") receivers += ", " + receiver;
-                else receivers += receiver;
+                if (receivers != "") receivers += ", <br/> " + receiver;
+                else receivers += "<br/>" + receiver;
             }
 
             return receivers;
         }
+
     }
 }

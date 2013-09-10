@@ -12,5 +12,6 @@ namespace Notifications.Base
         string Content { get; set; }
         List<int> ReceiversIds { get; set; }
         List<string> ReceiversNames { get; set; }
+      
     }
 }

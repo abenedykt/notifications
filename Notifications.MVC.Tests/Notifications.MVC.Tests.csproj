@@ -73,7 +73,7 @@
       <Name>Notifications.BusinessLogic</Name>
     </ProjectReference>
     <ProjectReference Include="..\Notifications.MVC\Notifications.MVC.csproj">
-      <Project>{DFF9D0A6-43D9-4F46-90A0-AFA29F21ED72}</Project>
+      <Project>{dff9d0a6-43d9-4f46-90a0-afa29f21ed72}</Project>
       <Name>Notifications.MVC</Name>
     </ProjectReference>
   </ItemGroup>

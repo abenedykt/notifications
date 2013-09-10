@@ -1,6 +1,4 @@
-﻿//using Autofac.Integration.Mvc;
-//using Autofac.Integration.WebApi;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -10,8 +8,9 @@ using Autofac.Integration.SignalR;
 using Microsoft.AspNet.SignalR;
 using Notifications.Base;
 using Notifications.BusiessLogic;
-using Notifications.DataAccessLayer;
 using Notifications.Mvc.App_Start;
+using Notifications.DataAccessLayer;
+
 
 namespace Notifications.Mvc
 {
@@ -28,9 +27,7 @@ namespace Notifications.Mvc
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-
-
-           }
+        }
 
         private static void AutofacConfiguration()
         {

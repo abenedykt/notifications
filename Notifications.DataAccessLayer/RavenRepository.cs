@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Metadata.Edm;
 using System.Diagnostics;
 using System.Linq;
 using Notifications.Base;
@@ -37,8 +36,8 @@ namespace Notifications.DataAccessLayer
                 Debug.WriteLine(e.Message);
             }
         }
-    
-        public void AddNotification(INotification notification)
+
+        public int AddNotification(INotification notification)
         {
             var ravenNotification = new RavenNotification
             {
@@ -55,13 +54,16 @@ namespace Notifications.DataAccessLayer
                 var receiverOfNotification = new RavenReceiversOfNotification()
                 {
                     ReceiverId = "RavenEmployees/" + receiver,
-                    NotificationId = ravenNotification.Id,
-                    WhenRead = DateTime.Now
+                    NotificationId = ravenNotification.Id,                
+                    Date = ravenNotification.Date
                 };
 
                 _session.Store(receiverOfNotification);
                 _session.SaveChanges();
             }
+            var s = new string((ravenNotification.Id).Where(c => Char.IsNumber(c)).ToArray());
+            var cs = Convert.ToInt32(s);
+            return cs;
         }
 
         public void AddMessage(IMessage message)
@@ -92,7 +94,6 @@ namespace Notifications.DataAccessLayer
                 Date = _session.Load<RavenNotification>(item.NotificationId).Date, 
                 SenderName = _session.Load<RavenEmployee>(_session.Load<RavenNotification>(item.NotificationId).SenderId).Name
             }).AsEnumerable().Cast<INotification>().ToList();
-
         }
 
         public List<INotification> GetSendNotifications(int senderId)
@@ -115,9 +116,32 @@ namespace Notifications.DataAccessLayer
                 .Customize(x => x.Include<RavenReceiversOfNotification>(o => o.ReceiverId))
                 .Where(x => x.NotificationId == notesId)
                 .ToList();
+            var lista = new List<string>();
 
-            return result.Select(name => _session.Load<RavenEmployee>(name.ReceiverId).Name).ToList();
+            foreach (var r in result)
+            {
+                string s = _session.Load<RavenEmployee>(r.ReceiverId).Name;
+
+                if (r.Date != DateTime.MinValue)
+                {
+                    s += " (odczytane: " + GetDateTimeString(r.Date) + ")";
+                }
+                else
+                {
+                    s += " (nie odczytane)";
+                }
+                lista.Add(s);
+            }
+            return lista;
         }
+
+        private static string GetDateTimeString(DateTime date)
+        {
+            if (date.ToShortDateString() == DateTime.Now.ToShortDateString())
+                return String.Format("dzisiaj, {0}", date.ToLongTimeString());
+            return String.Format("{0}r., {1}", date.ToString("dd.MM.yyyy"), date.ToLongTimeString());
+        }
+
 
         public List<IMessage> GetMessages(int employeeId1, int employeeId2)
         {
@@ -139,6 +163,20 @@ namespace Notifications.DataAccessLayer
                 }).AsEnumerable().Cast<IMessage>().ToList();
         }
 
+        public void AddTimeofReading(int notificationId, int receiverId)
+        {
+            var notification = String.Format("RavenNotifications/{0}", notificationId);
+            var receiver = String.Format("RavenEmployees/{0}", receiverId);
+
+            var result =
+                _session.Query<RavenReceiversOfNotification>().FirstOrDefault(x => (x.NotificationId == notification && x.ReceiverId == receiver));
+
+            if (result.WhenRead == DateTime.MinValue)
+            {
+                result.WhenRead = DateTime.Now;
+                _session.SaveChanges();
+            }
+        }
 
         public void AddEmployee(IEmployee employee)
         {         

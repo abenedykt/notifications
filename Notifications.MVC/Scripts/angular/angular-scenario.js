@@ -34,7 +34,7 @@
             // A central reference to the root jQuery(document)
             rootjQuery,
             // A simple way to check for HTML strings or ID strings
-	// Prioritize #id over <tag> to avoid XSS via location.hash (#9521)
+            // Prioritize #id over <tag> to avoid XSS via location.hash (#9521)
             quickExpr = /^(?:[^#<]*(<[\w\W]+>)[^>]*$|#([\w\-]*)$)/,
             // Check if a string has a non-whitespace character in it
             rnotwhite = /\S/,
@@ -1682,13 +1682,13 @@
                 internalKey = jQuery.expando,
                 getByName = typeof name === "string",
                 // We have to handle DOM nodes and JS objects differently because IE6-7
-			// can't GC object references properly across the DOM-JS boundary
+                // can't GC object references properly across the DOM-JS boundary
                 isNode = elem.nodeType,
                 // Only DOM nodes need the global jQuery cache; JS object data is
-			// attached directly to the object so GC can occur automatically
+                // attached directly to the object so GC can occur automatically
                 cache = isNode ? jQuery.cache : elem,
                 // Only defining an ID for JS objects if its cache already exists allows
-			// the code to shortcut on the same path as a DOM node with no cache
+                // the code to shortcut on the same path as a DOM node with no cache
                 id = isNode ? elem[internalKey] : elem[internalKey] && internalKey,
                 isEvents = name === "events";
 
@@ -5186,7 +5186,7 @@
                                 // IE 9's matchesSelector returns false on disconnected nodes
                                 if (ret || !disconnectedMatch ||
                                     // As well, disconnected nodes are said to be in a document
-								// fragment in IE 9, so check for that
+                                    // fragment in IE 9, so check for that
                                     node.document && node.document.nodeType !== 11) {
                                     return ret;
                                 }
@@ -5441,7 +5441,7 @@
             return !!selector && (
                 typeof selector === "string" ?
                     // If this is a positional selector, check membership in the returned set
-				// so $("p:first").is("p:last") won't return true for a doc with two "p".
+                    // so $("p:first").is("p:last") won't return true for a doc with two "p".
                     POS.test(selector) ?
                         jQuery(selector, this.context).index(this[0]) >= 0 :
                         jQuery.filter(selector, this).length > 0 :
@@ -6024,7 +6024,7 @@
                                 root(this[i], first) :
                                 this[i],
                             // Make sure that we do not leak memory by inadvertently discarding
-						// the original fragment (which might have attached data) instead of
+                            // the original fragment (which might have attached data) instead of
 						// using it; in addition, use the original fragment object for the last
 						// item instead of first because it can end up being emptied incorrectly
 						// in certain situations (Bug #8070).
@@ -6550,7 +6550,7 @@
 
     jQuery.extend({
         // Add in style property hooks for overriding the default
-	// behavior of getting and setting a style property
+        // behavior of getting and setting a style property
         cssHooks: {
             opacity: {
                 get: function(elem, computed) {
@@ -7145,7 +7145,7 @@
                             // Create a dummy div to hold the results
                             jQuery("<div>")
                                 // inject the contents of the document in, removing the scripts
-							// to avoid any 'Permission Denied' errors in IE
+                                // to avoid any 'Permission Denied' errors in IE
                                 .append(responseText.replace(rscript, ""))
 
                                 // Locate the specified elements
@@ -7326,7 +7326,7 @@
                 // Callbacks context
                 callbackContext = s.context || s,
                 // Context for global events
-			// It's the callbackContext if one was provided in the options
+                // It's the callbackContext if one was provided in the options
 			// and if it's a DOM node or a jQuery collection
                 globalEventContext = callbackContext !== s &&
                     (callbackContext.nodeType || callbackContext instanceof jQuery) ?
@@ -17839,7 +17839,7 @@
 
             return {
                 // Android has history.pushState, but it does not update location correctly
-      // so let's not use the history API at all.
+                // so let's not use the history API at all.
       // http://code.google.com/p/android/issues/detail?id=17471
       // https://github.com/angular/angular.js/issues/904
                 history: !!($window.history && $window.history.pushState && !(android < 4)),
@@ -23162,7 +23162,7 @@
                         collection = scope.$eval(rhs),
                         cursor = iterStartElement, // current position of the node
                         // Same as lastOrder but it has the current state. It will become the
-            // lastOrder on the next iteration.
+                        // lastOrder on the next iteration.
                         nextOrder = new HashQueueMap(),
                         arrayBound,
                         childScope,
@@ -23954,7 +23954,7 @@
                     nullOption = false, // if false, user will not be able to select it (used by ngOptions)
                     emptyOption,
                     // we can't just jqLite('<option>') since jqLite is not smart enough
-          // to create it in <select> and IE barfs otherwise.
+                    // to create it in <select> and IE barfs otherwise.
                     optionTemplate = jqLite(document.createElement('option')),
                     optGroupTemplate = jqLite(document.createElement('optgroup')),
                     unknownOption = optionTemplate.clone();
@@ -24064,7 +24064,7 @@
                         valueFn = $parse(match[2] ? match[1] : valueName),
                         valuesFn = $parse(match[7]),
                         // This is an array of array of existing option groups in DOM. We try to reuse these if possible
-            // optionGroupsCache[0] is the options with no option group
+                        // optionGroupsCache[0] is the options with no option group
             // optionGroupsCache[?][0] is the parent: either the SELECT or OPTGROUP element
                         optionGroupsCache = [[{ element: selectElement, label: '' }]];
 

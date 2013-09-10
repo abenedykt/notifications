@@ -4,12 +4,12 @@ namespace Notifications.Base
 {
     public interface IFactory
     {
-        void AddNotification(INotification notification);
+        int AddNotification(INotification notification);
         void AddMessage(IMessage message);
         List<INotification> GetReceiveNotifications(int employeeId);
         List<INotification> GetSendNotifications(int employeeId);
         List<IMessage> GetMessages(int employeeId1, int employeeId2);
-
+        void AddTimeofReading(int notificationId, int receiverId);
         void AddEmployee(IEmployee employee);
     }
 }

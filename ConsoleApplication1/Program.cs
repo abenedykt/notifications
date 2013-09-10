@@ -1,9 +1,7 @@
-﻿using Notifications.DataAccessLayer.RavenClass;
+﻿using System;
+using Notifications.DataAccessLayer.RavenClass;
 using Raven.Client;
 using Raven.Client.Document;
-using System;
-using System.Linq;
-
 
 namespace ConsoleApplication1
 {
@@ -16,7 +14,6 @@ namespace ConsoleApplication1
 
         private static void Main()
         {
-
             DocumentStore.Initialize();
 
             //AddEmployees();
@@ -29,7 +26,6 @@ namespace ConsoleApplication1
 
         public static void AddEmployees()
         {
-
             using (IDocumentSession session = DocumentStore.OpenSession())
             {
                 for (int i = 1; i <= 5000; i++)
@@ -56,7 +52,6 @@ namespace ConsoleApplication1
             {
                 using (IDocumentSession session = DocumentStore.OpenSession())
                 {
-                   
                     for (int i = 1000*j; i < 1000*(j + 1); i++)
                     {
                         var ravenMessage = new RavenMessage

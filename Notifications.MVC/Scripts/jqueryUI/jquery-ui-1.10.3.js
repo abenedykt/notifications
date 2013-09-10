@@ -330,7 +330,7 @@
     $.widget = function(name, base, prototype) {
         var fullName, existingConstructor, constructor, basePrototype,
             // proxiedPrototype allows the provided prototype to remain unmodified
-		// so that it can be used as a mixin for multiple widgets (#8876)
+            // so that it can be used as a mixin for multiple widgets (#8876)
             proxiedPrototype = {},
             namespace = name.split(".")[0];
 
@@ -408,7 +408,7 @@
         });
         constructor.prototype = $.widget.extend(basePrototype, {
                 // TODO: remove support for widgetEventPrefix
-		// always use the name + a colon as the prefix, e.g., draggable:start
+                // always use the name + a colon as the prefix, e.g., draggable:start
 		// don't prefix for widgets that aren't DOM-based
                 widgetEventPrefix: existingConstructor ? basePrototype.widgetEventPrefix : name
             }, proxiedPrototype, {
@@ -573,11 +573,11 @@
             this.element
                 .unbind(this.eventNamespace)
                 // 1.9 BC for #7810
-			// TODO remove dual storage
+                // TODO remove dual storage
                 .removeData(this.widgetName)
                 .removeData(this.widgetFullName)
                 // support: jquery <1.6.3
-			// http://bugs.jquery.com/ticket/9413
+                // http://bugs.jquery.com/ticket/9413
                 .removeData($.camelCase(this.widgetFullName));
             this.widget()
                 .unbind(this.eventNamespace)
@@ -885,7 +885,7 @@
             var that = this,
                 btnIsLeft = (event.which === 1),
                 // event.target.nodeName works around a bug in IE 8 with
-			// disabled inputs (#7620)
+                // disabled inputs (#7620)
                 elIsCancel = (typeof this.options.cancel === "string" && event.target.nodeName ? $(event.target).closest(this.options.cancel).length : false);
             if (!btnIsLeft || elIsCancel || !this._mouseCapture(event)) {
                 return true;
@@ -6698,7 +6698,7 @@
                 // Textareas are always multi-line
                 isTextarea ? true :
                     // Inputs are always single-line, even if inside a contentEditable element
-			// IE also treats inputs as contentEditable
+                    // IE also treats inputs as contentEditable
                     isInput ? false :
                         // All other element types are determined by whether or not they're contentEditable
                         this.element.prop("isContentEditable");
@@ -7145,7 +7145,7 @@
             var ul = this.menu.element;
             ul.outerWidth(Math.max(
                 // Firefox wraps long text (possibly a rounding bug)
-			// so we add 1px to avoid the wrapping (#7513)
+                // so we add 1px to avoid the wrapping (#7513)
                 ul.width("").outerWidth() + 1,
                 this.element.outerWidth()
             ));
@@ -7424,7 +7424,7 @@
                         }
                     })
                     // see #8559, we bind to blur here in case the button element loses
-				// focus between keydown and keyup, it would be left in an "active" state
+                    // focus between keydown and keyup, it would be left in an "active" state
                     .bind("keyup" + this.eventNamespace + " blur" + this.eventNamespace, function() {
                         $(this).removeClass("ui-state-active");
                     });
@@ -10182,7 +10182,7 @@
                 options = this.options,
                 handles = options.resizable,
                 // .ui-resizable has position: relative defined in the stylesheet
-			// but dialogs have to use absolute or fixed positioning
+                // but dialogs have to use absolute or fixed positioning
                 position = this.uiDialog.css("position"),
                 resizeHandles = typeof handles === "string" ?
                     handles :
@@ -10847,7 +10847,7 @@
                     })
 
                     // select the wrapper - make it overflow: hidden and absolute positioned based on
-			// where the original was located +left and +top equal to the size of pieces
+                    // where the original was located +left and +top equal to the size of pieces
                     .parent()
                     .addClass("ui-effects-explode")
                     .css({
@@ -11538,7 +11538,7 @@
                     tabIndex: 0
                 })
                 // need to catch all clicks on disabled menu
-			// not possible through _on
+                // not possible through _on
                 .bind("click" + this.eventNamespace, $.proxy(function(event) {
                     if (this.options.disabled) {
                         event.preventDefault();
@@ -11553,7 +11553,7 @@
 
             this._on({
                 // Prevent focus from sticking to links inside menu after clicking
-			// them (focus should always stay on UL during navigation).
+                // them (focus should always stay on UL during navigation).
                 "mousedown .ui-menu-item > a": function(event) {
                     event.preventDefault();
                 },
@@ -11727,7 +11727,7 @@
                     match;
 
                 // If no matches on the current filter, reset to the last character pressed
-			// to move down the menu to the first item that starts with that character
+                // to move down the menu to the first item that starts with that character
                 if (!match.length) {
                     character = String.fromCharCode(event.keyCode);
                     regex = new RegExp("^" + escape(character), "i");
@@ -12613,7 +12613,7 @@
                 .addClass("ui-progressbar ui-widget ui-widget-content ui-corner-all")
                 .attr({
                     // Only set static values, aria-valuenow and aria-valuemax are
-				// set inside _refreshValue()
+                    // set inside _refreshValue()
                     role: "progressbar",
                     "aria-valuemin": this.min
                 });
@@ -12827,7 +12827,7 @@
 
                     classes = "ui-slider-range" +
                         // note: this isn't the most fittingly semantic framework class for this element,
-				// but worked best visually with a variety of themes
+                        // but worked best visually with a variety of themes
                         " ui-widget-header ui-corner-all";
                 } else {
                     this.range.removeClass("ui-slider-range-min ui-slider-range-max")
@@ -13908,7 +13908,7 @@
                     }
                 })
                 // support: IE <9
-			// Preventing the default action in mousedown doesn't prevent IE
+                // Preventing the default action in mousedown doesn't prevent IE
 			// from focusing the element, so if the anchor gets focused, blur.
 			// We don't have to worry about focusing the previously focused
 			// element since clicking on a non-focusable element should focus
@@ -14818,7 +14818,7 @@
             var that = this,
                 target = $(event ? event.target : this.element)
                     // we need closest here due to mouseover bubbling,
-				// but always pointing at the same event target
+                    // but always pointing at the same event target
                     .closest(this.options.items);
 
             // No element to show a tooltip for or the tooltip is already open

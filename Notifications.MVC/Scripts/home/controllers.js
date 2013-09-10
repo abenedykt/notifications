@@ -1,5 +1,5 @@
-function LogCtrl($scope, $location) {
-    $scope.login = function() {
+function LogCtrl($scope) {
+    $scope.login = function () {
         userName = $scope.user.name;
         userId = $scope.user.id;
     };
@@ -11,6 +11,7 @@ var zIndex = 0;
 var leftPosition = 0;
 var topPosition = 100;
 
+
 function NoticeCtrl($scope) {
     $scope.showChatList = false;
     $scope.name = userName;
@@ -19,14 +20,14 @@ function NoticeCtrl($scope) {
 
     addClientMethods(chatHub);
 
-    $.connection.hub.start().done(function() {
+    $.connection.hub.start().done(function () {
 
         chatHub.server.connect(userName, userId);
 
-        $scope.sendNotification = function() {
+        $scope.sendNotification = function () {
             var receivers = [];
 
-            $(".chk:checked").each(function() {
+            $(".chk:checked").each(function () {
                 receivers.push($(this).val());
             });
 
@@ -42,66 +43,93 @@ function NoticeCtrl($scope) {
 
 function addClientMethods(chatHub) {
 
-    chatHub.client.getReceivedNotifications = function(date, sender, content) {
+    chatHub.client.clearHistoryOfSendNotifications = function() {
+        $('#sendNotifications').empty();
+    };
+
+    chatHub.client.getReceivedNotifications = function (date, sender, content) {
 
         $('#receivedNotifications').append('<li><strong>' + date + ', nadawca: ' + sender + '</strong><br/>' + content + '</li>');
     };
 
-    chatHub.client.getSendNotifications = function(date, receivers, content) {
+    chatHub.client.getSendNotifications = function (date, receivers, content) {
 
         $('#sendNotifications').append('<li><strong>' + date + ', odbiorcy: ' + receivers + '</strong><br/>' + content + '</li>');
     };
+    
+    chatHub.client.addReceivedNotification = function (date, sender, content) {
+
+        $('#receivedNotifications').prepend('<li><strong>' + date + ', nadawca: ' + sender + '</strong><br/>' + content + '</li>');
+    };
+
+    chatHub.client.addSendNotification = function (date, receivers, content) {
+
+        $('#sendNotifications').prepend('<li><strong>' + date + ', odbiorcy: ' + receivers + ' (nie odczytano)</strong><br/>' + content + '</li>');
+    };
 
     //count of active users
-    chatHub.client.onlineUsers = function(count) {
+    chatHub.client.onlineUsers = function (count) {
 
         $("#counter").text('Chat(' + count + ')');
     };
 
     //send notification 
-    chatHub.client.sendNotificationBroadcast = function(notification, name) {
+    chatHub.client.sendNotificationBroadcast = function(notificationId, notification, name, senderId) {
+
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             if (window.webkitNotifications.checkPermission() == 0) {
-                window.webkitNotifications.createNotification(null, "Nowe powiadomienie od: " + name, notification).show();
+                var note = window.webkitNotifications.createNotification(null, "Nowe powiadomienie od: " + name, notification);
+               
+                note.onclick = function() {
+                    chatHub.server.addTimeofReading(notificationId, senderId);
+                };
+                note.onclose = function () {
+                    chatHub.server.addTimeofReading(notificationId, senderId);
+                };             
+                note.show();
             } else {
                 window.webkitNotifications.requestPermission();
             }
         } else {
             $.pnotify({
-                title: "Nowe powiadomienie od: " + name,
-                text: notification,
-                hide: false,
-                sticker: false
+                    title: "Nowe powiadomienie od: " + name,
+                    text: notification,
+                    hide: false,
+                    sticker: false,
+                    history: false
+                }
+            ).click(function() {
+                chatHub.server.addTimeofReading(notificationId, senderId);
             });
         }
     };
-    
-    chatHub.client.notificationConfirm = function() {
+
+    chatHub.client.notificationConfirm = function () {
         alert("Powiadomienie zostalo wyslane");
         $("#txtNotification").val('');
     }; // send to all except caller client
-    
-    chatHub.client.onNewUserConnected = function(id, name) {
+
+    chatHub.client.onNewUserConnected = function (id, name) {
         AddUser(chatHub, id, name);
     }; // send list of active person to caller
-    
-    chatHub.client.onConnected = function(id, name, allUsers) {
+
+    chatHub.client.onConnected = function (id, name, allUsers) {
 
         for (var i = 0; i < allUsers.length; i++) {
 
             AddUser(chatHub, allUsers[i].ConnectionId, allUsers[i].Name, id);
         }
     }; // remove from active list if client disconnect
-    
-    chatHub.client.onUserDisconnected = function(id, name) {
+
+    chatHub.client.onUserDisconnected = function (id, name) {
         $('#' + id).remove();
         $('#active_' + id).remove();
 
         var ctrId = 'private_' + id;
         $('#' + ctrId).remove();
     }; //send message
-    
-    chatHub.client.createNewWindow = function(toUserId, fromName, message) {
+
+    chatHub.client.createNewWindow = function (toUserId, fromName, message) {
 
         var windowId = 'private_' + toUserId;
         if ($('#' + windowId).length == 0) {
@@ -109,8 +137,8 @@ function addClientMethods(chatHub) {
             chatHub.server.sendMessage(true, toUserId, fromName, message);
         } else chatHub.server.sendMessage(false, toUserId, fromName, message);
     };
-    
-    chatHub.client.addMessage = function(toUserId, fromName, message, date) {
+
+    chatHub.client.addMessage = function (toUserId, fromName, message, date) {
 
         var windowId = 'private_' + toUserId;
 
@@ -131,7 +159,7 @@ function AddUser(chatHub, id, name, actualId) {
         userChat = $('<div style="height:20px;" id="' + id + '"><a style="cursor: pointer;">' + name + '</a></div>');
         userNotification = $('<div id="active_' + id + '"><input name="grupa" class="chk" type="checkbox" value="' + id + '"> ' + name + "<br/></div>");
 
-        $(userChat).click(function() {
+        $(userChat).click(function () {
             if (actualId != id)
                 OpenChatWindow(chatHub, id, name);
         });
@@ -179,12 +207,12 @@ function createChatWindow(chatHub, toUserId, windowId, name) {
 
 
     // DELETE BUTTON IMAGE
-    $div.find('#imgClose').click(function() {
+    $div.find('#imgClose').click(function () {
         $('#' + windowId).remove();
     });
 
     // Send Button event
-    $div.find('#btnSendMessage').click(function() {
+    $div.find('#btnSendMessage').click(function () {
 
         $textBox = $div.find('#txtMessage');
         var message = $textBox.val();
@@ -196,7 +224,7 @@ function createChatWindow(chatHub, toUserId, windowId, name) {
     });
 
     // Text Box event
-    $div.find('#txtMessage').keypress(function(e) {
+    $div.find('#txtMessage').keypress(function (e) {
         if (e.which == 13) {
             $div.find('#btnSendMessage').click();
         }
@@ -205,18 +233,18 @@ function createChatWindow(chatHub, toUserId, windowId, name) {
     $('#divDraggable').prepend($div);
 
     $div.draggable({
-        start: function(event, ui) {
+        start: function (event, ui) {
             $(this).css("z-index", zIndex++);
         },
         handle: ".header",
         cursor: 'move',
         opacity: 0.65,
         stack: $div,
-        stop: function() {
+        stop: function () {
         }
     });
 
-    $div.click(function() {
+    $div.click(function () {
         $(this).addClass('top').removeClass('bottom');
         $(this).siblings().removeClass('top').addClass('bottom');
         $(this).css("z-index", zIndex++);

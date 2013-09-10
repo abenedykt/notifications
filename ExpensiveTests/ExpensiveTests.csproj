@@ -89,7 +89,7 @@
       <Name>Notifications.BusinessLogic</Name>
     </ProjectReference>
     <ProjectReference Include="..\Notifications.DataAccessLayer\Notifications.DataAccessLayer.csproj">
-      <Project>{1DE08D5B-5B74-4B6A-A285-6D07931741FD}</Project>
+      <Project>{1de08d5b-5b74-4b6a-a285-6d07931741fd}</Project>
       <Name>Notifications.DataAccessLayer</Name>
     </ProjectReference>
   </ItemGroup>

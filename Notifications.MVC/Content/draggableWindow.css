@@ -2,15 +2,15 @@
     background-color: #f89406;
     position: absolute;
     width: 350px;
-    z-index: 1;    
+    z-index: 1;
 }
 
 .draggable .header {
     background-color: #945f0c;
     color: #ffffff;
+    cursor: move;
     height: 15px;
     padding: 5px 5px;
-    cursor: move;
 }
 
 .draggable .messageArea {

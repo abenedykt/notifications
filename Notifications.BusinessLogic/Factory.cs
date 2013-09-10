@@ -13,9 +13,9 @@ namespace Notifications.BusiessLogic
         }
 
 
-        public void AddNotification(INotification notification)
+        public int AddNotification(INotification notification)
         {
-            _repository.AddNotification(notification);
+            return _repository.AddNotification(notification);
         }
 
         public void AddMessage(IMessage message)
@@ -38,10 +38,16 @@ namespace Notifications.BusiessLogic
             return _repository.GetMessages(employeeId1, employeeId2);
         }
 
+        public void AddTimeofReading(int notificationId, int receiverId)
+        {
+            _repository.AddTimeofReading(notificationId, receiverId);
+        }
+
 
         public void AddEmployee(IEmployee employee)
         {
             _repository.AddEmployee(employee);
         }
+       
     }
 }
