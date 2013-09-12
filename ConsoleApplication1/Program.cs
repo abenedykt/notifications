@@ -10,30 +10,26 @@ namespace ConsoleApplication1
         public static DocumentStore DocumentStore = new DocumentStore
         {
             Url = "http://localhost:8080",
-            DefaultDatabase = "chat"
+            DefaultDatabase = "chat2"
         };
 
         private static void Main()
         {
             DocumentStore.Initialize();
 
-            //AddEmployees();
+            AddEmployees();
+            //AddMessages();
+            //AddNotifications();
 
-            
-               // AddMessages();
-                AddNotifications();
-            
-           
             Console.WriteLine("koniec!");
             Console.ReadLine();
         }
 
         public static void AddEmployees()
         {
-           
             using (IDocumentSession session = DocumentStore.OpenSession())
             {
-                for (int i = 800001; i <= 1000000; i++)
+                for (int i = 1; i <= 5000; i++)
                 {
                     var newEmployee = new RavenEmployee
                     {
@@ -44,8 +40,6 @@ namespace ConsoleApplication1
                         (dbname, commands, user) => "RavenEmployees/" + i);
 
                     session.Store(newEmployee);
-
-                    if (i % 100000 == 0) session.SaveChanges();
                 }
                 session.SaveChanges();
             }
@@ -55,22 +49,23 @@ namespace ConsoleApplication1
         {
             var r = new Random();
 
-            for (int j = 1; j < 10000; j++)
+            for (int j = 1; j < 1000; j++)
             {
                 using (IDocumentSession session = DocumentStore.OpenSession())
                 {
-                    for (int i = 1000*j; i < 1000*(j + 1); i++)
+                    for (int i = 1000 * j; i < 1000 * (j + 1); i++)
                     {
                         var ravenMessage = new RavenMessage
                         {
                             Content = "wiadomosc nr" + i,
                             Date = new DateTime(2012, 11, 20),
-                            ReceiverId = String.Format("RavenEmployees/{0}", r.Next(1, 300000)),
-                            SenderId = String.Format("RavenEmployees/{0}", r.Next(1, 300000))
+                            ReceiverId = String.Format("RavenEmployees/{0}", r.Next(1, 5000)),
+                            SenderId = String.Format("RavenEmployees/{0}", r.Next(1, 5000))
                         };
                         session.Store(ravenMessage);
                     }
                     session.SaveChanges();
+                    Console.WriteLine("koniec " + j);
                 }
             }
         }
@@ -79,7 +74,7 @@ namespace ConsoleApplication1
         {
             var r = new Random();
 
-            for (int j = 300000; j < 1000000; j++)
+            for (int j = 1; j < 1000000; j++)
             {
                 using (IDocumentSession session = DocumentStore.OpenSession())
                 {
@@ -87,7 +82,7 @@ namespace ConsoleApplication1
                     {
                         Content = "powiadomienie nr" + j,
                         Date = DateTime.Now,
-                        SenderId = String.Format("RavenEmployees/{0}", r.Next(1, 300000))
+                        SenderId = String.Format("RavenEmployees/{0}", r.Next(1, 5000))
                     };
 
                     session.Store(ravenNotification);
@@ -99,7 +94,7 @@ namespace ConsoleApplication1
                         var receiverOfNotification = new RavenReceiversOfNotification
                         {
                             NotificationId = ravenNotification.Id,
-                            ReceiverId = String.Format("RavenEmployees/{0}", r.Next(1, 300000)),
+                            ReceiverId = String.Format("RavenEmployees/{0}", r.Next(1, 5000)),
                             Date = ravenNotification.Date
                         };
                         session.Store(receiverOfNotification);
