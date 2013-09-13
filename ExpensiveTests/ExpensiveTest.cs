@@ -95,7 +95,6 @@ namespace ExpensiveTests
             };
 
             _ravenRepository.AddNotification(notification);
-
         }
 
         [Theory]

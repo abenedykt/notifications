@@ -1,0 +1,43 @@
+﻿.draggable {
+    background-color: #f89406;
+    position: absolute;
+    width: 350px;
+    z-index: 1;
+}
+
+.draggable .header {
+    background-color: #945f0c;
+    color: #ffffff;
+    cursor: move;
+    height: 15px;
+    padding: 5px 5px;
+}
+
+.draggable .messageArea {
+    border-bottom: #5f9482 solid 1px;
+    font-weight: normal;
+    height: 200px;
+    overflow-y: scroll;
+    width: 350px;
+}
+
+.draggable .messageArea .message { padding: 4px; }
+
+.draggable .buttonBar {
+    padding: 4px;
+    width: 350px;
+}
+
+.draggable .buttonBar .msgText {
+    margin-bottom: 0;
+    width: 272px;
+}
+
+.draggable .buttonBar .button {
+    margin-left: 4px;
+    width: 55px;
+}
+
+.top { z-index: 2; }
+
+.bottom { z-index: 1; }
