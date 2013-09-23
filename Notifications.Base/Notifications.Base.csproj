@@ -39,7 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IApplication.cs" />
+    <Compile Include="IChatApplication.cs" />
     <Compile Include="IDataRepository.cs" />
     <Compile Include="IEmployee.cs" />
     <Compile Include="IFactory.cs" />

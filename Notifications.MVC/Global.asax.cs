@@ -38,7 +38,7 @@ namespace Notifications.Mvc
             builder.RegisterHubs(Assembly.GetExecutingAssembly());
 
             builder.RegisterType<RavenRepository>().As<IDataRepository>();
-            builder.RegisterType<Application>().As<IApplication>();
+            builder.RegisterType<ChatApplication>().As<IChatApplication>();
             builder.RegisterType<Factory>().As<IFactory>();
             //var container = builder.Build();
             //DependencyResolver.SetResolver(new AutofacDependencyResolver(container));

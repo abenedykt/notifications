@@ -6,14 +6,14 @@ using Microsoft.AspNet.SignalR;
 using Notifications.Base;
 using Notifications.BusiessLogic;
 
-namespace Notifications.Mvc.Hubs
+namespace Notifications.Hubs
 {
-    public class ChatHub : Hub
+    public class NoteHub : Hub
     {
         private static readonly List<Employee> ConnectedUsers = new List<Employee>();
         private readonly IChatApplication _application;
 
-        public ChatHub(IChatApplication application)
+        public NoteHub(IChatApplication application)
         {
             _application = application;
         }
@@ -33,8 +33,6 @@ namespace Notifications.Mvc.Hubs
                 Clients.Caller.onConnected(id, userName, ConnectedUsers); // send list of active person to caller
 
                 Clients.AllExcept(id).onNewUserConnected(id, userName); // send to all except caller client
-
-                Clients.All.onlineUsers(ConnectedUsers.Count - 1); //send actual number of available users
 
 
                 List<INotification> sendNotes = _application.GetSendNotifications(userId);
@@ -61,45 +59,7 @@ namespace Notifications.Mvc.Hubs
                 Clients.All.onUserDisconnected(id, item.Name);
             }
 
-            Clients.All.onlineUsers(ConnectedUsers.Count - 1); //send actual number of available users
-
             return base.OnDisconnected();
-        }
-
-        public async Task PrivateMessage(string toUserId, string message)
-        {
-            string fromUserId = Context.ConnectionId;
-
-            Employee toUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == toUserId);
-            Employee fromUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == fromUserId);
-
-            if (toUser != null && fromUser != null)
-            {
-                await Clients.Client(toUserId).createNewWindow(fromUserId, fromUser.Name, message);
-            }
-        }
-
-        public async Task SendMessage(bool newWindow, string toUserId, string fromUserName, string message)
-        {
-            string fromUserId = Context.ConnectionId;
-
-            Employee toUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == toUserId);
-            Employee fromUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == fromUserId);
-
-            DateTime date = DateTime.Now;
-
-            if (newWindow)
-            {
-                await GetHistory(toUserId);
-            }
-
-            await Clients.Caller.addMessage(toUserId, fromUserName, message, GetDateTimeString(date));
-            // send to caller user
-
-            await Clients.Client(toUserId).addMessage(fromUserId, fromUserName, message, GetDateTimeString(date));
-            // send to 
-
-            _application.SendMessage(message, toUser.EmployeeId, fromUser.EmployeeId, date);
         }
 
         public async Task Broadcasting(string[] users, string notification, string userName)
@@ -134,20 +94,6 @@ namespace Notifications.Mvc.Hubs
             Clients.Caller.addSendNotification(GetDateTimeString(date), GetReceiversNamesString(receiversNames),
                 notification);
             Clients.Caller.notificationConfirm();
-        }
-
-        public async Task GetHistory(string toUserId)
-        {
-            string fromUserId = Context.ConnectionId;
-
-            Employee toUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == toUserId);
-            Employee fromUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == fromUserId);
-
-            List<IMessage> messages = _application.GetMessages(toUser.EmployeeId, fromUser.EmployeeId);
-            foreach (IMessage m in messages)
-            {
-                await Clients.Caller.addMessage(toUserId, m.SenderName, m.Content, GetDateTimeString(m.Date));
-            }
         }
 
        

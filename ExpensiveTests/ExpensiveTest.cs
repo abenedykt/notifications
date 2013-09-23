@@ -14,7 +14,7 @@ namespace ExpensiveTests
     public class ExpensiveTests
     {
         private readonly RavenRepository _ravenRepository = new RavenRepository();
-        private readonly Application _application = new Application(new Factory(new RavenRepository()));
+        private readonly ChatApplication _application = new ChatApplication(new Factory(new RavenRepository()));
         private DocumentStore _documentStore;
 
         private IDocumentSession _session;
