@@ -21,7 +21,7 @@ namespace Notifications.DataAccessLayer
                 _documentStore = new DocumentStore
                 {
                     Url = "http://localhost:8080",
-                    DefaultDatabase = "chat"
+                    DefaultDatabase = "chat2"
                 };
                 _documentStore.Initialize();
             }
@@ -231,9 +231,9 @@ namespace Notifications.DataAccessLayer
                 {
                     var s = session.Load<RavenEmployee>(r.ReceiverId).Name;
 
-                    if (r.Date != DateTime.MinValue)
+                    if (r.WhenRead != DateTime.MinValue)
                     {
-                        s += " (odczytane: " + GetDateTimeString(r.Date) + ")";
+                        s += " (odczytane: " + GetDateTimeString(r.WhenRead) + ")";
                     }
                     else
                     {

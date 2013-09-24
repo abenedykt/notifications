@@ -11,7 +11,7 @@
         
         noteHub.server.connect(userName, userId);
         
-        $('#sendNotification').click = function () {
+        $('#sendNotification').click(function () {
             var receivers = [];
 
             $(".chk:checked").each(function () {
@@ -24,7 +24,7 @@
                 noteHub.server.broadcasting(receivers, message, userName);
             else
                 alert("Zaznacz przynajmniej jedna osobe!");
-        };
+        });
 
     });
 }
@@ -62,12 +62,12 @@ function addClientMethods(noteHub) {
             if (window.webkitNotifications.checkPermission() == 0) {
                 var note = window.webkitNotifications.createNotification(null, "Nowe powiadomienie od: " + name, notification);
 
-                note.onclick = function () {
+                note.click(function () {
                     noteHub.server.addTimeofReading(notificationId, senderId);
-                };
-                note.onclose = function () {
+                });
+                note.onclose (function () {
                     noteHub.server.addTimeofReading(notificationId, senderId);
-                };
+                });
                 note.show();
             } else {
                 window.webkitNotifications.requestPermission();

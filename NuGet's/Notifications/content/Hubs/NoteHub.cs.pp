@@ -6,7 +6,7 @@ using Microsoft.AspNet.SignalR;
 using Notifications.Base;
 using Notifications.BusiessLogic;
 
-namespace Notifications.Hubs
+namespace $rootnamespace$.Hubs
 {
     public class NoteHub : Hub
     {
