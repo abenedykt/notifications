@@ -13,7 +13,7 @@ Aby uruchomiæ fukcjê chatu, wykonaj nastêpuj¹ce czynnoœci:
 -> dodaj referencje do styli
 
    <link rel="stylesheet" type="text/css" href="~/Content/chat.css" />
-   <link rel="stylesheet" type="text/css" href="~/Content/draggableWindow.css" />
+   <link rel="stylesheet" type="text/css" href="~/Content/draggableWindowChat.css" />
    <link rel="stylesheet" type="text/css" href="~/Content/themes/base/jquery.ui.all.css" />
 
 -> zarejestruj typy dla Dependency Injection( przyk³ad dla Autofac'a):

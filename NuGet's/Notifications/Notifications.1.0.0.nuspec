@@ -29,9 +29,9 @@
     <files>
         <file src="content\Hubs\NoteHub.cs.pp" target="content\Hubs\NoteHub.cs.pp" />
         <file src="content\Scripts\notifications.js" target="content\Scripts\notifications.js" />
-        <file src="lib\net45\Notifications.Base.dll" target="lib\net45\Notifications.Base.dll" />
-        <file src="lib\net45\Notifications.BusiessLogic.dll" target="lib\net45\Notifications.BusiessLogic.dll" />
-        <file src="lib\net45\Notifications.DataAccessLayer.dll" target="lib\net45\Notifications.DataAccessLayer.dll" />
+        <file src="lib\Notifications.Base.dll" target="lib\net45\Notifications.Base.dll" />
+        <file src="lib\Notifications.BusiessLogic.dll" target="lib\net45\Notifications.BusiessLogic.dll" />
+        <file src="lib\Notifications.DataAccessLayer.dll" target="lib\net45\Notifications.DataAccessLayer.dll" />
         <file src="README.txt" target="README.txt" />
     </files>
 </package>

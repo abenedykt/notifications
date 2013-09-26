@@ -126,18 +126,18 @@ function OpenChatWindow(chatHub, toUserId, name) {
 function createChatWindow(chatHub, toUserId, windowId, name) {
 
 
-    var div = '<div id="' + windowId + '" class="ui-widget-content draggable label label-warning" rel="0" style="z-index:' + (zIndex++) + '; position:absolute; left:' + leftPosition + 'px; top:' + topPosition + 'px;">' +
+    var div = '<div id="' + windowId + '" class="ui-widget-content draggable" rel="0" style="z-index:' + (zIndex++) + '; position:absolute; left:' + leftPosition + 'px; top:' + topPosition + 'px;">' +
         '<div class="header">' +
         '<div  style="float:right;">' +
         '<img id="imgClose"  style="cursor:pointer;" src="/Content/images/close.png"/>' +
         '</div>' +
-        '<span class="selText" rel="0">' + name + '</span>' +
+        '<span rel="0">' + name + '</span>' +
         '</div>' +
         '<div id="divMessages" class="messageArea">' +
         '</div>' +
         '<div class="buttonBar">' +
-        '<input id="txtMessage" class="msgText form-control" type="text"   />' +
-        '<input id="btnSendMessage" class="submitButton button btn btn-warning" type="button" value="Wyslij"   />' +
+        '<input id="txtMessage" class="msgText" type="text"   />' +
+        '<input id="btnSendMessage" class="button" type="button" value="Wyslij"   />' +
         '</div>' +
         '</div>';
 

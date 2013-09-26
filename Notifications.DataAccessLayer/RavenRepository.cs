@@ -21,7 +21,7 @@ namespace Notifications.DataAccessLayer
                 _documentStore = new DocumentStore
                 {
                     Url = "http://localhost:8080",
-                    DefaultDatabase = "chat2"
+                    DefaultDatabase = "chat"
                 };
                 _documentStore.Initialize();
             }
