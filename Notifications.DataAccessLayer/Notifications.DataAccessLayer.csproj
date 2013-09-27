@@ -51,6 +51,12 @@
     <Reference Include="Microsoft.WindowsAzure.Storage">
       <HintPath>..\packages\WindowsAzure.Storage.2.0.6.1\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
     </Reference>
+    <Reference Include="MongoDB.Bson">
+      <HintPath>..\packages\mongocsharpdriver.1.8.2\lib\net35\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver">
+      <HintPath>..\packages\mongocsharpdriver.1.8.2\lib\net35\MongoDB.Driver.dll</HintPath>
+    </Reference>
     <Reference Include="Raven.Abstractions">
       <HintPath>..\packages\RavenDB.Client.2.5.2700\lib\net45\Raven.Abstractions.dll</HintPath>
     </Reference>
@@ -84,6 +90,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MongoClass\MongoEmployee.cs" />
+    <Compile Include="MongoClass\MongoMessage.cs" />
+    <Compile Include="MongoClass\MongoNotification.cs" />
+    <Compile Include="MongoClass\MongoReceiversOfNotification.cs" />
+    <Compile Include="MongoRepository.cs" />
     <Compile Include="RavenClass\RavenEmployee.cs" />
     <Compile Include="RavenClass\RavenMessage.cs" />
     <Compile Include="RavenClass\RavenNotification.cs" />

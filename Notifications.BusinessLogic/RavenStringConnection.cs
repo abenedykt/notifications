@@ -2,7 +2,7 @@
 
 namespace Notifications.BusiessLogic
 {
-    public class RavenConnection : IDatabaseConnection
+    public class RavenStringConnection : IStringConnection
     {
         public string DatabaseUrl { get; set; }
         public string DatabaseName { get; set; }

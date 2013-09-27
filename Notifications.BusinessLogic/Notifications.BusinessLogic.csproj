@@ -44,10 +44,11 @@
     <Compile Include="ChatApplication.cs" />
     <Compile Include="Employee.cs" />
     <Compile Include="Message.cs" />
+    <Compile Include="MongoStringConnection.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="Factory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RavenConnection.cs" />
+    <Compile Include="RavenStringConnection.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Notifications.Base\Notifications.Base.csproj">

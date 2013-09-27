@@ -16,4 +16,4 @@ http://adres_ip_komputera:8080/
 
 -> Dostêp do bazy danych 'chat':
 
-http://192.168.2.122:8080/
+http://192.168.2.122:12345/

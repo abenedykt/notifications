@@ -16,10 +16,10 @@ namespace Notifications.Mvc.Hubs
 
         public ChatHub()
         {
-            var ravenConnection = new RavenConnection
+            var ravenConnection = new RavenStringConnection
             {
                 DatabaseName = "chat",
-                DatabaseUrl = "http://localhost:8080"
+                DatabaseUrl = "http://localhost:12345"
             };
 
             _application = new ChatApplication(new Factory(new RavenRepository(ravenConnection)));

@@ -14,7 +14,7 @@ namespace Notifications.DataAccessLayer
     {
         private readonly DocumentStore _documentStore;
 
-        public RavenRepository(RavenConnection ravenConnection)
+        public RavenRepository(RavenStringConnection ravenConnection)
         {
             try
             {

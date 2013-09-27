@@ -1,6 +1,6 @@
 ﻿namespace Notifications.Base
 {
-    public interface IDatabaseConnection
+    public interface IStringConnection
     {
         string DatabaseUrl { get; set; }
         string DatabaseName { get; set; }

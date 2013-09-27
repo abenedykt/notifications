@@ -14,12 +14,12 @@ namespace ExpensiveTests
     public class ExpensiveTests
     {
         private readonly RavenRepository _ravenRepository =
-            new RavenRepository(new RavenConnection
+            new RavenRepository(new RavenStringConnection
             {
                 DatabaseUrl = "localhost:8080",
                 DatabaseName = "chat"
             });
-        private readonly ChatApplication _application = new ChatApplication(new Factory(new RavenRepository(new RavenConnection
+        private readonly ChatApplication _application = new ChatApplication(new Factory(new RavenRepository(new RavenStringConnection
             {
                 DatabaseUrl = "localhost:8080",
                 DatabaseName = "chat"

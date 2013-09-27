@@ -9,17 +9,17 @@ namespace ConsoleApplication1
     {
         public static DocumentStore DocumentStore = new DocumentStore
         {
-            Url = "http://localhost:8080",
-            DefaultDatabase = "chat2"
+            Url = "http://localhost:12345",
+            DefaultDatabase = "chat"
         };
 
         private static void Main()
         {
             DocumentStore.Initialize();
 
-            AddEmployees();
+            //AddEmployees();
             //AddMessages();
-            //AddNotifications();
+            AddNotifications();
 
             Console.WriteLine("koniec!");
             Console.ReadLine();
