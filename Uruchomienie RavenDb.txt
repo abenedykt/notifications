@@ -1,0 +1,19 @@
+Aby udostêpniæ bazê RavenDb ze swojego komputera, nale¿y:
+
+-> pobraæ RavenDb ze strony http://ravendb.net/download
+
+-> zainstalowaæ RavenDB z ustawieniami:
+	*Target environment: Development
+	*Installation type: Windows Service
+	*Port: 8080
+
+-> dostêp do bazy danych
+
+http://adres_ip_komputera:8080/
+
+-> mo¿e byc konieczne dodanie regu³y przychodz¹cej dla firewalla, która oblokuje port 8080
+
+
+-> Dostêp do bazy danych 'chat':
+
+http://192.168.2.122:8080/
