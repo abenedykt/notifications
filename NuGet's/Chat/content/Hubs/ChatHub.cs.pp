@@ -13,10 +13,11 @@ namespace $rootnamespace$.Hubs
         private static readonly List<Employee> ConnectedUsers = new List<Employee>();
         private readonly IChatApplication _application;
 
-        public ChatHub(IChatApplication application)
+        public ChatHub()
         {
-            _application = application;
+            _application = new ChatApplication(new Factory(new RavenRepository("http://localhost:8080", "chat")));
         }
+
 
         public void Connect(string userName, int userId)
         {
