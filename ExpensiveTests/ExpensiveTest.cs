@@ -13,8 +13,18 @@ namespace ExpensiveTests
 {
     public class ExpensiveTests
     {
-        private readonly RavenRepository _ravenRepository = new RavenRepository();
-        private readonly ChatApplication _application = new ChatApplication(new Factory(new RavenRepository()));
+        private readonly RavenRepository _ravenRepository =
+            new RavenRepository(new RavenConnection
+            {
+                DatabaseUrl = "localhost:8080",
+                DatabaseName = "chat"
+            });
+        private readonly ChatApplication _application = new ChatApplication(new Factory(new RavenRepository(new RavenConnection
+            {
+                DatabaseUrl = "localhost:8080",
+                DatabaseName = "chat"
+            })));
+
         private DocumentStore _documentStore;
 
         private IDocumentSession _session;

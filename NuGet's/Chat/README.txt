@@ -25,9 +25,13 @@ Aby uruchomiæ fukcjê chatu, wykonaj nastêpuj¹ce czynnoœci:
 RouteTable.Routes.MapHubs();
 
 
--> w hubie ChatHub.cs zmieñ parametry konstruktora dla RavenRepository, podaj¹c adres, gdzie znajduje siê baza danych, oraz nazwê bazy:
+-> w hubie ChatHub.cs zmieñ parametry ravenConnection, podaj¹c adres, gdzie znajduje siê baza danych, oraz nazwê bazy:
 
-_application = new ChatApplication(new Factory(new RavenRepository("http://localhost:8080", "chat")));
+var ravenConnection = new RavenConnection
+            {
+                DatabaseName = "chat",
+                DatabaseUrl = "http://localhost:8080"
+            };
 
 
 -> na stronie, na której chcesz uruchomiæ chat dodaj texboxy :
@@ -39,7 +43,7 @@ Uwaga:
 Nazwê u¿ytkownika oraz jego numer id mo¿esz równie¿ przekazywaæ w inny sposób. Wystarczy zmodyfikowaæ pocz¹tkowy fragment skryptu 'chat.js', przypisuj¹c inne wartoœci dla zmiennych sesyjnych:
 
 	sessionStorage.setItem("name", $('#chatName').val());
-    	sessionStorage.setItem("id", $('#chatId').val());
+    sessionStorage.setItem("id", $('#chatId').val());
 
 
 -> dodaj na stronie divy

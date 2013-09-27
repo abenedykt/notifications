@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IChatApplication.cs" />
+    <Compile Include="IDatabaseConnection.cs" />
     <Compile Include="IDataRepository.cs" />
     <Compile Include="IEmployee.cs" />
     <Compile Include="IFactory.cs" />

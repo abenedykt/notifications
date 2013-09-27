@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using Notifications.Base;
 using Notifications.BusiessLogic;
+using Notifications.DataAccessLayer;
 
 namespace $rootnamespace$.Hubs
 {
@@ -15,7 +16,13 @@ namespace $rootnamespace$.Hubs
 
         public ChatHub()
         {
-            _application = new ChatApplication(new Factory(new RavenRepository("http://localhost:8080", "chat")));
+            var ravenConnection = new RavenConnection
+            {
+                DatabaseName = "chat",
+                DatabaseUrl = "http://localhost:8080"
+            };
+
+            _application = new ChatApplication(new Factory(new RavenRepository(ravenConnection)));
         }
 
 
@@ -31,9 +38,9 @@ namespace $rootnamespace$.Hubs
                 _application.AddEmployee(employee);
 
 
-                Clients.Caller.onConnected(id, userName, ConnectedUsers); // send list of active person to caller
+                Clients.Caller.onConnected(userId, userName, ConnectedUsers); // send list of active person to caller
 
-                Clients.AllExcept(id).onNewUserConnected(id, userName); // send to all except caller client
+                Clients.AllExcept(id).onNewUserConnected(userId, userName); // send to all except caller client
 
                 Clients.All.onlineUsers(ConnectedUsers.Count - 1); //send actual number of available users
             }

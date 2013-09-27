@@ -14,14 +14,14 @@ namespace Notifications.DataAccessLayer
     {
         private readonly DocumentStore _documentStore;
 
-        public RavenRepository()
+        public RavenRepository(RavenConnection ravenConnection)
         {
             try
             {
                 _documentStore = new DocumentStore
                 {
-                    Url = "http://localhost:8080",
-                    DefaultDatabase = "chat"
+                    Url = ravenConnection.DatabaseUrl,
+                    DefaultDatabase = ravenConnection.DatabaseName
                 };
                 _documentStore.Initialize();
             }

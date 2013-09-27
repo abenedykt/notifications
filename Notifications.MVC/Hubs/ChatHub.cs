@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using Notifications.Base;
 using Notifications.BusiessLogic;
+using Notifications.DataAccessLayer;
 
 namespace Notifications.Mvc.Hubs
 {
@@ -13,9 +14,15 @@ namespace Notifications.Mvc.Hubs
         private static readonly List<Employee> ConnectedUsers = new List<Employee>();
         private readonly IChatApplication _application;
 
-        public ChatHub(IChatApplication application)
+        public ChatHub()
         {
-            _application = application;
+            var ravenConnection = new RavenConnection
+            {
+                DatabaseName = "chat",
+                DatabaseUrl = "http://localhost:8080"
+            };
+
+            _application = new ChatApplication(new Factory(new RavenRepository(ravenConnection)));
         }
 
         public void Connect(string userName, int userId)
