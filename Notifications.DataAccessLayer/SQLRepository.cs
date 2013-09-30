@@ -115,7 +115,7 @@ namespace Notifications.DataAccessLayer
 
         public void AddTimeofReading(int notificationId, int receiverId)
         {
-            SqlReceiversOfNotification result = (from item in _context.ReceiversOfNotifications
+            var result = (from item in _context.ReceiversOfNotifications
                 where item.NotificationId == notificationId && item.ReceiverId == receiverId
                 select item).FirstOrDefault();
             result.WhenRead = DateTime.Now;
