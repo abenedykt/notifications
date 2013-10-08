@@ -10,7 +10,7 @@ namespace Notifications.BusiessLogic.Tests
     internal class FactoryTests
     {
         [Theory]
-        [InlineData("wiadomosc", 4, new int[] { 5, 3, 2 }, 2011, 11, 11, 12, 12, 54)]
+        [InlineData("wiadomosc", 4, new[] { 5, 3, 2 }, 2011, 11, 11, 12, 12, 54)]
         public void Application_BrodcastNotification_should_send_notification_for_each_receivers_to_repository(
             string content, int senderId, int[] receiversIds, int years, int months, int days, int hours, int minutes, int seconds)
         {

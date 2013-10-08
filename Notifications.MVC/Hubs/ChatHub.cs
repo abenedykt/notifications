@@ -161,18 +161,23 @@ namespace Notifications.Mvc.Hubs
        
         public void AddTimeofReading(string notificationId, int senderId)
         {
-            var UserId = Context.ConnectionId;
-            var User = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == UserId);
+            var userId = Context.ConnectionId;
+            var user = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == userId);
 
-            Employee sender = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == senderId);
+            var sender = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == senderId);
 
+<<<<<<< HEAD
             _application.AddTimeofReading(notificationId, User.EmployeeId);
+=======
+
+            _application.AddTimeofReading(notificationId, user.EmployeeId);
+>>>>>>> f815d6b6916713a298d17f452d21f57cc62eb8cf
 
             List<INotification> sendNotes = _application.GetSendNotifications(senderId);
 
             Clients.Client(sender.ConnectionId).clearHistoryOfSendNotifications();
             // get history of send messages
-            foreach (INotification note in sendNotes)
+            foreach (var note in sendNotes)
                 Clients.Client(sender.ConnectionId).getSendNotifications(GetDateTimeString(note.Date),
                     GetReceiversNamesString(note.ReceiversNames), note.Content);
         }
