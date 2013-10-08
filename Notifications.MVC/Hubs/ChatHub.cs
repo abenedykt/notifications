@@ -16,13 +16,13 @@ namespace Notifications.Mvc.Hubs
 
         public ChatHub()
         {
-            var ravenConnection = new RavenStringConnection
+            var mongoConnection = new MongoStringConnection
             {
                 DatabaseName = "chat",
-                DatabaseUrl = "http://localhost:12345"
+                DatabaseUrl = "mongodb://localhost"
             };
 
-            _application = new ChatApplication(new Factory(new RavenRepository(ravenConnection)));
+            _application = new ChatApplication(new Factory(new MongoRepository(mongoConnection)));
         }
 
         public void Connect(string userName, int userId)
@@ -35,6 +35,7 @@ namespace Notifications.Mvc.Hubs
                 ConnectedUsers.Add(employee);
 
                 _application.AddEmployee(employee);
+
 
 
                 Clients.Caller.onConnected(id, userName, ConnectedUsers); // send list of active person to caller
@@ -86,24 +87,24 @@ namespace Notifications.Mvc.Hubs
             }
         }
 
-        public async Task SendMessage(bool newWindow, string toUserId, string fromUserName, string message)
+        public async Task SendMessage(bool newWindow, string fromUserId, string fromUserName, string message)
         {
-            string fromUserId = Context.ConnectionId;
+            string toUserId = Context.ConnectionId;
 
-            Employee toUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == toUserId);
             Employee fromUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == fromUserId);
+            Employee toUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == toUserId);
 
             DateTime date = DateTime.Now;
 
             if (newWindow)
             {
-                await GetHistory(toUserId);
+                await GetHistory(fromUserId);
             }
 
-            await Clients.Caller.addMessage(toUserId, fromUserName, message, GetDateTimeString(date));
+            await Clients.Caller.addMessage(fromUserId, fromUserName, message, GetDateTimeString(date));
             // send to caller user
 
-            await Clients.Client(toUserId).addMessage(fromUserId, fromUserName, message, GetDateTimeString(date));
+            await Clients.Client(fromUserId).addMessage(toUserId, fromUserName, message, GetDateTimeString(date));
             // send to 
 
             _application.SendMessage(message, toUser.EmployeeId, fromUser.EmployeeId, date);
@@ -158,13 +159,12 @@ namespace Notifications.Mvc.Hubs
         }
 
        
-        public void AddTimeofReading(int notificationId, int senderId)
+        public void AddTimeofReading(string notificationId, int senderId)
         {
             var UserId = Context.ConnectionId;
             var User = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == UserId);
 
             Employee sender = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == senderId);
-
 
             _application.AddTimeofReading(notificationId, User.EmployeeId);
 

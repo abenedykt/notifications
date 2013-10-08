@@ -31,7 +31,7 @@ namespace Notifications.DataAccessLayer
             }
         }
 
-        public int AddNotification(INotification notification)
+        public string AddNotification(INotification notification)
         {
             var ravenNotification = new RavenNotification
             {
@@ -62,10 +62,8 @@ namespace Notifications.DataAccessLayer
                 }
             }
 
-            var s = new string((ravenNotification.Id).Where(Char.IsNumber).ToArray());
-            int cs = Convert.ToInt32(s);
-
-            return cs;
+            
+            return ravenNotification.Id;
         }
 
         public void AddMessage(IMessage message)
@@ -151,9 +149,10 @@ namespace Notifications.DataAccessLayer
                         (x =>
                             (x.ReceiverId == employee1 && x.SenderId == employee2) ||
                             (x.ReceiverId == employee2 && x.SenderId == employee1)))
-                    .OrderByDescending(x => x.Date).Take(Int32.MaxValue).ToList();
+                    .OrderBy(x => x.Date).Take(Int32.MaxValue).ToList();
 
             }
+            
             foreach (var message in result)
                 {
                     using (var session = _documentStore.OpenSession())
@@ -172,16 +171,16 @@ namespace Notifications.DataAccessLayer
 
         }
 
-        public void AddTimeofReading(int notificationId, int receiverId)
+        public void AddTimeofReading(string notificationId, int receiverId)
         {
-            var notification = String.Format("RavenNotifications/{0}", notificationId);
+           
             var receiver = String.Format("RavenEmployees/{0}", receiverId);
 
             using (var session = _documentStore.OpenSession())
             {
                 var result =
                     session.Query<RavenReceiversOfNotification>()
-                        .FirstOrDefault(x => (x.NotificationId == notification && x.ReceiverId == receiver));
+                        .FirstOrDefault(x => (x.NotificationId == notificationId && x.ReceiverId == receiver));
 
                 if (result != null && result.WhenRead == DateTime.MinValue)
                 {
@@ -233,11 +232,11 @@ namespace Notifications.DataAccessLayer
 
                     if (r.WhenRead != DateTime.MinValue)
                     {
-                        s += " (odczytane: " + GetDateTimeString(r.WhenRead) + ")";
+                        s += " (odczytano: " + GetDateTimeString(r.WhenRead) + ")";
                     }
                     else
                     {
-                        s += " (nie odczytane)";
+                        s += " (nie odczytano)";
                     }
                     lista.Add(s);
                 }

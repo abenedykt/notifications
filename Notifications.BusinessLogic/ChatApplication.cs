@@ -13,7 +13,7 @@ namespace Notifications.BusiessLogic
             _factory = factory;
         }
 
-        public int BrodcastNotification(string content, int senderId, List<int> receiversIds, DateTime date)
+        public string BrodcastNotification(string content, int senderId, List<int> receiversIds, DateTime date)
         {
             INotification notification = new Notification
             {
@@ -54,7 +54,7 @@ namespace Notifications.BusiessLogic
             return _factory.GetMessages(employeeId1, employeeId2);
         }
 
-        public void AddTimeofReading(int notificationId, int receiverId)
+        public void AddTimeofReading(string notificationId, int receiverId)
         {
             _factory.AddTimeofReading(notificationId, receiverId);
         }

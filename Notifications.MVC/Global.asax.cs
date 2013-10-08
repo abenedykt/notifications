@@ -37,7 +37,7 @@ namespace Notifications.Mvc
             //builder.RegisterApiControllers(typeof(MvcApplication).Assembly);
             builder.RegisterHubs(Assembly.GetExecutingAssembly());
 
-            builder.RegisterType<RavenRepository>().As<IDataRepository>();
+            builder.RegisterType<MongoRepository>().As<IDataRepository>();
             builder.RegisterType<ChatApplication>().As<IChatApplication>();
             builder.RegisterType<Factory>().As<IFactory>();
             //var container = builder.Build();

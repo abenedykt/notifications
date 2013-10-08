@@ -11,7 +11,7 @@ namespace Notifications.DataAccessLayer
     {
         private readonly ContextNotifications _context = new ContextNotifications();
 
-        public int AddNotification(INotification notification)
+        public string AddNotification(INotification notification)
         {
             SqlEmployee sender = _context.Employees.Find(notification.SenderId);
 
@@ -41,7 +41,7 @@ namespace Notifications.DataAccessLayer
                 _context.ReceiversOfNotifications.Add(receiverOfNotification);
                 _context.SaveChanges();
             }
-            return sqlNotification.NotificationId;
+            return sqlNotification.NotificationId.ToString();
         }
 
         public void AddMessage(IMessage message)
@@ -113,10 +113,13 @@ namespace Notifications.DataAccessLayer
             return result;
         }
 
-        public void AddTimeofReading(int notificationId, int receiverId)
+        public void AddTimeofReading(string notificationId, int receiverId)
         {
+
+            var noteId = Convert.ToInt32(notificationId);
+
             SqlReceiversOfNotification result = (from item in _context.ReceiversOfNotifications
-                where item.NotificationId == notificationId && item.ReceiverId == receiverId
+                where item.NotificationId == noteId && item.ReceiverId == receiverId
                 select item).FirstOrDefault();
             result.WhenRead = DateTime.Now;
             _context.SaveChanges();
