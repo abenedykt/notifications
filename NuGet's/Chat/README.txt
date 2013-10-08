@@ -27,10 +27,10 @@ RouteTable.Routes.MapHubs();
 
 -> w hubie ChatHub.cs zmieñ parametry ravenConnection, podaj¹c adres, gdzie znajduje siê baza danych, oraz nazwê bazy:
 
-var ravenConnection = new RavenConnection
+var mongoConnection = new MongoConnection
             {
                 DatabaseName = "chat",
-                DatabaseUrl = "http://localhost:8080"
+                DatabaseUrl = "mongodb://localhost"
             };
 
 

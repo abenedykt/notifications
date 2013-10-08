@@ -1,14 +1,10 @@
 ﻿.chat-div{
-
 bottom: 0;
 position: fixed;
 right: 10px;
 width: 108px;
 display: block;
-
-
 }
-
 
 .chat-label{
 display: none;
@@ -32,7 +28,6 @@ list-style-type: disc;
 
 -webkit-margin-start: 0px;
 -webkit-margin-end: 0px;
-
 }
 
 .chat-btn{

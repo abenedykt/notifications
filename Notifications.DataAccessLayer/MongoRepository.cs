@@ -13,25 +13,22 @@ namespace Notifications.DataAccessLayer
 {
     public class MongoRepository :IDataRepository
     {
-        string _connectionString;
-        MongoClient _mongoClient;
-        MongoServer _mongoServer;
-        private MongoDatabase _mongoDatabase;
+        private readonly MongoDatabase _mongoDatabase;
 
 
         public MongoRepository(MongoStringConnection mongoConnection)
         {
-            _connectionString = mongoConnection.DatabaseUrl; //"mongodb://localhost";
-            _mongoClient = new MongoClient(_connectionString);
-            _mongoServer = _mongoClient.GetServer();
-            _mongoDatabase = _mongoServer.GetDatabase(mongoConnection.DatabaseName);
+            string connectionString = mongoConnection.DatabaseUrl;
+            MongoClient mongoClient = new MongoClient(connectionString);
+            MongoServer mongoServer = mongoClient.GetServer();
+            _mongoDatabase = mongoServer.GetDatabase(mongoConnection.DatabaseName);
         }
       
         public string AddNotification(INotification notification)
         {
             var notifications = _mongoDatabase.GetCollection<MongoNotification>("Notifications");
 
-            var mongoNotification = new MongoNotification()
+            var mongoNotification = new MongoNotification
             {
                
                 SenderId = notification.SenderId,
@@ -57,9 +54,8 @@ namespace Notifications.DataAccessLayer
 
         public void AddMessage(IMessage message)
         {
-            var mongoMessage = new MongoMessage()
+            var mongoMessage = new MongoMessage
             {
-                
                 Content = message.Content,
                 Date = message.Date,
                 ReceiverId = message.ReceiverId,
@@ -146,7 +142,7 @@ namespace Notifications.DataAccessLayer
             foreach (var message in result.OrderBy(x=>x.Date))
             {
                 var senderName =
-                    employees.AsQueryable().FirstOrDefault(x => x.EmployeeId == message.ReceiverId).Name;
+                    employees.AsQueryable().FirstOrDefault(x => x.EmployeeId == message.SenderId).Name;
                 var receiverName =
                     employees.AsQueryable().FirstOrDefault(x => x.EmployeeId == message.ReceiverId).Name;
 

@@ -193,9 +193,7 @@ namespace Notifications.Mvc.Hubs
                 if (receivers != "") receivers += ", <br/> " + receiver;
                 else receivers += "<br/>" + receiver;
             }
-
             return receivers;
         }
-
     }
 }

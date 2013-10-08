@@ -16,13 +16,13 @@ namespace $rootnamespace$.Hubs
 
         public ChatHub()
         {
-            var ravenConnection = new RavenConnection
+            var mongoConnection = new MongoStringConnection
             {
                 DatabaseName = "chat",
-                DatabaseUrl = "http://localhost:8080"
+                DatabaseUrl = "mongodb://localhost"
             };
 
-            _application = new ChatApplication(new Factory(new RavenRepository(ravenConnection)));
+            _application = new ChatApplication(new Factory(new MongoRepository(mongoConnection)));
         }
 
 
@@ -75,24 +75,24 @@ namespace $rootnamespace$.Hubs
             }
         }
 
-        public async Task SendMessage(bool newWindow, string toUserId, string fromUserName, string message)
+        public async Task SendMessage(bool newWindow, string fromUserId, string fromUserName, string message)
         {
-            string fromUserId = Context.ConnectionId;
+            string toUserId = Context.ConnectionId;
 
-            Employee toUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == toUserId);
             Employee fromUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == fromUserId);
+            Employee toUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == toUserId);
 
             DateTime date = DateTime.Now;
 
             if (newWindow)
             {
-                await GetHistory(toUserId);
+                await GetHistory(fromUserId);
             }
 
-            await Clients.Caller.addMessage(toUserId, fromUserName, message, GetDateTimeString(date));
+            await Clients.Caller.addMessage(fromUserId, fromUserName, message, GetDateTimeString(date));
             // send to caller user
 
-            await Clients.Client(toUserId).addMessage(fromUserId, fromUserName, message, GetDateTimeString(date));
+            await Clients.Client(fromUserId).addMessage(toUserId, fromUserName, message, GetDateTimeString(date));
             // send to 
 
             _application.SendMessage(message, toUser.EmployeeId, fromUser.EmployeeId, date);

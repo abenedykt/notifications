@@ -32,9 +32,9 @@
         <file src="content\Content\Chat\draggableWindowChat.css" target="content\Content\Chat\draggableWindowChat.css" />
         <file src="content\Hubs\ChatHub.cs.pp" target="content\Hubs\ChatHub.cs.pp" />
         <file src="content\Scripts\Chat\chat.js" target="content\Scripts\Chat\chat.js" />
-        <file src="lib\net45\Notifications.Base.dll" target="lib\net45\Notifications.Base.dll" />
-        <file src="lib\net45\Notifications.BusiessLogic.dll" target="lib\net45\Notifications.BusiessLogic.dll" />
-        <file src="lib\net45\Notifications.DataAccessLayer.dll" target="lib\net45\Notifications.DataAccessLayer.dll" />
+        <file src="lib\Notifications.Base.dll" target="lib\net45\Notifications.Base.dll" />
+        <file src="lib\Notifications.BusiessLogic.dll" target="lib\net45\Notifications.BusiessLogic.dll" />
+        <file src="lib\Notifications.DataAccessLayer.dll" target="lib\net45\Notifications.DataAccessLayer.dll" />
         <file src="README.txt" target="README.txt" />
     </files>
 </package>
