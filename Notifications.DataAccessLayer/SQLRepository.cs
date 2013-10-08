@@ -115,17 +115,14 @@ namespace Notifications.DataAccessLayer
 
         public void AddTimeofReading(string notificationId, int receiverId)
         {
-<<<<<<< HEAD
+
 
             var noteId = Convert.ToInt32(notificationId);
 
             SqlReceiversOfNotification result = (from item in _context.ReceiversOfNotifications
                 where item.NotificationId == noteId && item.ReceiverId == receiverId
-=======
-            var result = (from item in _context.ReceiversOfNotifications
-                where item.NotificationId == notificationId && item.ReceiverId == receiverId
->>>>>>> f815d6b6916713a298d17f452d21f57cc62eb8cf
                 select item).FirstOrDefault();
+
             result.WhenRead = DateTime.Now;
             _context.SaveChanges();
         }

@@ -50,8 +50,8 @@ namespace ExpensiveTests
 		}
 
 		[Theory]
-		[InlineData(5313, 3)]
-		public void AddTimeOfReading_ExpensiveTest(int notificationId, int receiverId)
+		[InlineData("5313", 3)]
+		public void AddTimeOfReading_ExpensiveTest(string notificationId, int receiverId)
 		{
 			_ravenRepository.AddTimeofReading(notificationId, receiverId);
 

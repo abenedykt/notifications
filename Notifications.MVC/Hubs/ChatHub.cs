@@ -166,12 +166,7 @@ namespace Notifications.Mvc.Hubs
 
             var sender = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == senderId);
 
-<<<<<<< HEAD
-            _application.AddTimeofReading(notificationId, User.EmployeeId);
-=======
-
             _application.AddTimeofReading(notificationId, user.EmployeeId);
->>>>>>> f815d6b6916713a298d17f452d21f57cc62eb8cf
 
             List<INotification> sendNotes = _application.GetSendNotifications(senderId);
 

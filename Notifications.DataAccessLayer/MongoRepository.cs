@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Notifications.Base;
 using Notifications.BusiessLogic;
-<<<<<<< HEAD
 using Notifications.DataAccessLayer.MongoClass;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
-using MongoDB.Driver.GridFS;
 using MongoDB.Driver.Linq;
-=======
-
->>>>>>> f815d6b6916713a298d17f452d21f57cc62eb8cf
 
 namespace Notifications.DataAccessLayer
 {
