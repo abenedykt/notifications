@@ -6,8 +6,8 @@ Aby uruchomiæ fukcjê chatu, wykonaj nastêpuj¹ce czynnoœci:
 
 -> dodaj referencje do skryptow:
 
-<script src="~/Scripts/jquery-1.6.4.js" type="text/javascript"> </script>
-<script src="~/Scripts/jquery-ui-1.8.11.js"> </script>
+<script src="~/Scripts/jquery-1.8.2.js" type="text/javascript"> </script>
+<script src="~/Scripts/jquery-ui-1.8.24.js"> </script>
 <script src="~/Scripts/jquery.signalR-1.1.3.js"> </script>
 <script src="~/signalr/hubs"> </script>
 <script src="~/Scripts/chat/chat.js" type="text/javascript"> </script>
@@ -27,12 +27,11 @@ RouteTable.Routes.MapHubs();
 
 -> w hubie ChatHub.cs zmieñ parametry ravenConnection, podaj¹c adres, gdzie znajduje siê baza danych, oraz nazwê bazy:
 
-var mongoConnection = new MongoConnection
+  var mongoConnection = new MongoStringConnection
             {
                 DatabaseName = "chat",
                 DatabaseUrl = "mongodb://localhost"
             };
-
 
 -> na stronie, na której chcesz uruchomiæ chat dodaj texboxy :
  	* <input id="chatName" type="text" > - dla nazwy u¿ytkownika

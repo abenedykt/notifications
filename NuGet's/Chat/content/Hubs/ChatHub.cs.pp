@@ -62,47 +62,47 @@ namespace $rootnamespace$.Hubs
             return base.OnDisconnected();
         }
 
-        public async Task PrivateMessage(string toUserId, string message)
+        public async Task PrivateMessage(int toUserId, string message)
         {
             string fromUserId = Context.ConnectionId;
 
-            Employee toUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == toUserId);
+            Employee toUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == toUserId);
             Employee fromUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == fromUserId);
 
             if (toUser != null && fromUser != null)
             {
-                await Clients.Client(toUserId).createNewWindow(fromUserId, fromUser.Name, message);
+                await Clients.Client(toUser.ConnectionId).createNewWindow(fromUser.EmployeeId, fromUser.Name, message);
             }
         }
 
-        public async Task SendMessage(bool newWindow, string fromUserId, string fromUserName, string message)
+        public async Task SendMessage(bool newWindow, int toUserId, string fromUserName, string message)
         {
-            string toUserId = Context.ConnectionId;
+            string fromUserId = Context.ConnectionId;
 
+            Employee toUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == toUserId);
             Employee fromUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == fromUserId);
-            Employee toUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == toUserId);
 
             DateTime date = DateTime.Now;
 
             if (newWindow)
             {
-                await GetHistory(fromUserId);
+                await GetHistory(toUserId);
             }
 
-            await Clients.Caller.addMessage(fromUserId, fromUserName, message, GetDateTimeString(date));
+            await Clients.Caller.addMessage(toUserId, fromUserName, message, GetDateTimeString(date));
             // send to caller user
 
-            await Clients.Client(fromUserId).addMessage(toUserId, fromUserName, message, GetDateTimeString(date));
+            await Clients.Client(toUser.ConnectionId).addMessage(fromUser.EmployeeId, fromUserName, message, GetDateTimeString(date));
             // send to 
 
             _application.SendMessage(message, toUser.EmployeeId, fromUser.EmployeeId, date);
         }
 
-        public async Task GetHistory(string toUserId)
+        public async Task GetHistory(int toUserId)
         {
             string fromUserId = Context.ConnectionId;
 
-            Employee toUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == toUserId);
+            Employee toUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == toUserId);
             Employee fromUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == fromUserId);
 
             List<IMessage> messages = _application.GetMessages(toUser.EmployeeId, fromUser.EmployeeId);

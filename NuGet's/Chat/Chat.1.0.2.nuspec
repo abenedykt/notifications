@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
+    <metadata>
+        <id>Chat</id>
+        <version>1.0.2</version>
+        <title>Chat</title>
+        <authors>zos-srv</authors>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>NuGet pozwalający na implementację funkcji chatu pomiędzy aktywnymi użytkownikami w aplikacji.</description>
+        <language>pl-PL</language>
+        <dependencies>
+            <group targetFramework=".NETFramework4.0">
+                <dependency id="EntityFramework" version="5.0.0" />
+                <dependency id="Microsoft.AspNet.SignalR" version="1.1.3" />
+                <dependency id="RavenDB.Database" version="2.5.2700" />
+                <dependency id="RavenDB.Client" version="2.5.2700" />
+                <dependency id="jQuery.UI.Combined" version="1.8.11" />
+                <dependency id="jQuery" version="1.6.4" />
+                <dependency id="mongocsharpdriver" version="1.8.3" />
+            </group>
+        </dependencies>
+        <references>
+            <group targetFramework=".NETFramework4.0">
+                <reference file="Notifications.Base.dll" />
+                <reference file="Notifications.DataAccessLayer.dll" />
+                <reference file="Notifications.BusiessLogic.dll" />
+            </group>
+        </references>
+    </metadata>
+    <files>
+        <file src="content\Content\Chat\images\closeChat.png" target="content\Content\Chat\images\closeChat.png" />
+        <file src="content\Content\Chat\chat.css" target="content\Content\Chat\chat.css" />
+        <file src="content\Content\Chat\draggableWindowChat.css" target="content\Content\Chat\draggableWindowChat.css" />
+        <file src="content\Hubs\ChatHub.cs.pp" target="content\Hubs\ChatHub.cs.pp" />
+        <file src="content\Scripts\Chat\chat.js" target="content\Scripts\Chat\chat.js" />
+        <file src="lib\net45\Notifications.Base.dll" target="lib\net45\Notifications.Base.dll" />
+        <file src="lib\net45\Notifications.BusiessLogic.dll" target="lib\net45\Notifications.BusiessLogic.dll" />
+        <file src="lib\net45\Notifications.DataAccessLayer.dll" target="lib\net45\Notifications.DataAccessLayer.dll" />
+        <file src="README.txt" target="README.txt" />
+    </files>
+</package>

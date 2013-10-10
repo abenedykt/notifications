@@ -64,7 +64,7 @@ function addClientMethods(chatHub) {
 
         for (var i = 0; i < allUsers.length; i++) {
 
-            AddUser(chatHub, allUsers[i].ConnectionId, allUsers[i].Name, id);
+            AddUser(chatHub, allUsers[i].EmployeeId, allUsers[i].Name, id);
         }
     }; // remove from active list if client disconnect
 
@@ -129,7 +129,7 @@ function createChatWindow(chatHub, toUserId, windowId, name) {
     var div = '<div id="' + windowId + '" class="ui-widget-content draggable" rel="0" style="z-index:' + (zIndex++) + '; position:absolute; left:' + leftPosition + 'px; top:' + topPosition + 'px;">' +
         '<div class="header">' +
         '<div  style="float:right;">' +
-        '<img id="imgClose"  style="cursor:pointer;" src="/Content/images/close.png"/>' +
+        '<img id="imgClose"  style="cursor:pointer;" src="/Content/Chat/images/closeChat.png"/>' +
         '</div>' +
         '<span rel="0">' + name + '</span>' +
         '</div>' +
