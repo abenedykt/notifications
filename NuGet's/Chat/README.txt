@@ -25,12 +25,20 @@ Aby uruchomiæ fukcjê chatu, wykonaj nastêpuj¹ce czynnoœci:
 RouteTable.Routes.MapHubs();
 
 
--> w hubie ChatHub.cs zmieñ parametry ravenConnection, podaj¹c adres, gdzie znajduje siê baza danych, oraz nazwê bazy:
+-> w hubie ChatHub.cs zmieñ parametry mongoConnection, podaj¹c adres, gdzie znajduje siê baza danych, oraz nazwê bazy:
 
   var mongoConnection = new MongoStringConnection
             {
                 DatabaseName = "chat",
-                DatabaseUrl = "mongodb://localhost"
+                DatabaseUrl = "mongodb://localhost" // lub DatabaseUrl = "mongodb://192.168.2.122:27017"
+            };
+
+Uwaga: mo¿na równiez skorzystaæ z bazy RavenDB, wystarczy zmieniæ powy¿szy fragment kodu na:
+
+  var ravenConnection = new RavenConnection
+            {
+                DatabaseName = "chat",
+                DatabaseUrl = "http://localhost:8080"
             };
 
 -> na stronie, na której chcesz uruchomiæ chat dodaj texboxy :
@@ -44,7 +52,10 @@ Nazwê u¿ytkownika oraz jego numer id mo¿esz równie¿ przekazywaæ w inny sposób. W
 	sessionStorage.setItem("name", $('#chatName').val());
     sessionStorage.setItem("id", $('#chatId').val());
 
+-> jesli nie chcesz aby wiadomoœci zapisywa³y siê w bazie, zmieñ zmienna _saving w konstruktorze huba na false:
 
+    _saving = false;
+    
 -> dodaj na stronie divy
 
 	* <div id="divDraggable"></div> - w tym divie pokaze sie okienko prywatnej wiadomosci (najlepiej div na ca³¹ stronê)

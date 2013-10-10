@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using Notifications.Base;
@@ -19,7 +20,7 @@ namespace $rootnamespace$.Hubs
             var mongoConnection = new MongoStringConnection
             {
                 DatabaseName = "chat",
-                DatabaseUrl = "mongodb://localhost"
+                DatabaseUrl = "mongodb://emp:12345@localhost/chat"
             };
 
             _application = new ChatApplication(new Factory(new MongoRepository(mongoConnection)));
@@ -30,13 +31,12 @@ namespace $rootnamespace$.Hubs
         {
             string id = Context.ConnectionId;
 
-            if (ConnectedUsers.Count(x => x.ConnectionId == id) == 0)
+            if (ConnectedUsers.Count(x => x.EmployeeId == userId) == 0)
             {
                 var employee = new Employee { ConnectionId = id, Name = userName, EmployeeId = userId };
                 ConnectedUsers.Add(employee);
 
                 _application.AddEmployee(employee);
-
 
                 Clients.Caller.onConnected(userId, userName, ConnectedUsers); // send list of active person to caller
 
@@ -44,21 +44,29 @@ namespace $rootnamespace$.Hubs
 
                 Clients.All.onlineUsers(ConnectedUsers.Count - 1); //send actual number of available users
             }
+            else
+            {
+                ConnectedUsers.FirstOrDefault(x => x.EmployeeId == userId).ConnectionId = Context.ConnectionId;
+                Clients.Caller.onConnected(userId, userName, ConnectedUsers); // send list of active person to caller
+                Clients.Caller.onlineUsers(ConnectedUsers.Count - 1); //send actual number of available users
+            }
+
+
         }
 
         public override Task OnDisconnected()
         {
-            Employee item = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
+            var id = Context.ConnectionId;
+
+            Thread.Sleep(2000);
+            Employee item = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == id);
             if (item != null)
             {
                 ConnectedUsers.Remove(item);
 
-                string id = Context.ConnectionId;
-                Clients.All.onUserDisconnected(id, item.Name);
+                Clients.All.onUserDisconnected(item.EmployeeId, item.Name);
+                Clients.All.onlineUsers(ConnectedUsers.Count - 1); //send actual number of available users
             }
-
-            Clients.All.onlineUsers(ConnectedUsers.Count - 1); //send actual number of available users
-
             return base.OnDisconnected();
         }
 
