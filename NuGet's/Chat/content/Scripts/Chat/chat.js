@@ -90,9 +90,12 @@ function addClientMethods(chatHub) {
 
     chatHub.client.onUserDisconnected = function (id, name) {
         $('#' + id).remove();
+
         var ctrId = 'private_' + id;
-        $('#' + ctrId).find('#divMessages').append('<div class="message"><strong>Użytkownik wylogował się!</strong></div>');
-        $('#' + ctrId).find('#btnSendMessage').disable();
+        $('#' + ctrId).find('#divMessages').append('<div class="message"><strong>Użytkownik wylogował się!</strong></div>')
+
+        var height = $('#' + ctrId).find('#divMessages')[0].scrollHeight;
+        $('#' + ctrId).find('#divMessages').scrollTop(height);;
     };
 
     //stworzenie nowego okna rozmowy u odbiorcy wiadomości
@@ -115,8 +118,6 @@ function addClientMethods(chatHub) {
         var height = $('#' + windowId).find('#divMessages')[0].scrollHeight;
         $('#' + windowId).find('#divMessages').scrollTop(height);
     };
-    
-    
 
 }
 

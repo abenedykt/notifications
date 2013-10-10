@@ -14,6 +14,7 @@ namespace $rootnamespace$.Hubs
     {
         private static readonly List<Employee> ConnectedUsers = new List<Employee>();
         private readonly IChatApplication _application;
+        private bool _saving;
 
         public ChatHub()
         {
@@ -24,6 +25,8 @@ namespace $rootnamespace$.Hubs
             };
 
             _application = new ChatApplication(new Factory(new MongoRepository(mongoConnection)));
+
+            _saving = false;
         }
 
 
@@ -58,7 +61,7 @@ namespace $rootnamespace$.Hubs
         {
             var id = Context.ConnectionId;
 
-            Thread.Sleep(2000);
+            Thread.Sleep(1000);
             Employee item = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == id);
             if (item != null)
             {
@@ -103,7 +106,7 @@ namespace $rootnamespace$.Hubs
             await Clients.Client(toUser.ConnectionId).addMessage(fromUser.EmployeeId, fromUserName, message, GetDateTimeString(date));
             // send to 
 
-            _application.SendMessage(message, toUser.EmployeeId, fromUser.EmployeeId, date);
+            if (_saving) _application.SendMessage(message, toUser.EmployeeId, fromUser.EmployeeId, date);
         }
 
         public async Task GetHistory(int toUserId)
