@@ -62,7 +62,7 @@ namespace Chat.Hubs
             var id = Context.ConnectionId;
 
             Thread.Sleep(1000);
-            Employee item = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == id);
+            Employee item = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == id); //zobacz czy jest uzytkownik z takim id( znak ze nie dostal nowego id)
             if (item != null)
             {
                 ConnectedUsers.Remove(item);

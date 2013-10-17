@@ -286,15 +286,6 @@
     <Content Include="Scripts\knockout-2.2.0.debug.js" />
     <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Service References\ChatServiceReference\App1.ChatServiceReference.ShowTheTextResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\ChatServiceReference\App1.ChatServiceReference.SimpleFunctionResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\ChatServiceReference\App1.ChatServiceReference.ConnectUserResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
     <None Include="Service References\ChatServiceReference\ChatService.disco" />
     <None Include="Service References\ChatServiceReference\configuration91.svcinfo" />
     <None Include="Service References\ChatServiceReference\configuration.svcinfo" />

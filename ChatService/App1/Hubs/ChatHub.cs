@@ -19,11 +19,14 @@ namespace App1.Hubs
         private static readonly List<Employee> ConnectedUsers = new List<Employee>();
         private IHubProxy chat;
         private HubConnection connection;
+
         public ChatHub()
         {
-            connection = new HubConnection("http://localhost:55481/signalr", useDefaultUrl: false);
-            chat = connection.CreateHubProxy("ChatHubService");
-            connection.Start().Wait();
+            
+                connection = new HubConnection("http://localhost:61122/signalr", useDefaultUrl: false);
+                chat = connection.CreateHubProxy("ChatServiceHub");
+                connection.Start().Wait();
+            
         }
 
         public void Connect(string userName, int userId)//polaczenie sie nowego klienta 
@@ -64,10 +67,21 @@ namespace App1.Hubs
                 Clients.All.onUserDisconnected(item.EmployeeId, item.Name);
                 Clients.All.onlineUsers(ConnectedUsers.Count - 1); //send actual number of available users
                 chat.Invoke("OnUserDisconnected", item.EmployeeId);
-
             }
             return base.OnDisconnected();
         }
+
+        public void SendDisconnectUser(int disconnectUserId)
+        {
+            var employee = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == disconnectUserId);
+            ConnectedUsers.Remove(employee);
+            Clients.All.onUserDisconnected(employee.EmployeeId, employee.Name);       //odswiezanie listy aktywnych
+            Clients.All.onlineUsers(ConnectedUsers.Count - 1);
+
+        }
+
+
+
 
 
     }
