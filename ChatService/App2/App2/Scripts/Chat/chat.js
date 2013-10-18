@@ -140,7 +140,7 @@ function OpenChatWindow(chatHub, toUserId, name) {
     var windowId = 'private_' + toUserId;
     if ($('#' + windowId).length == 0) {
         createChatWindow(chatHub, toUserId, windowId, name);
-        chatHub.server.getHistory(toUserId);
+        //chatHub.server.getHistory(toUserId);
     }
 }
 

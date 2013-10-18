@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -61,6 +62,33 @@ namespace App1.Hubs
             return base.OnDisconnected();
         }
 
+
+        public async Task PrivateMessage(int toUserId, string message)
+        {
+            var fromUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
+
+            GlobalVar.chat.Invoke("PrivateMessage", fromUser.EmployeeId, toUserId, message);
+        }
+
+        public async Task SendMessage(bool newWindow, int fromUserId, string fromUserName, string message)
+        {
+            string toUserId = Context.ConnectionId;
+
+            Employee toUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == toUserId);
+            Employee fromUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == fromUserId);
+
+            DateTime date = DateTime.Now;
+
+            await Clients.Caller.addMessage(fromUserId, fromUserName, message, GetDateTimeString(date));
+            // send to caller user
+
+            GlobalVar.chat.Invoke(toUserId, fromUserId, fromUserName, message, GetDateTimeString(date));
+
+        }
+
+
+
+
         public void SendDisconnectUser(int disconnectUserId)
         {
             var employee = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == disconnectUserId);
@@ -80,7 +108,6 @@ namespace App1.Hubs
             Clients.All.onlineUsers(ConnectedUsers.Count - 1);
         }
 
-
         public void OnNewUserConnected(int userId, string userName)
         {
             if (ConnectedUsers.Count(x => x.EmployeeId == userId) == 0)
@@ -92,7 +119,6 @@ namespace App1.Hubs
 
                 Clients.All.onlineUsers(ConnectedUsers.Count - 1); //send actual number of available users
             }
-
         }
 
         private void AddClientMethod()
@@ -100,6 +126,35 @@ namespace App1.Hubs
             GlobalVar.chat.On<int, string>("OnNewUserConnected", OnNewUserConnected);
             GlobalVar.chat.On<int>("SendDisconnectUser", SendDisconnectUser);
             GlobalVar.chat.On<int>("SendConnectUser", SendDisconnectUser);
+            GlobalVar.chat.On<int, int, string>("CreatePrivateWindow", CreatePrivateWindow);
+            GlobalVar.chat.On<int, int, string, string, string>("AddMessage", AddMessage);
+        }
+
+        public async void AddMessage(int toUserId, int fromUserId, string fromUserName, string message, string date)
+        {
+            Employee toUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == toUserId);
+
+            Employee fromUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == fromUserId);
+
+            await Clients.Client(fromUser.ConnectionId).addMessage(toUserId, fromUserName, message, date);
+        }
+
+        private async void CreatePrivateWindow(int fromUserId, int toUserId, string message)
+        {
+            Employee toUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == toUserId);
+            Employee fromUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == fromUserId);
+
+            if (toUser != null && fromUser != null)
+            {
+                await Clients.Client(toUser.ConnectionId).createNewWindow(fromUser.EmployeeId, fromUser.Name, message);
+            }
+        }
+
+        private string GetDateTimeString(DateTime date)
+        {
+            if (date.ToShortDateString() == DateTime.Now.ToShortDateString())
+                return String.Format("Dzisiaj, {0}", date.ToLongTimeString());
+            return String.Format("{0}r., {1}", date.ToString("dd.MM.yyyy"), date.ToLongTimeString());
         }
     }
 }

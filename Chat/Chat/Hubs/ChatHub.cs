@@ -53,8 +53,6 @@ namespace Chat.Hubs
                 Clients.Caller.onConnected(userId, userName, ConnectedUsers); // send list of active person to caller
                 Clients.Caller.onlineUsers(ConnectedUsers.Count - 1); //send actual number of available users
             }
-
-
         }
 
         public override Task OnDisconnected()
@@ -129,7 +127,5 @@ namespace Chat.Hubs
                 return String.Format("Dzisiaj, {0}", date.ToLongTimeString());
             return String.Format("{0}r., {1}", date.ToString("dd.MM.yyyy"), date.ToLongTimeString());
         }
-
-
     }
 }

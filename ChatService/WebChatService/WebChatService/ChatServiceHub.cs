@@ -19,7 +19,7 @@ namespace WebChatService
         private static readonly List<User> ConnectedUsers = new List<User>();
         IHubContext context = GlobalHost.ConnectionManager.GetHubContext<ChatServiceHub>();
        
-        public void ConnectUser(string userName, int userId) //polaczenie sie nowego uzytkownika 
+        public async void ConnectUser(string userName, int userId) //polaczenie sie nowego uzytkownika 
         {
             var id = Context.ConnectionId;
             Debug.WriteLine("Id App dla {0} = {1}", userName, id); //to pozniej usun
@@ -33,7 +33,7 @@ namespace WebChatService
                 };
                 user.ConnectionId.Add(id);
                 ConnectedUsers.Add(user);
-                context.Clients.AllExcept(id).onNewUserConnected(userId, userName);// wyslij pozostalym ze user sie polaczyl
+                await context.Clients.AllExcept(id).onNewUserConnected(userId, userName);// wyslij pozostalym ze user sie polaczyl
             }
             else
             {
@@ -42,7 +42,7 @@ namespace WebChatService
             }
         }
 
-        public void OnUserDisconnected(int employeeId)
+        public async void OnUserDisconnected(int employeeId)
         {
             var id = Context.ConnectionId;
 
@@ -50,7 +50,7 @@ namespace WebChatService
             user.ConnectionId.Remove(id);
             if (user.ConnectionId.Count == 0) ConnectedUsers.Remove(user);
 
-            context.Clients.AllExcept(id).SendDisconnectUser(user.EmployeeId);
+            await context.Clients.AllExcept(id).SendDisconnectUser(user.EmployeeId);
         }
 
         public override Task OnDisconnected() 
@@ -72,6 +72,28 @@ namespace WebChatService
         }
 
         //wyslanie wiadomosci 
+        public async Task PrivateMessage(int fromUserId, int toUserId, string message)
+        {
+
+            var toUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == toUserId);
+
+            foreach (var connId in toUser.ConnectionId)
+            {
+                await Clients.Client(connId).CreatePrivateWindow(fromUserId, toUserId, message);
+
+            }
+        }
+
+        public async Task SendMessage(int toUserId, int fromUserId, string fromUserName, string message, string date)
+        {
+
+            var fromUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == fromUserId);
+
+            foreach (var connId in fromUser.ConnectionId)
+            {
+                await Clients.Client(connId).AddMessage(toUserId, fromUserId, fromUserName, message, date);
+            }
+        }
 
     }
 }
