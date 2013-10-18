@@ -9,29 +9,27 @@
 
     var $div = $(div);
 
-   
+
     $('#chat').prepend(div);
     $("#ActiveUsersChat").hide();
-    
+
     chatHub = $.connection.chatHub;
 
     addClientMethods(chatHub);
-    
-    $.connection.hub.start().done(function ()
-    {
+
+    $.connection.hub.start().done(function () {
         //jeśli w zmiennej sesyjnej znajduje się już wartość (uzytkownik juz sie logował) wykonaj reconnect
-        if (sessionStorage.getItem("name") != null) 
-        {
+        if (sessionStorage.getItem("name") != null) {
             chatHub.server.connect(sessionStorage.getItem("name"), sessionStorage.getItem("id"));
         }
         else {
             $("#counter").text('Chat(0)');
         }
     });
-    
+
 });
 
-var showList= false;
+var showList = false;
 var zIndex = 0;
 var leftPosition = 0;
 var topPosition = 100;
@@ -43,23 +41,22 @@ function show() {
         showList = true;
     } else {
         $("#ActiveUsersChat").hide();
-        showList =false;      
+        showList = false;
     }
 }
 
-function addToChat()
-{
+function addToChat() {
     //dodanie zmiennych sesyjnych po zalogowaniu
     sessionStorage.setItem("name", $('#chatName').val());
     sessionStorage.setItem("id", $('#chatId').val());
-    
+
     $.connection.hub.start().done(function () {
         chatHub.server.connect(sessionStorage.getItem("name"), sessionStorage.getItem("id"));
-    });   
+    });
 }
 
 function addClientMethods(chatHub) {
- 
+
     //licznik aktywnych uzytkowników(na przycisku z chatem)
     chatHub.client.onlineUsers = function (count) {
 
@@ -70,23 +67,23 @@ function addClientMethods(chatHub) {
             $("#ActiveUsersChat").hide();
             showList = false;
         }
-            
+
     };
 
     //dodanie logującego się użytkownika do wyświetlanej listy aktywnych u innych użytkowników
     chatHub.client.onNewUserConnected = function (userId, name) {
 
         if (sessionStorage.getItem("name") != null)
-        AddUser(chatHub, userId, name, 0);
-    }; 
+            AddUser(chatHub, userId, name, 0);
+    };
 
     //dodanie wszystkich zalogowanych użytkowników do wyświetlanej listy aktywnych u logującego się użytkownika
-    chatHub.client.onConnected = function (userId, name, allUsers) {
-        
+    chatHub.client.onConnected = function (userId, allUsers) {
+
         $("#ActiveUsersChat").clear;
-        for (var i = 0; i < allUsers.length; i++) 
-            AddUser(chatHub, allUsers[i].EmployeeId, allUsers[i].Name, userId);    
-    }; 
+        for (var i = 0; i < allUsers.length; i++)
+            AddUser(chatHub, allUsers[i].EmployeeId, allUsers[i].Name, userId);
+    };
 
     chatHub.client.onUserDisconnected = function (id, name) {
         $('#' + id).remove();
@@ -125,8 +122,7 @@ function addClientMethods(chatHub) {
 function AddUser(chatHub, userId, name, actualUserId) {
     var userChat = "";
 
-    if (actualUserId != userId)
-    {
+    if (actualUserId != userId) {
         userChat = $('<div style="height:20px;" id="' + userId + '"><a style="cursor: pointer;">' + name + '</a></div>');
 
         $(userChat).click(function () {

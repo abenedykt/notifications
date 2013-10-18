@@ -18,5 +18,6 @@ namespace WebChatService
     // [System.Web.Script.Services.ScriptService]
     public class ChatService : System.Web.Services.WebService
     {
+
     }
 }

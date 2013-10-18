@@ -1,6 +1,10 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNet.SignalR;
@@ -12,12 +16,13 @@ namespace WebChatService
     {
         private readonly IChatApplication _application;
 
-        private List<User> ConnectedUsers = new List<User>();
-
+        private static readonly List<User> ConnectedUsers = new List<User>();
+        IHubContext context = GlobalHost.ConnectionManager.GetHubContext<ChatServiceHub>();
        
         public void ConnectUser(string userName, int userId) //polaczenie sie nowego uzytkownika 
         {
-            string id = Context.ConnectionId;
+            var id = Context.ConnectionId;
+            Debug.WriteLine("Id App dla {0} = {1}", userName, id); //to pozniej usun
 
             if (ConnectedUsers.Count(x => x.EmployeeId == userId) == 0)
             {
@@ -28,36 +33,35 @@ namespace WebChatService
                 };
                 user.ConnectionId.Add(id);
                 ConnectedUsers.Add(user);
-                //Clients.AllExcept(id).onNewUserConnected(userId, userName); wyslij pozostalym ze user sie polaczyl
+                context.Clients.AllExcept(id).onNewUserConnected(userId, userName);// wyslij pozostalym ze user sie polaczyl
             }
             else
             {
                 var user = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == userId);
-                user.ConnectionId.Add(id);
+                if(!user.ConnectionId.Any(x=>x ==id)) user.ConnectionId.Add(id);
             }
         }
 
-        //rozlaczenie sie jednego uzytkownika
-        public void OnUserDisconnected(int employeeId)//ale co jesli rozlaczy sie tylko z jednej aplikacji?
+        public void OnUserDisconnected(int employeeId)
         {
             var id = Context.ConnectionId;
 
             var user = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == employeeId);
             user.ConnectionId.Remove(id);
-            if (user.ConnectionId.Count < 1) Clients.AllExcept(id).SendDisconnectUser(user.EmployeeId);
+            if (user.ConnectionId.Count == 0) ConnectedUsers.Remove(user);
 
-            //wyslij innym ze user sie rozlaczyl
+            context.Clients.AllExcept(id).SendDisconnectUser(user.EmployeeId);
         }
 
-        public override Task OnDisconnected() //rozlaczenie sie calej app ?
+        public override Task OnDisconnected() 
         {
             var id = Context.ConnectionId;
 
-            foreach (
-                var connectedUser in ConnectedUsers.Where(connectedUser => connectedUser.ConnectionId.Any(x => x == id)))
+            var result = ConnectedUsers.FindAll(user=> user.ConnectionId.Any(x => x == id)).ToList();
+
+            foreach (var b in result)
             {
-                if (connectedUser.ConnectionId.Count <= 1) ConnectedUsers.Remove(connectedUser);
-                else connectedUser.ConnectionId.Remove(id);
+                ConnectedUsers.Remove(b);
             }
 
             var connectUsers = ConnectedUsers.Select(user => user.EmployeeId).ToList();

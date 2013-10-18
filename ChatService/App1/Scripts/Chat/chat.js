@@ -81,7 +81,7 @@ function addClientMethods(chatHub) {
     }; 
 
     //dodanie wszystkich zalogowanych użytkowników do wyświetlanej listy aktywnych u logującego się użytkownika
-    chatHub.client.onConnected = function (userId, name, allUsers) {
+    chatHub.client.onConnected = function (userId, allUsers) {
         
         $("#ActiveUsersChat").clear;
         for (var i = 0; i < allUsers.length; i++) 

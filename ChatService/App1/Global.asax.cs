@@ -7,16 +7,20 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Client.Hubs;
 
 namespace App1
 {
-    // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
-    // visit http://go.microsoft.com/?LinkId=9394801
-
-    public class MvcApplication : HttpApplication
+   public class MvcApplication : HttpApplication
     {
+        
+
         protected void Application_Start()
         {
+            GlobalVar.connection = new HubConnection("http://localhost:61122/signalr", useDefaultUrl: false);
+            GlobalVar.chat = GlobalVar.connection.CreateHubProxy("ChatServiceHub");
+            GlobalVar.connection.Start().Wait();
+
             RouteTable.Routes.MapHubs();
   
             AreaRegistration.RegisterAllAreas();
@@ -27,4 +31,6 @@ namespace App1
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
     }
-}
+
+       
+    }
