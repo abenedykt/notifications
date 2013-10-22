@@ -12,35 +12,39 @@ namespace App1.Hubs
 {
     public class ChatHub : Hub
     {
-        private static List<Employee> ConnectedUsers = new List<Employee>();
+        private static List<Employee> _connectedUsers = new List<Employee>();
 
         public ChatHub()
         {
-            AddClientMethod();
+            GlobalVar.chat.On<int, string>("OnNewUserConnected", OnNewUserConnected);
+            GlobalVar.chat.On<int>("SendDisconnectUser", SendDisconnectUser);
+            GlobalVar.chat.On<int>("SendConnectUser", SendDisconnectUser);
+            GlobalVar.chat.On<int, int, string, string>("CreatePrivateWindow", (fromUserId, toUserId, fromUserName, message) => CreatePrivateWindow(fromUserId, toUserId, fromUserName, message));
+
         }
 
         public void Connect(string userName, int userId)//polaczenie sie nowego klienta 
         {
             string id = Context.ConnectionId;
             Debug.WriteLine("Id uzytkownika dla {0} = {1}", userName, id);
-            if (ConnectedUsers.Count(x => x.EmployeeId == userId) == 0)
+            if (_connectedUsers.Count(x => x.EmployeeId == userId) == 0)
             {
                 var employee = new Employee { ConnectionId = id, Name = userName, EmployeeId = userId };
-                ConnectedUsers.Add(employee);
+                _connectedUsers.Add(employee);
 
-                Clients.Caller.onConnected(userId, ConnectedUsers); // send list of active person to caller
+                Clients.Caller.onConnected(userId, _connectedUsers); // send list of active person to caller
 
                 Clients.AllExcept(id).onNewUserConnected(userId, userName); // send to all except caller client
 
-                Clients.All.onlineUsers(ConnectedUsers.Count - 1); //send actual number of available users
+                Clients.All.onlineUsers(_connectedUsers.Count - 1); //send actual number of available users
 
                 GlobalVar.chat.Invoke("ConnectUser", userName, userId);
             }
             else
             {
-                ConnectedUsers.FirstOrDefault(x => x.EmployeeId == userId).ConnectionId = Context.ConnectionId;
-                Clients.Caller.onConnected(userId, ConnectedUsers); // send list of active person to caller
-                Clients.Caller.onlineUsers(ConnectedUsers.Count - 1); //send actual number of available users
+                _connectedUsers.FirstOrDefault(x => x.EmployeeId == userId).ConnectionId = Context.ConnectionId;
+                Clients.Caller.onConnected(userId, _connectedUsers); // send list of active person to caller
+                Clients.Caller.onlineUsers(_connectedUsers.Count - 1); //send actual number of available users
             }
         }
 
@@ -49,13 +53,13 @@ namespace App1.Hubs
             var id = Context.ConnectionId;
 
             Thread.Sleep(1000);
-            Employee item = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == id);
+            Employee item = _connectedUsers.FirstOrDefault(x => x.ConnectionId == id);
             if (item != null)
             {
-                ConnectedUsers.Remove(item);
+                _connectedUsers.Remove(item);
 
                 Clients.All.onUserDisconnected(item.EmployeeId, item.Name);
-                Clients.All.onlineUsers(ConnectedUsers.Count - 1); //send actual number of available users
+                Clients.All.onlineUsers(_connectedUsers.Count - 1); //send actual number of available users
                 GlobalVar.chat.Invoke("OnUserDisconnected", item.EmployeeId);
 
             }
@@ -63,90 +67,67 @@ namespace App1.Hubs
         }
 
 
-        public async Task PrivateMessage(int toUserId, string message)
+        public void PrivateMessage(int toUserId, string message)
         {
-            var fromUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
+            var fromUser = _connectedUsers.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
 
             GlobalVar.chat.Invoke("PrivateMessage", fromUser.EmployeeId, toUserId, message);
         }
 
-        public async Task SendMessage(bool newWindow, int fromUserId, string fromUserName, string message)
+        public async Task SendMessage(bool newWindow, int fromUserId, string fromUserName, string message)//metoda potrzeban tylko przy historii!
         {
-            string toUserId = Context.ConnectionId;
-
-            Employee toUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == toUserId);
-            Employee fromUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == fromUserId);
-
             DateTime date = DateTime.Now;
 
             await Clients.Caller.addMessage(fromUserId, fromUserName, message, GetDateTimeString(date));
-            // send to caller user
-
-            GlobalVar.chat.Invoke(toUserId, fromUserId, fromUserName, message, GetDateTimeString(date));
-
         }
 
+        public async void AddMessage(int toUserId, int fromUserId, string fromUserName, string message, string date)
+        {
+            Employee fromUser = _connectedUsers.FirstOrDefault(x => x.EmployeeId == fromUserId);
 
+            await Clients.Client(fromUser.ConnectionId).addMessage(toUserId, fromUserName, message, date);
+        }
 
+        private async Task CreatePrivateWindow(int fromUserId, int toUserId, string fromUserName, string message) //dodaje okienka odbierajacemu wiadomosc
+        {
+            Employee toUser = _connectedUsers.FirstOrDefault(x => x.EmployeeId == toUserId);
+            Employee fromUser = _connectedUsers.FirstOrDefault(x => x.EmployeeId == fromUserId);
+
+            if (toUser != null && fromUser != null)
+            {
+                await Clients.Client(toUser.ConnectionId).createNewWindow(fromUser.EmployeeId, fromUserName, message);
+            }
+        }
 
         public void SendDisconnectUser(int disconnectUserId)
         {
-            var employee = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == disconnectUserId);
+            var employee = _connectedUsers.FirstOrDefault(x => x.EmployeeId == disconnectUserId);
             if (employee == null) return;
-            ConnectedUsers.Remove(employee);
+            _connectedUsers.Remove(employee);
             Clients.All.onUserDisconnected(employee.EmployeeId, employee.Name); //odswiezanie listy aktywnych
-            Clients.All.onlineUsers(ConnectedUsers.Count - 1);
+            Clients.All.onlineUsers(_connectedUsers.Count - 1);
         }
 
         public void SendConnectUser(int[] ConnectUsersIds)
         {
             var id = Context.ConnectionId;
-            var employee = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == id);
-            var result = ConnectedUsers.FindAll(user => ConnectUsersIds.Any(x => x == user.EmployeeId)).ToList();
-            ConnectedUsers = result;
-            Clients.All.onConnected(employee.EmployeeId, ConnectedUsers);
-            Clients.All.onlineUsers(ConnectedUsers.Count - 1);
+            var employee = _connectedUsers.FirstOrDefault(x => x.ConnectionId == id);
+            var result = _connectedUsers.FindAll(user => ConnectUsersIds.Any(x => x == user.EmployeeId)).ToList();
+            _connectedUsers = result;
+            Clients.All.onConnected(employee.EmployeeId, _connectedUsers);
+            Clients.All.onlineUsers(_connectedUsers.Count - 1);
         }
 
         public void OnNewUserConnected(int userId, string userName)
         {
-            if (ConnectedUsers.Count(x => x.EmployeeId == userId) == 0)
+            if (_connectedUsers.Count(x => x.EmployeeId == userId) == 0)
             {
                 var employee = new Employee { Name = userName, EmployeeId = userId };
-                ConnectedUsers.Add(employee);
+                _connectedUsers.Add(employee);
 
                 Clients.All.onNewUserConnected(userId, userName); // send to all except caller client
 
-                Clients.All.onlineUsers(ConnectedUsers.Count - 1); //send actual number of available users
-            }
-        }
-
-        private void AddClientMethod()
-        {
-            GlobalVar.chat.On<int, string>("OnNewUserConnected", OnNewUserConnected);
-            GlobalVar.chat.On<int>("SendDisconnectUser", SendDisconnectUser);
-            GlobalVar.chat.On<int>("SendConnectUser", SendDisconnectUser);
-            GlobalVar.chat.On<int, int, string>("CreatePrivateWindow", CreatePrivateWindow);
-            GlobalVar.chat.On<int, int, string, string, string>("AddMessage", AddMessage);
-        }
-
-        public async void AddMessage(int toUserId, int fromUserId, string fromUserName, string message, string date)
-        {
-            Employee toUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == toUserId);
-
-            Employee fromUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == fromUserId);
-
-            await Clients.Client(fromUser.ConnectionId).addMessage(toUserId, fromUserName, message, date);
-        }
-
-        private async void CreatePrivateWindow(int fromUserId, int toUserId, string message)
-        {
-            Employee toUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == toUserId);
-            Employee fromUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == fromUserId);
-
-            if (toUser != null && fromUser != null)
-            {
-                await Clients.Client(toUser.ConnectionId).createNewWindow(fromUser.EmployeeId, fromUser.Name, message);
+                Clients.All.onlineUsers(_connectedUsers.Count - 1); //send actual number of available users
             }
         }
 

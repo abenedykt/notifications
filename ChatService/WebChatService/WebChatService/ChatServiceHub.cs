@@ -14,12 +14,12 @@ namespace WebChatService
 {
     public class ChatServiceHub : Hub
     {
-        private readonly IChatApplication _application;
+        //private readonly IChatApplication _application;
 
         private static readonly List<User> ConnectedUsers = new List<User>();
         IHubContext context = GlobalHost.ConnectionManager.GetHubContext<ChatServiceHub>();
        
-        public async void ConnectUser(string userName, int userId) //polaczenie sie nowego uzytkownika 
+        public void ConnectUser(string userName, int userId) //polaczenie sie nowego uzytkownika 
         {
             var id = Context.ConnectionId;
             Debug.WriteLine("Id App dla {0} = {1}", userName, id); //to pozniej usun
@@ -29,11 +29,12 @@ namespace WebChatService
                 var user = new User
                 {
                     EmployeeId = userId,
+                    EmployeeName = userName,
                     ConnectionId = new List<string>()
                 };
                 user.ConnectionId.Add(id);
                 ConnectedUsers.Add(user);
-                await context.Clients.AllExcept(id).onNewUserConnected(userId, userName);// wyslij pozostalym ze user sie polaczyl
+                context.Clients.AllExcept(id).onNewUserConnected(userId, userName);// wyslij pozostalym ze user sie polaczyl
             }
             else
             {
@@ -42,7 +43,7 @@ namespace WebChatService
             }
         }
 
-        public async void OnUserDisconnected(int employeeId)
+        public void OnUserDisconnected(int employeeId)
         {
             var id = Context.ConnectionId;
 
@@ -50,7 +51,7 @@ namespace WebChatService
             user.ConnectionId.Remove(id);
             if (user.ConnectionId.Count == 0) ConnectedUsers.Remove(user);
 
-            await context.Clients.AllExcept(id).SendDisconnectUser(user.EmployeeId);
+            context.Clients.AllExcept(id).SendDisconnectUser(user.EmployeeId);
         }
 
         public override Task OnDisconnected() 
@@ -76,12 +77,19 @@ namespace WebChatService
         {
 
             var toUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == toUserId);
+            var fromUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == fromUserId);
 
-            foreach (var connId in toUser.ConnectionId)
+            foreach (var connId in toUser.ConnectionId)//dla wszystkich okienek odbiorcy wiadomosci
             {
-                await Clients.Client(connId).CreatePrivateWindow(fromUserId, toUserId, message);
+                await Clients.Client(connId).CreatePrivateWindow(fromUserId, toUserId, fromUser.EmployeeName, message);
 
             }
+
+            foreach (var connId in fromUser.ConnectionId)//dla wszystkich okienek nadawcy wiadomosci
+            {
+                await Clients.Client(connId).CreatePrivateWindow(toUserId, fromUserId,fromUser.EmployeeName, message);
+            }
+
         }
 
         public async Task SendMessage(int toUserId, int fromUserId, string fromUserName, string message, string date)
