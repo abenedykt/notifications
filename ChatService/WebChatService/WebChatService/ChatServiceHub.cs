@@ -9,20 +9,27 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNet.SignalR;
 using Notifications.Base;
-
+using Notifications.BusiessLogic;
 namespace WebChatService
 {
     public class ChatServiceHub : Hub
     {
-        //private readonly IChatApplication _application;
+       private static readonly List<User> ConnectedUsers = new List<User>();
 
-        private static readonly List<User> ConnectedUsers = new List<User>();
-        IHubContext context = GlobalHost.ConnectionManager.GetHubContext<ChatServiceHub>();
-       
-        public void ConnectUser(string userName, int userId) //polaczenie sie nowego uzytkownika 
+       //private static readonly Queue<IMessage> _currentMessage = new Queue<IMessage>();
+       // private readonly int _limitOfMessages =1000;
+
+        public async Task ConnectUser(string userName, int userId) //polaczenie sie nowego uzytkownika 
         {
             var id = Context.ConnectionId;
             Debug.WriteLine("Id App dla {0} = {1}", userName, id); //to pozniej usun
+
+            if (!ConnectedUsers.Any(u => u.ConnectionId.Any(x => x == id)))
+            {
+                var connectUsers = ConnectedUsers.Select(u => u.EmployeeId).ToList();
+
+                await Clients.Caller.SendConnectUsers(connectUsers);
+            }
 
             if (ConnectedUsers.Count(x => x.EmployeeId == userId) == 0)
             {
@@ -34,7 +41,10 @@ namespace WebChatService
                 };
                 user.ConnectionId.Add(id);
                 ConnectedUsers.Add(user);
-                context.Clients.AllExcept(id).onNewUserConnected(userId, userName);// wyslij pozostalym ze user sie polaczyl
+                await  Clients.AllExcept(id).onNewUserConnected(userId, userName);// wyslij pozostalym ze user sie polaczyl
+
+                
+                
             }
             else
             {
@@ -51,7 +61,7 @@ namespace WebChatService
             user.ConnectionId.Remove(id);
             if (user.ConnectionId.Count == 0) ConnectedUsers.Remove(user);
 
-            context.Clients.AllExcept(id).SendDisconnectUser(user.EmployeeId);
+            Clients.AllExcept(id).SendDisconnectUser(user.EmployeeId);
         }
 
         public override Task OnDisconnected() 
@@ -73,35 +83,47 @@ namespace WebChatService
         }
 
         //wyslanie wiadomosci 
-        public async Task PrivateMessage(int fromUserId, int toUserId, string message)
+        public async Task PrivateMessage(int fromUserId, int toUserId, string message)//etap 2
         {
-
             var toUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == toUserId);
             var fromUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == fromUserId);
 
+
+            //if (_currentMessage.Count > _limitOfMessages) _currentMessage.Dequeue(); //pamiec wiadomosci
+            //_currentMessage.Enqueue( new Message
+            //{
+            //    Content= message,
+            //    Date = DateTime.Now,
+            //    ReceiverId = toUserId,
+            //    SenderId = fromUserId
+            //});
+
+            
             foreach (var connId in toUser.ConnectionId)//dla wszystkich okienek odbiorcy wiadomosci
             {
                 await Clients.Client(connId).CreatePrivateWindow(fromUserId, toUserId, fromUser.EmployeeName, message);
-
             }
 
             foreach (var connId in fromUser.ConnectionId)//dla wszystkich okienek nadawcy wiadomosci
             {
                 await Clients.Client(connId).CreatePrivateWindow(toUserId, fromUserId,fromUser.EmployeeName, message);
             }
-
         }
 
-        public async Task SendMessage(int toUserId, int fromUserId, string fromUserName, string message, string date)
-        {
+        //public async Task GetHistory(int fromUserId, int toUserId, string message, string date)
+        //{
+        //    List<IMessage> messages =
+        //        _currentMessage.Where(
+        //            x =>
+        //                (x.SenderId == fromUserId && x.SenderId == toUserId) ||
+        //                (x.SenderId == toUserId && x.SenderId == fromUserId)).AsEnumerable().ToList();
 
-            var fromUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == fromUserId);
 
-            foreach (var connId in fromUser.ConnectionId)
-            {
-                await Clients.Client(connId).AddMessage(toUserId, fromUserId, fromUserName, message, date);
-            }
-        }
+        //    await Clients.Caller.AddMessages(messages, fromUserId, toUserId, message, date);
+
+
+        //}
+
 
     }
 }

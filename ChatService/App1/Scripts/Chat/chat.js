@@ -1,5 +1,4 @@
 ﻿$(function () {
-
     //div z chatem 
     var div = '<div class="chat-div" >' +
            '<ul class="chat-label" id="ActiveUsersChat" ></ul>' +
@@ -8,7 +7,6 @@
            '</button>' + '</div>';
 
     var $div = $(div);
-
    
     $('#chat').prepend(div);
     $("#ActiveUsersChat").hide();
@@ -108,7 +106,6 @@ function addClientMethods(chatHub) {
         } else chatHub.server.sendMessage(false, userId, fromName, message);
     };
 
-
     chatHub.client.addMessage = function (userId, fromName, message, date) {
 
         var windowId = 'private_' + userId;
@@ -118,7 +115,6 @@ function addClientMethods(chatHub) {
         var height = $('#' + windowId).find('#divMessages')[0].scrollHeight;
         $('#' + windowId).find('#divMessages').scrollTop(height);
     };
-
 }
 
 //dodanie uzytkownika do wyswietlanej listy aktywnych
@@ -147,7 +143,6 @@ function OpenChatWindow(chatHub, toUserId, name) {
        // chatHub.server.getHistory(toUserId);
     }
 }
-
 
 function createChatWindow(chatHub, toUserId, windowId, name) {
 

@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Client.Hubs;
+using Notifications.Base;
 using Notifications.BusiessLogic;
 
 namespace App2.Hubs
@@ -18,14 +19,14 @@ namespace App2.Hubs
         {
             GlobalVar.chat.On<int, string>("OnNewUserConnected", OnNewUserConnected);
             GlobalVar.chat.On<int>("SendDisconnectUser", SendDisconnectUser);
-            GlobalVar.chat.On<int>("SendConnectUser", SendDisconnectUser);
+            GlobalVar.chat.On<int>("SendConnectUsers", SendDisconnectUser);
             GlobalVar.chat.On<int, int, string, string>("CreatePrivateWindow", (fromUserId, toUserId, fromUserName, message) => CreatePrivateWindow(fromUserId, toUserId, fromUserName, message));
-
+            //GlobalVar.chat.On<List<Message>, int, int, string, string>("AddMessages", (messages, fromUserId, toUserId, message, date) => AddMessages(messages, fromUserId, toUserId, message, date)); 
         }
 
-        public void Connect(string userName, int userId)//polaczenie sie nowego klienta 
+        public async Task Connect(string userName, int userId)//polaczenie sie nowego klienta 
         {
-            string id = Context.ConnectionId;
+            var id = Context.ConnectionId;
             Debug.WriteLine("Id uzytkownika dla {0} = {1}", userName, id);
             if (_connectedUsers.Count(x => x.EmployeeId == userId) == 0)
             {
@@ -38,7 +39,7 @@ namespace App2.Hubs
 
                 Clients.All.onlineUsers(_connectedUsers.Count - 1); //send actual number of available users
 
-                GlobalVar.chat.Invoke("ConnectUser", userName, userId);
+               await GlobalVar.chat.Invoke("ConnectUser", userName, userId);
             }
             else
             {
@@ -66,29 +67,14 @@ namespace App2.Hubs
             return base.OnDisconnected();
         }
 
-
-        public async Task PrivateMessage(int toUserId, string message)
+        public void PrivateMessage(int toUserId, string message) //etap 1
         {
             var fromUser = _connectedUsers.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
 
-            await GlobalVar.chat.Invoke("PrivateMessage", fromUser.EmployeeId, toUserId, message);
+            GlobalVar.chat.Invoke("PrivateMessage", fromUser.EmployeeId, toUserId, message);
         }
 
-        public async Task SendMessage(bool newWindow, int fromUserId, string fromUserName, string message)//metoda potrzeban tylko przy historii!
-        {
-            DateTime date = DateTime.Now;
-
-            await Clients.Caller.addMessage(fromUserId, fromUserName, message, GetDateTimeString(date));
-        }
-
-        public async Task AddMessage(int toUserId, int fromUserId, string fromUserName, string message, string date)
-        {
-            Employee fromUser = _connectedUsers.FirstOrDefault(x => x.EmployeeId == fromUserId);
-
-            await Clients.Client(fromUser.ConnectionId).addMessage(toUserId, fromUserName, message, date);
-        }
-
-        private async Task CreatePrivateWindow(int fromUserId, int toUserId, string fromUserName, string message) //dodaje okienka odbierajacemu wiadomosc
+        private async Task CreatePrivateWindow(int fromUserId, int toUserId, string fromUserName, string message) //etap 3 
         {
             Employee toUser = _connectedUsers.FirstOrDefault(x => x.EmployeeId == toUserId);
             Employee fromUser = _connectedUsers.FirstOrDefault(x => x.EmployeeId == fromUserId);
@@ -98,6 +84,33 @@ namespace App2.Hubs
                 await Clients.Client(toUser.ConnectionId).createNewWindow(fromUser.EmployeeId, fromUserName, message);
             }
         }
+
+        public async Task SendMessage(bool newWindow, int fromUserId, string fromUserName, string message)//metoda potrzebna tylko przy historii!
+        {
+            //var id = Context.ConnectionId;
+            //var toUser = _connectedUsers.FirstOrDefault(x => x.ConnectionId == id);
+
+            DateTime date = DateTime.Now;
+
+            //if (newWindow)
+            //{
+            //    GlobalVar.chat.Invoke("GetHistory", fromUserId, toUser.EmployeeId, message, GetDateTimeString(date));
+            //}
+
+            await Clients.Caller.addMessage(fromUserId, fromUserName, message, GetDateTimeString(date));
+        }
+
+
+        //public async Task AddMessages(List<Message> messages, int fromUserId, int toUserId, string message, string date)
+        //{
+        //    var fromUser = _connectedUsers.FirstOrDefault(x => x.EmployeeId == fromUserId);
+        //    foreach (var msg in messages)
+        //    {
+        //        await Clients.Caller.addMessage(fromUserId, fromUser.Name, message, date);
+        //    }
+        //}
+
+
 
         public void SendDisconnectUser(int disconnectUserId)
         {
@@ -112,9 +125,19 @@ namespace App2.Hubs
         {
             var id = Context.ConnectionId;
             var employee = _connectedUsers.FirstOrDefault(x => x.ConnectionId == id);
-            var result = _connectedUsers.FindAll(user => ConnectUsersIds.Any(x => x == user.EmployeeId)).ToList();
-            _connectedUsers = result;
-            Clients.All.onConnected(employee.EmployeeId, _connectedUsers);
+
+
+
+            foreach (var userId in ConnectUsersIds)
+            {
+                if (_connectedUsers.Any(x => x.EmployeeId == userId)) _connectedUsers.Add(new Employee
+                {
+                    EmployeeId = userId
+                });
+            }
+
+
+            if (employee != null) Clients.All.onConnected(employee.EmployeeId, _connectedUsers);
             Clients.All.onlineUsers(_connectedUsers.Count - 1);
         }
 
@@ -130,8 +153,10 @@ namespace App2.Hubs
                 Clients.All.onlineUsers(_connectedUsers.Count - 1); //send actual number of available users
             }
         }
-      
-        private string GetDateTimeString(DateTime date)
+
+
+
+        private static string GetDateTimeString(DateTime date)
         {
             if (date.ToShortDateString() == DateTime.Now.ToShortDateString())
                 return String.Format("Dzisiaj, {0}", date.ToLongTimeString());
