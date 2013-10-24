@@ -19,9 +19,8 @@ namespace App2.Hubs
         {
             GlobalVar.chat.On<int, string>("OnNewUserConnected", OnNewUserConnected);
             GlobalVar.chat.On<int>("SendDisconnectUser", SendDisconnectUser);
-            GlobalVar.chat.On<int>("SendConnectUsers", SendDisconnectUser);
+            GlobalVar.chat.On<List<int>>("SendConnectUsers", SendConnectUser);
             GlobalVar.chat.On<int, int, string, string>("CreatePrivateWindow", (fromUserId, toUserId, fromUserName, message) => CreatePrivateWindow(fromUserId, toUserId, fromUserName, message));
-            //GlobalVar.chat.On<List<Message>, int, int, string, string>("AddMessages", (messages, fromUserId, toUserId, message, date) => AddMessages(messages, fromUserId, toUserId, message, date)); 
         }
 
         public async Task Connect(string userName, int userId)//polaczenie sie nowego klienta 
@@ -39,7 +38,7 @@ namespace App2.Hubs
 
                 Clients.All.onlineUsers(_connectedUsers.Count - 1); //send actual number of available users
 
-               await GlobalVar.chat.Invoke("ConnectUser", userName, userId);
+                await GlobalVar.chat.Invoke("ConnectUser", userName, userId);
             }
             else
             {
@@ -62,7 +61,6 @@ namespace App2.Hubs
                 Clients.All.onUserDisconnected(item.EmployeeId, item.Name);
                 Clients.All.onlineUsers(_connectedUsers.Count - 1); //send actual number of available users
                 GlobalVar.chat.Invoke("OnUserDisconnected", item.EmployeeId);
-
             }
             return base.OnDisconnected();
         }
@@ -87,31 +85,11 @@ namespace App2.Hubs
 
         public async Task SendMessage(bool newWindow, int fromUserId, string fromUserName, string message)//metoda potrzebna tylko przy historii!
         {
-            //var id = Context.ConnectionId;
-            //var toUser = _connectedUsers.FirstOrDefault(x => x.ConnectionId == id);
-
-            DateTime date = DateTime.Now;
-
-            //if (newWindow)
-            //{
-            //    GlobalVar.chat.Invoke("GetHistory", fromUserId, toUser.EmployeeId, message, GetDateTimeString(date));
-            //}
+           DateTime date = DateTime.Now;
 
             await Clients.Caller.addMessage(fromUserId, fromUserName, message, GetDateTimeString(date));
         }
-
-
-        //public async Task AddMessages(List<Message> messages, int fromUserId, int toUserId, string message, string date)
-        //{
-        //    var fromUser = _connectedUsers.FirstOrDefault(x => x.EmployeeId == fromUserId);
-        //    foreach (var msg in messages)
-        //    {
-        //        await Clients.Caller.addMessage(fromUserId, fromUser.Name, message, date);
-        //    }
-        //}
-
-
-
+ 
         public void SendDisconnectUser(int disconnectUserId)
         {
             var employee = _connectedUsers.FirstOrDefault(x => x.EmployeeId == disconnectUserId);
@@ -121,7 +99,7 @@ namespace App2.Hubs
             Clients.All.onlineUsers(_connectedUsers.Count - 1);
         }
 
-        public void SendConnectUser(int[] ConnectUsersIds)
+        public void SendConnectUser(List<int> ConnectUsersIds)
         {
             var id = Context.ConnectionId;
             var employee = _connectedUsers.FirstOrDefault(x => x.ConnectionId == id);
@@ -130,14 +108,13 @@ namespace App2.Hubs
 
             foreach (var userId in ConnectUsersIds)
             {
-                if (_connectedUsers.Any(x => x.EmployeeId == userId)) _connectedUsers.Add(new Employee
+                if (!_connectedUsers.Any(x => x.EmployeeId == userId)) _connectedUsers.Add(new Employee
                 {
                     EmployeeId = userId
                 });
             }
 
-
-            if (employee != null) Clients.All.onConnected(employee.EmployeeId, _connectedUsers);
+           Clients.Caller.onConnected(employee.EmployeeId, _connectedUsers);
             Clients.All.onlineUsers(_connectedUsers.Count - 1);
         }
 
@@ -153,8 +130,6 @@ namespace App2.Hubs
                 Clients.All.onlineUsers(_connectedUsers.Count - 1); //send actual number of available users
             }
         }
-
-
 
         private static string GetDateTimeString(DateTime date)
         {

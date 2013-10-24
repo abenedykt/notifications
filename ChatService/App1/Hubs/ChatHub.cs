@@ -20,8 +20,7 @@ namespace App1.Hubs
             GlobalVar.chat.On<int, string>("OnNewUserConnected", OnNewUserConnected);
             GlobalVar.chat.On<int>("SendDisconnectUser", SendDisconnectUser);
             GlobalVar.chat.On<List<int>>("SendConnectUsers", SendConnectUser);
-            GlobalVar.chat.On<int, int, string, string>("CreatePrivateWindow", (fromUserId, toUserId, fromUserName, message) => CreatePrivateWindow(fromUserId, toUserId, fromUserName, message));
-            //GlobalVar.chat.On<List<Message>, int, int, string, string>("AddMessages", (messages, fromUserId, toUserId, message, date) => AddMessages(messages, fromUserId, toUserId, message, date)); 
+            GlobalVar.chat.On<int, int, string, string>("CreatePrivateWindow", (fromUserId, toUserId, fromUserName, message) => CreatePrivateWindow(fromUserId, toUserId, fromUserName, message));           
         }
 
         public async Task Connect(string userName, int userId)//polaczenie sie nowego klienta 
@@ -74,7 +73,7 @@ namespace App1.Hubs
             GlobalVar.chat.Invoke("PrivateMessage", fromUser.EmployeeId, toUserId, message);
         }
 
-        private async Task CreatePrivateWindow(int fromUserId, int toUserId, string fromUserName, string message) //etap 3 
+        public async Task CreatePrivateWindow(int fromUserId, int toUserId, string fromUserName, string message) //etap 3 
         {
             Employee toUser = _connectedUsers.FirstOrDefault(x => x.EmployeeId == toUserId);
             Employee fromUser = _connectedUsers.FirstOrDefault(x => x.EmployeeId == fromUserId);
@@ -87,27 +86,11 @@ namespace App1.Hubs
 
         public async Task SendMessage(bool newWindow, int fromUserId, string fromUserName, string message)//metoda potrzebna tylko przy historii!
         {
-            //var id = Context.ConnectionId;
-            //var toUser = _connectedUsers.FirstOrDefault(x => x.ConnectionId == id);
 
             DateTime date = DateTime.Now;
 
-            //if (newWindow)
-            //{
-            //    GlobalVar.chat.Invoke("GetHistory", fromUserId, toUser.EmployeeId, message, GetDateTimeString(date));
-            //}
-
             await Clients.Caller.addMessage(fromUserId, fromUserName, message, GetDateTimeString(date));
         }
-
-        //public async Task AddMessages(List<Message> messages, int fromUserId, int toUserId, string message, string date)
-        //{
-        //    var fromUser = _connectedUsers.FirstOrDefault(x => x.EmployeeId == fromUserId);
-        //    foreach (var msg in messages)
-        //    {
-        //        await Clients.Caller.addMessage(fromUserId, fromUser.Name, message, date);
-        //    }
-        //}
 
         public void SendDisconnectUser(int disconnectUserId)
         {
@@ -123,18 +106,17 @@ namespace App1.Hubs
             var id = Context.ConnectionId;
             var employee = _connectedUsers.FirstOrDefault(x => x.ConnectionId == id);
 
-            
-           
+
+
             foreach (var userId in ConnectUsersIds)
             {
-                if (_connectedUsers.Any(x => x.EmployeeId == userId)) _connectedUsers.Add(new Employee
+                if (!_connectedUsers.Any(x => x.EmployeeId == userId)) _connectedUsers.Add(new Employee
                 {
                     EmployeeId = userId
                 });
             }
 
-
-            if (employee != null) Clients.All.onConnected(employee.EmployeeId, _connectedUsers);
+            Clients.Caller.onConnected(employee.EmployeeId, _connectedUsers);
             Clients.All.onlineUsers(_connectedUsers.Count - 1);
         }
 

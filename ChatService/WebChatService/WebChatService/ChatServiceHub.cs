@@ -14,10 +14,7 @@ namespace WebChatService
 {
     public class ChatServiceHub : Hub
     {
-       private static readonly List<User> ConnectedUsers = new List<User>();
-
-       //private static readonly Queue<IMessage> _currentMessage = new Queue<IMessage>();
-       // private readonly int _limitOfMessages =1000;
+        private static readonly List<User> ConnectedUsers = new List<User>();
 
         public async Task ConnectUser(string userName, int userId) //polaczenie sie nowego uzytkownika 
         {
@@ -42,9 +39,6 @@ namespace WebChatService
                 user.ConnectionId.Add(id);
                 ConnectedUsers.Add(user);
                 await  Clients.AllExcept(id).onNewUserConnected(userId, userName);// wyslij pozostalym ze user sie polaczyl
-
-                
-                
             }
             else
             {
@@ -88,17 +82,6 @@ namespace WebChatService
             var toUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == toUserId);
             var fromUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == fromUserId);
 
-
-            //if (_currentMessage.Count > _limitOfMessages) _currentMessage.Dequeue(); //pamiec wiadomosci
-            //_currentMessage.Enqueue( new Message
-            //{
-            //    Content= message,
-            //    Date = DateTime.Now,
-            //    ReceiverId = toUserId,
-            //    SenderId = fromUserId
-            //});
-
-            
             foreach (var connId in toUser.ConnectionId)//dla wszystkich okienek odbiorcy wiadomosci
             {
                 await Clients.Client(connId).CreatePrivateWindow(fromUserId, toUserId, fromUser.EmployeeName, message);
@@ -109,21 +92,5 @@ namespace WebChatService
                 await Clients.Client(connId).CreatePrivateWindow(toUserId, fromUserId,fromUser.EmployeeName, message);
             }
         }
-
-        //public async Task GetHistory(int fromUserId, int toUserId, string message, string date)
-        //{
-        //    List<IMessage> messages =
-        //        _currentMessage.Where(
-        //            x =>
-        //                (x.SenderId == fromUserId && x.SenderId == toUserId) ||
-        //                (x.SenderId == toUserId && x.SenderId == fromUserId)).AsEnumerable().ToList();
-
-
-        //    await Clients.Caller.AddMessages(messages, fromUserId, toUserId, message, date);
-
-
-        //}
-
-
     }
 }
