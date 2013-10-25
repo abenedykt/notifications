@@ -241,7 +241,6 @@ C:\proj\ChatService\App1\bin\Mono.Cecil.dll
 C:\proj\ChatService\App1\bin\PowerCollections.dll
 C:\proj\ChatService\App1\bin\Microsoft.AspNet.SignalR.Client.xml
 C:\proj\ChatService\App1\bin\Microsoft.AspNet.SignalR.Core.xml
-C:\proj\ChatService\App1\bin\Microsoft.AspNet.SignalR.Owin.xml
 C:\proj\ChatService\App1\bin\Microsoft.AspNet.SignalR.SystemWeb.xml
 C:\proj\ChatService\App1\bin\Microsoft.Owin.Host.SystemWeb.xml
 C:\proj\ChatService\App1\bin\Microsoft.WindowsAzure.Storage.xml
@@ -309,3 +308,11 @@ C:\proj\ChatService\App1\bin\zh-Hant\System.Spatial.resources.dll
 C:\proj\ChatService\App1\obj\Debug\App1.csprojResolveAssemblyReference.cache
 C:\proj\ChatService\App1\obj\Debug\App1.dll
 C:\proj\ChatService\App1\obj\Debug\App1.pdb
+C:\proj\ChatService\App1\bin\Microsoft.AspNet.SignalR.Core.dll
+C:\proj\ChatService\App1\bin\Microsoft.AspNet.SignalR.SystemWeb.dll
+C:\proj\ChatService\App1\bin\Microsoft.Owin.dll
+C:\proj\ChatService\App1\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\proj\ChatService\App1\bin\Microsoft.Owin.Security.dll
+C:\proj\ChatService\App1\bin\Microsoft.Owin.xml
+C:\proj\ChatService\App1\bin\Microsoft.Owin.Security.xml
+C:\proj\ChatService\App1\bin\Newtonsoft.Json.xml
