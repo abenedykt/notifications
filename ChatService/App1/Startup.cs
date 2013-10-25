@@ -11,6 +11,7 @@ namespace App1
     {
         public void Configuration(IAppBuilder app)
         {
+
             app.MapHubs();
 
         }

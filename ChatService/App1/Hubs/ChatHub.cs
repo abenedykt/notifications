@@ -12,16 +12,17 @@ using Notifications.BusiessLogic;
 
 namespace App1.Hubs
 {
+    
     public class ChatHub : Hub
     {
         private static List<Employee> _connectedUsers = new List<Employee>();
 
         public ChatHub()
-        {
+        {       
             GlobalVar.chat.On<int, string>("OnNewUserConnected", OnNewUserConnected);
             GlobalVar.chat.On<int>("SendDisconnectUser", SendDisconnectUser);
             GlobalVar.chat.On<bool, Dictionary<int, string>>("SendConnectUsers", SendConnectUsers);
-            GlobalVar.chat.On<int, int, string, string>("CreatePrivateWindow", (fromUserId, toUserId, fromUserName, message) => CreatePrivateWindow(fromUserId, toUserId, fromUserName, message));
+            GlobalVar.chat.On<int, int, string, string>("CreatePrivateWindow", (fromUserId, toUserId, fromUserName, message) => CreatePrivateWindow(fromUserId, toUserId, fromUserName, message));    
         }
 
         public void Connect(string userName, int userId)//polaczenie sie nowego klienta 

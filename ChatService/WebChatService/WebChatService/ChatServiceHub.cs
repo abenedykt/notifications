@@ -102,12 +102,13 @@ namespace WebChatService
             {
                 Debug.WriteLine(String.Format("ConnectionID receiver: {0} ", connId));
                 await Clients.Client(connId).CreatePrivateWindow(fromUserId, toUserId, fromUser.EmployeeName, message);
+
             }
 
             foreach (var connId in fromUser.ConnectionId)//dla wszystkich okienek nadawcy wiadomosci
             {
                 Debug.WriteLine(String.Format("ConnectionID sender: {0} ", connId));
-                await Clients.Client(connId).CreatePrivateWindow(toUserId, fromUserId,fromUser.EmployeeName, message);
+                await Clients.Client(connId).CreatePrivateWindow(toUserId, fromUserId, fromUser.EmployeeName, message);
             }
         }
     }

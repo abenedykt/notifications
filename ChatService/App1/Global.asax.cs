@@ -9,6 +9,7 @@ using System.Web.Routing;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 using Microsoft.AspNet.SignalR.Client;
+using App1.Hubs;
 
 namespace App1
 {
@@ -21,8 +22,8 @@ namespace App1
             GlobalVar.connection = new HubConnection("http://localhost:61122//signalr", useDefaultUrl: false);
             GlobalVar.chat = GlobalVar.connection.CreateHubProxy("ChatServiceHub");
             GlobalVar.connection.Start().Wait();
-
-  
+            
+           
             AreaRegistration.RegisterAllAreas();
             
             WebApiConfig.Register(GlobalConfiguration.Configuration);
