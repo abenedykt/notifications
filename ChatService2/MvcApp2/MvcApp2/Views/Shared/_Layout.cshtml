@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - My ASP.NET MVC Application</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="~/Content/chat/chat.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/chat/draggableWindowChat.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/themes/base/jquery.ui.all.css" />
+    <meta name="viewport" content="width=device-width" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <header>
+        <div class="content-wrapper">
+            <div class="float-left">
+                <p class="site-title">@Html.ActionLink("your logo here", "Index", "Home")</p>
+            </div>
+            <div class="float-right">
+                <section id="login">
+                    @Html.Partial("_LoginPartial")
+                </section>
+                <nav>
+                    <ul id="menu">
+                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                        <li>@Html.ActionLink("About", "About", "Home")</li>
+                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <div id="body">
+        <h1>APP2!!!!!!!!!!!</h1>
+        @RenderSection("featured", required: false)
+        <section class="content-wrapper main-content clear-fix">
+            @RenderBody()
+        </section>
+    </div>
+    <footer>
+        <div class="content-wrapper">
+            <div class="float-left">
+                <p>&copy; @DateTime.Now.Year - My ASP.NET MVC Application</p>
+                * <input id="chatName" type="text"> - dla nazwy użytkownika
+                * <input id="chatId" type="text" /> -dla id użytkownika (id po którym będzie on wyszukiwany w bazie)
+                * <button type="button" onclick="addToChat()"> Zaloguj </button>
+                <div id="divDraggable"></div> - w tym divie pokaze sie okienko prywatnej wiadomosci (najlepiej div na całą stronę)
+                * <div id="chat"> </div> - w tym divie pojawi sie chat
+            </div>
+        </div>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/jquery-1.8.2.js" type="text/javascript"> </script>
+    <script src="~/Scripts/jquery-ui-1.8.24.js"> </script>
+    <script src="~/Scripts/jquery.signalR-2.0.0.js"> </script>
+    <script src="http://localhost:59537/signalr/hubs"> </script>
+    <script src="~/Scripts/chat/chat.js" type="text/javascript"> </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>
