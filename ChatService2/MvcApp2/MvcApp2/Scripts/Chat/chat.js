@@ -68,7 +68,6 @@ function addClientMethods(chatHub) {
             $("#ActiveUsersChat").hide();
             showList = false;
         }
-
     });
      
     chatHub.on('onNewUserConnected', function (userId, name) {

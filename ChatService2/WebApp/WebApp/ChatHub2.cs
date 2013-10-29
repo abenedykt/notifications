@@ -14,11 +14,21 @@ namespace WebApp
     public class ChatHub2 : Hub
     {
         private static List<Employee> ConnectedUsers = new List<Employee>();
+        private readonly IChatApplication _application;
+        private bool _saving;
 
 
         public ChatHub2()
         {
-            Debug.WriteLine("done");
+            var mongoConnection = new MongoStringConnection
+            {
+                DatabaseName = "chat",
+                DatabaseUrl = "mongodb://emp:12345@localhost/chat"
+            };
+
+            _application = new ChatApplication(new Factory(new MongoRepository(mongoConnection)));
+
+            _saving = true;
         }
 
         public void Connect(string userName, int userId)
@@ -29,6 +39,8 @@ namespace WebApp
             {
                 var employee = new Employee { ConnectionId = id, Name = userName, EmployeeId = userId };
                 ConnectedUsers.Add(employee);
+
+               if(_saving) _application.AddEmployee(employee);
 
                 Clients.Caller.onConnected(userId, userName, ConnectedUsers); // send list of active person to caller
 
@@ -82,6 +94,10 @@ namespace WebApp
 
             DateTime date = DateTime.Now;
 
+            if (newWindow && _saving)
+            {
+                await GetHistory(toUserId);
+            }
 
             await Clients.Caller.addMessage(toUserId, fromUserName, message, GetDateTimeString(date));
             // send to caller user
@@ -90,6 +106,23 @@ namespace WebApp
             // send to 
         }
 
+        public async Task GetHistory(int toUserId)
+        {
+            if (_saving)
+            {
+                string fromUserId = Context.ConnectionId;
+
+                Employee toUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == toUserId);
+                Employee fromUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == fromUserId);
+
+
+                List<IMessage> messages = _application.GetMessages(toUser.EmployeeId, fromUser.EmployeeId);
+                foreach (IMessage m in messages)
+                {
+                    await Clients.Caller.addMessage(toUserId, m.SenderName, m.Content, GetDateTimeString(m.Date));
+                }
+            }
+        }
   
         private string GetDateTimeString(DateTime date)
         {
