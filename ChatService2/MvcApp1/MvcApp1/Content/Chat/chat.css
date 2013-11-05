@@ -68,11 +68,15 @@ position:absolute;
 }
 
 .chat-white-icon {
-    background-image: url(images/whiteIcons.png)/*{iconsContent}*/;
+    background-image: url(images/whiteIcons.png);
 }
 
 .chat-green-icon {
-    background-image: url(images/greenIcons.png)/*{iconsContent}*/;
+    background-image: url(images/greenIcons.png);
+}
+
+.chat-red-icon {
+    background-image: url(images/redIcons.png);
 }
 
 .chat-icon-triangle {
@@ -80,8 +84,85 @@ position:absolute;
     background-position: -64px -16px;
 }
 
+.chat-icon-iks {
+  background-position: -32px -192px;
+}
+
 .chat-icon-bullet {
     background-position: -80px -144px;
+}
+
+.chat-window {
+    background-color:#E5E5E5;
+    border: 2px solid #9B9B9B;
+    position: absolute;
+    width: 350px;
+    height: 370px;
+    z-index: 1;
+    padding: 0px 0px 0px 0px;
+    margin: 10px 10px 10px 10px;
+}
+
+.chat-header {
+    background-color: #0D6E10;
+    height: 30px;
+    width:350px;
+    margin: 0px 0px 0px 0px; 
+}
+
+.chat-header-name {    
+    font-family: 'Segoe UI';
+    font-size: 15px;
+    color: #ffffff;
+    height: 30px;
+    width: 320px;
+    padding:5px 20px;
+    margin: 0px 0px 0px 0px;
+}
+
+.chat-header-close {
+    cursor:pointer;  
+    float:right;
+    width:16px;
+    height:30px;
+    text-align: center;
+    margin: 0px 0px 0px 0px;
+}
+
+.chat-messages-area {
+    background-color: #FFFFFF;
+    color: #000000; 
+    overflow-y: scroll;
+    width:340px;  
+    height:200px; 
+    margin: 5px 5px 0px;
+    padding: 0px 0px 0px 0px;
+}
+
+.chat-message {
+    width:340px; 
+    margin: 0px 0px; 
+    height: 75px;
+}
+
+.chat-message textarea {
+    resize: none;
+    width:340px;  
+    padding: 0px 0px;
+    margin: 5px 5px;
+    }
+
+.chat-send {
+    height: 40px;
+    width:350px; 
+
+    margin: 0px 0px;
+}
+
+.chat-send-btn {
+    width: 30px;
+    background-color: #f49124;
+    margin: 5px 5px;
 }
 
 

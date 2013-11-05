@@ -148,22 +148,23 @@ function OpenChatWindow(chatHub, toUserId, name) {
 function createChatWindow(chatHub, toUserId, windowId, name) {
 
     var div = '<div id="' + windowId + '" class="chat-window">' +
-        '<div class="chat-header">' +
-
-        '<span rel="0">' + name + '</span>' +
-        '<div class="chat-close"><img id="imgClose" height:"20px" width="20px" src="/Content/Chat/images/closeChat.png"/>' +
-        '</div></div>' +
-        '<div id="divMessages" class="chat-messages-area">' +
-        '</div>' +
-        '<div class="buttonBar">' +
-        '<input id="txtMessage" class="chat-message" type="text"   />' +
-        '<input id="btnSendMessage" class="chat-send-btn" type="button" value="Wyslij"   />' +
-        '</div>' +
+            '<div class="chat-header">' +
+             '<div class="chat-header-close" ><span class="chat-icon chat-red-icon chat-icon-iks"></span></div>' +
+                '<div class="chat-header-name">' + name + '</div>' +
+               
+            '</div>' +
+            '<div id="divMessages" class="chat-messages-area">' +
+            '</div>' +
+            '<div class="chat-message"><textarea id="txtMessage" type="text" rows="4"/></div>' +
+            '<div class="chat-send" ><input id="btnSendMessage" class="chat-send-btn" type="button" value="Wyslij"   /> </div>' +
         '</div>';
 
+    
 
 
     var $div = $(div);
+    $div.css("left:", leftPosition);
+    $div.css("top:", topPosition);
 
     leftPosition = leftPosition + 40;
     if (leftPosition > 600) leftPosition = 0;
