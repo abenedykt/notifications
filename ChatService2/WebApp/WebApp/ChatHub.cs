@@ -11,14 +11,14 @@ using System.Diagnostics;
 
 namespace WebApp
 {
-    public class ChatHub2 : Hub
+    public class ChatHub : Hub
     {
         private static List<Employee> ConnectedUsers = new List<Employee>();
         private readonly IChatApplication _application;
         private bool _saving;
 
 
-        public ChatHub2()
+        public ChatHub()
         {
             var mongoConnection = new MongoStringConnection
             {

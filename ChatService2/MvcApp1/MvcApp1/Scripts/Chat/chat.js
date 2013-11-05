@@ -13,7 +13,7 @@
     $("#ActiveUsersChat").hide();
 
     connection = $.hubConnection('http://localhost:59537/');
-    chatHub = connection.createHubProxy('ChatHub2');
+    chatHub = connection.createHubProxy('ChatHub');
   
     addClientMethods(chatHub);
     

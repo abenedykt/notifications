@@ -2,4 +2,8 @@ Adres do po³¹czenia siê z Chat MongoDb
 192.168.2.122 port:27017
 
 Connection string:
+mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]
+
+
+Obecnie dzia³aj¹cy connection string:
 DatabaseUrl = "mongodb://emp:12345@192.168.2.122:27017/chat"
