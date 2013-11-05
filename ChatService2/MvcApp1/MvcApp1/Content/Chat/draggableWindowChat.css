@@ -1,45 +1,41 @@
-﻿.draggable {
-    background-color: #f89406;
+﻿.chat-window {
+    background-color:#E5E5E5;
+    border: 2px solid #9B9B9B;
     position: absolute;
     width: 370px;
     z-index: 1;
+    padding: 2px 2px 2px 2px;
 }
 
-.draggable .header {
-    background-color: #945f0c;
-    color: #ffffff;
-    cursor: move;
-    height: 15px;
-    padding: 5px 5px;
+.chat-header {
+    background-color: #0D6E10;
+    font-family: 'Segoe UI';
+    color: #FFFFFF;
+    height: 20px;
 }
 
-.draggable .messageArea {
-    border-bottom: #5f9482 solid 1px;
-    font-weight: normal;
-    height: 200px;
+.chat-close {
+
+    cursor:pointer;
+    background-image: url("images/closeChat.png");
+    float:right;
+
+}
+
+.chat-messages-area {
+    background-color: #FFFFFF;
+    color: #000000; 
     overflow-y: scroll;
-    width: 370px;
 }
 
-.draggable .messageArea .message { padding: 4px; }
-
-.draggable .buttonBar {
-    padding: 4px;
-    width: 370px;
+.chat-message {
+    padding: 4px; 
 }
 
-.draggable .buttonBar .msgText {
-    margin-bottom: 0;
-    width: 272px;
-}
-
-.draggable .buttonBar .button {
+.chat-send-btn {
     margin-left: 4px;
     width: 60px;
     background-color: #f49124;
 
 }
 
-.top { z-index: 2; }
-
-.bottom { z-index: 1; }

@@ -1,68 +1,87 @@
 ﻿.chat-div{
-
 bottom: 0;
 position: fixed;
-right: 10px;
-width: 108px;
+right: 0px;
+width: 200px;
 display: block;
-
-
 }
 
 
 .chat-label{
 display: none;
-background-color: #ccf285;
+background-color: #e5e5e5;
 margin: 0px;
-padding-bottom: 10px;
-padding-top: 10px;
-width: 100px;
--webkit-border-radius: 3px;
--moz-border-radius: 3px;
-border-radius: 3px;
-padding: 2px 4px;
+padding: 10px 10px 10px 10px;
+width: 200px;
+font-family:"Segoe UI";
 font-size: 11.844px;
 font-weight: bold;
 line-height: 14px;
-color: #000000;
-text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-white-space: nowrap;
-vertical-align: baseline;
-list-style-type: disc;
+color: #0D6E10;
+}
 
--webkit-margin-start: 0px;
--webkit-margin-end: 0px;
 
+.userLink {
+    margin-top: 5px;
+}
+
+.userLink a {
+color: #0D6E10;
+outline: none;
+padding-left: 20px;
+padding-right: 0px;
+text-decoration: none;
+cursor: pointer;
+}
+.userLink a:hover {
+background-color: #c7d1d6;
+color: #333;
 }
 
 .chat-btn{
 color: #ffffff;
-text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-background-color: #5bb75b;
-height: 40px;
-width: 108px;
-background-image: linear-gradient(to bottom, #62c462, #51a351);
-background-repeat: repeat-x;
-padding: 0px 0px;
-display: inline-block;
-margin-bottom: 0;
+background-color: #0D6E10;
+height: 30px;
+width: 200px;
+border: 1px solid #1B761D;
+padding: 5px 5px;
 font-size: 14px;
-line-height: 20px;
 text-align: center;
 vertical-align: middle;
 cursor: pointer;
--webkit-border-radius: 4px;
--moz-border-radius: 4px;
-border-radius: 4px;
--webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
--moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
--webkit-appearance: button;
 margin: 0;
 letter-spacing: normal;
 word-spacing: normal;
 text-transform: none;
 text-indent: 0px;
 font: -webkit-small-control;
--webkit-writing-mode: horizontal-tb;
 }
+
+.chat-icon {
+width: 16px;
+height: 16px;
+display: block;
+text-indent: -99999px;
+overflow: hidden;
+background-repeat: no-repeat;
+position:absolute; 
+}
+
+.chat-white-icon {
+    background-image: url(images/whiteIcons.png)/*{iconsContent}*/;
+}
+
+.chat-green-icon {
+    background-image: url(images/greenIcons.png)/*{iconsContent}*/;
+}
+
+.chat-icon-triangle {
+    margin-left:20px;
+    background-position: -64px -16px;
+}
+
+.chat-icon-bullet {
+    background-position: -80px -144px;
+}
+
+

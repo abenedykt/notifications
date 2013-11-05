@@ -2,10 +2,11 @@
 
     //div z chatem 
     var div = '<div class="chat-div" >' +
-           '<ul class="chat-label" id="ActiveUsersChat" ></ul>' +
            '<button class="chat-btn" type="button" onClick="show()">' +
-           '<p id="counter" /> ' +
-           '</button>' + '</div>';
+           '<span id="triangleIcon" class="chat-icon chat-white-icon chat-icon-triangle"></span><span id="counter" />' +
+           '</button>' +
+           '<ul class="chat-label" id="ActiveUsersChat"></ul>' +
+           '</div>';
 
     var $div = $(div);
   
@@ -41,9 +42,12 @@ function show() {
     if (showList == false) {
         $("#ActiveUsersChat").show();
         showList = true;
+        $("#triangleIcon").css("background-position", "0px -16px");
+
     } else {
         $("#ActiveUsersChat").hide();
-        showList =false;      
+        showList = false;
+        $("#triangleIcon").css("background-position", "-64px -16px");
     }
 }
 
@@ -68,7 +72,6 @@ function addClientMethods(chatHub) {
             $("#ActiveUsersChat").hide();
             showList = false;
         }
-
     });
      
     chatHub.on('onNewUserConnected', function (userId, name) {
@@ -122,7 +125,7 @@ function AddUser(chatHub, userId, name, actualUserId) {
 
     if (actualUserId != userId)
     {
-        userChat = $('<div style="height:20px;" id="' + userId + '"><a style="cursor: pointer;">' + name + '</a></div>');
+        userChat = $('<div class="userLink" id="' + userId + '"><span class="chat-icon chat-green-icon chat-icon-bullet"></span><a>' + name + '</a></div>');
 
         $(userChat).click(function () {
             if (actualUserId != userId)
@@ -144,20 +147,21 @@ function OpenChatWindow(chatHub, toUserId, name) {
 
 function createChatWindow(chatHub, toUserId, windowId, name) {
 
-    var div = '<div id="' + windowId + '" class="ui-widget-content draggable" rel="0" style="z-index:' + (zIndex++) + '; position:absolute; left:' + leftPosition + 'px; top:' + topPosition + 'px;">' +
-        '<div class="header">' +
-        '<div  style="float:right;">' +
-        '<img id="imgClose"  style="cursor:pointer;" src="/Content/Chat/images/closeChat.png"/>' +
-        '</div>' +
+    var div = '<div id="' + windowId + '" class="chat-window">' +
+        '<div class="chat-header">' +
+
         '<span rel="0">' + name + '</span>' +
-        '</div>' +
-        '<div id="divMessages" class="messageArea">' +
+        '<div class="chat-close"><img id="imgClose" height:"20px" width="20px" src="/Content/Chat/images/closeChat.png"/>' +
+        '</div></div>' +
+        '<div id="divMessages" class="chat-messages-area">' +
         '</div>' +
         '<div class="buttonBar">' +
-        '<input id="txtMessage" class="msgText" type="text"   />' +
-        '<input id="btnSendMessage" class="button" type="button" value="Wyslij"   />' +
+        '<input id="txtMessage" class="chat-message" type="text"   />' +
+        '<input id="btnSendMessage" class="chat-send-btn" type="button" value="Wyslij"   />' +
         '</div>' +
         '</div>';
+
+
 
     var $div = $(div);
 
@@ -165,6 +169,7 @@ function createChatWindow(chatHub, toUserId, windowId, name) {
     if (leftPosition > 600) leftPosition = 0;
 
     topPosition = topPosition + 25;
+    if (topPosition > 600) topPosition = 0;
 
     $div.find('#imgClose').click(function () {
         $('#' + windowId).remove();
