@@ -2,10 +2,11 @@
 
     //div z chatem 
     var div = '<div class="chat-div" >' +
-           '<ul class="chat-label" id="ActiveUsersChat" ></ul>' +
            '<button class="chat-btn" type="button" onClick="show()">' +
-           '<p id="counter" /> ' +
-           '</button>' + '</div>';
+           '<span id="triangleIcon" class="chat-icon chat-white-icon chat-icon-triangle"></span><span class="chat-btn-text">czat</span><span class="chat-btn-counter" id="counter" />' +
+           '</button>' +
+           '<ul class="chat-label" id="ActiveUsersChat"></ul>' +
+           '</div>';
 
     var $div = $(div);
   
@@ -24,7 +25,7 @@
             chatHub.invoke("Connect", sessionStorage.getItem("name"), sessionStorage.getItem("id"));
         }
         else {
-            $("#counter").text('Chat(0)');
+            $("#counter").text('online(0)');
         }
     });
     
@@ -41,9 +42,12 @@ function show() {
     if (showList == false) {
         $("#ActiveUsersChat").show();
         showList = true;
+        $("#triangleIcon").css("background-position", "0px -16px");
+
     } else {
         $("#ActiveUsersChat").hide();
-        showList =false;      
+        showList = false;
+        $("#triangleIcon").css("background-position", "-64px -16px");
     }
 }
 
@@ -62,7 +66,7 @@ function addClientMethods(chatHub) {
     chatHub.on('onlineUsers', function (count) {
 
         if (sessionStorage.getItem("name") != null)
-            $("#counter").text('Chat(' + count + ')');
+            $("#counter").text('online(' + count + ')');
 
         if (count == 0) {
             $("#ActiveUsersChat").hide();
@@ -104,11 +108,11 @@ function addClientMethods(chatHub) {
     });
 
 
-    chatHub.on ('addMessage', function (userId, fromName, message, date) {
+    chatHub.on('addMessage', function (userId, fromName, message, date) {
 
         var windowId = 'private_' + userId;
 
-        $('#' + windowId).find('#divMessages').append('<div class="message"><strong>' + fromName + '</strong>(<i>' + date + '</i>): ' + message + '</div>');
+        $('#' + windowId).find('#divMessages').append('<div class="chat-messages-area-message"><span class="chat-messages-area-span1">' + fromName + '(' + date + ')</span> <span class="chat-messages-area-span2">' + message + '</span></div>');
 
         var height = $('#' + windowId).find('#divMessages')[0].scrollHeight;
         $('#' + windowId).find('#divMessages').scrollTop(height);
@@ -118,14 +122,15 @@ function addClientMethods(chatHub) {
 
 function AddUser(chatHub, userId, name, actualUserId) {
     var userChat = "";
-
     if (actualUserId != userId)
     {
-        userChat = $('<div style="height:20px;" id="' + userId + '"><a style="cursor: pointer;">' + name + '</a></div>');
+        userChat = $('<div class="userLink" id="' + userId + '"><span class="chat-icon chat-green-icon chat-icon-bullet"></span><a>' + name + '</a></div>');
 
         $(userChat).click(function () {
-            if (actualUserId != userId)
+            if (actualUserId != userId) {
                 OpenChatWindow(chatHub, userId, name);
+                $('#private_' + userId).click();
+            }
         });
     }
 
@@ -137,33 +142,37 @@ function OpenChatWindow(chatHub, toUserId, name) {
     var windowId = 'private_' + toUserId;
     if ($('#' + windowId).length == 0) {
         createChatWindow(chatHub, toUserId, windowId, name);
-        chatHub.invoke('getHistory',toUserId);
+        $('#' + windowId).find('#chatHeader').addClass('chat-header-top').removeClass('chat-header-bottom');
+        $('#' + windowId).siblings().find('#chatHeader').removeClass('chat-header-top').addClass('chat-header-bottom');
+        chatHub.invoke('getHistory', toUserId);
     }
 }
 
 function createChatWindow(chatHub, toUserId, windowId, name) {
 
-    var div = '<div id="' + windowId + '" class="ui-widget-content draggable" rel="0" style="z-index:' + (zIndex++) + '; position:absolute; left:' + leftPosition + 'px; top:' + topPosition + 'px;">' +
-        '<div class="header">' +
-        '<div  style="float:right;">' +
-        '<img id="imgClose"  style="cursor:pointer;" src="/Content/Chat/images/closeChat.png"/>' +
-        '</div>' +
-        '<span rel="0">' + name + '</span>' +
-        '</div>' +
-        '<div id="divMessages" class="messageArea">' +
-        '</div>' +
-        '<div class="buttonBar">' +
-        '<input id="txtMessage" class="msgText" type="text"   />' +
-        '<input id="btnSendMessage" class="button" type="button" value="Wyslij"   />' +
-        '</div>' +
+    var div = '<div id="' + windowId + '" class="chat-window">' +
+            '<div id="chatHeader" class="chat-header chat-header-bottom">' +
+             '<div id="imgClose" class="chat-header-close" ><span class="chat-icon chat-red-icon chat-icon-iks"></span></div>' +
+                '<div class="chat-header-name"><span class="chat-header-name-span1">Rozmowa </span><span class="chat-header-name-span2"> ' + name + '</span></div>' +
+               
+            '</div>' +
+            '<div id="divMessages" class="chat-messages-area">' +
+            '</div>' +
+            '<div class="chat-message"><textarea id="txtMessage" type="text" rows="4"/></div>' +
+            '<div class="chat-send" ><input id="btnSendMessage" type="button" class="chat-send-btn" value="Wyślij"   /> </div>' +
         '</div>';
 
     var $div = $(div);
+
+    $div.css("left", leftPosition);
+    $div.css("top", topPosition);
+    $div.css("z-index", ++zIndex);
 
     leftPosition = leftPosition + 40;
     if (leftPosition > 600) leftPosition = 0;
 
     topPosition = topPosition + 25;
+    if (topPosition > 600) topPosition = 0;
 
     $div.find('#imgClose').click(function () {
         $('#' + windowId).remove();
@@ -200,10 +209,12 @@ function createChatWindow(chatHub, toUserId, windowId, name) {
         }
     });
 
-    $div.click(function () {
-        $(this).addClass('top').removeClass('bottom');
-        $(this).siblings().removeClass('top').addClass('bottom');
+    $('#'+windowId).click(function () {
+        $(this).addClass('chat-window-top').removeClass('chat-window-bottom');
+        $(this).siblings().removeClass('chat-window-top').addClass('chat-window-bottom');
         $(this).css("z-index", zIndex++);
 
+        $('#' + windowId).find('#chatHeader').addClass('chat-header-top').removeClass('chat-header-bottom');
+        $('#' + windowId).siblings().find('#chatHeader').removeClass('chat-header-top').addClass('chat-header-bottom');
     });
 }

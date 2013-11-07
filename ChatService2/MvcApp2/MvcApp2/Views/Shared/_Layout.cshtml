@@ -5,7 +5,6 @@
     <title>@ViewBag.Title - My ASP.NET MVC Application</title>
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href="~/Content/chat/chat.css" />
-    <link rel="stylesheet" type="text/css" href="~/Content/chat/draggableWindowChat.css" />
     <link rel="stylesheet" type="text/css" href="~/Content/themes/base/jquery.ui.all.css" />
     <meta name="viewport" content="width=device-width" />
     @Styles.Render("~/Content/css")
@@ -14,6 +13,7 @@
 <body>
     <header>
         <div class="content-wrapper">
+            <div id="divDraggable"></div> 
             <div class="float-left">
                 <p class="site-title">@Html.ActionLink("your logo here", "Index", "Home")</p>
             </div>
@@ -36,17 +36,18 @@
         @RenderSection("featured", required: false)
         <section class="content-wrapper main-content clear-fix">
             @RenderBody()
+
+            <h3>Nazwa użytkownika:</h3><input id="chatName" type="text">
+            <h3>Hasło:</h3><input id="chatId" type="text" />
+            <button type="button" onclick="addToChat()"> Zaloguj </button>
+
         </section>
     </div>
     <footer>
         <div class="content-wrapper">
             <div class="float-left">
-                <p>&copy; @DateTime.Now.Year - My ASP.NET MVC Application</p>
-                * <input id="chatName" type="text"> - dla nazwy użytkownika
-                * <input id="chatId" type="text" /> -dla id użytkownika (id po którym będzie on wyszukiwany w bazie)
-                * <button type="button" onclick="addToChat()"> Zaloguj </button>
-                <div id="divDraggable"></div> - w tym divie pokaze sie okienko prywatnej wiadomosci (najlepiej div na całą stronę)
-                * <div id="chat"> </div> - w tym divie pojawi sie chat
+                <p>&copy; @DateTime.Now.Year - My ASP.NET MVC Application</p> 
+                 <div id="chat"> </div> 
             </div>
         </div>
     </footer>

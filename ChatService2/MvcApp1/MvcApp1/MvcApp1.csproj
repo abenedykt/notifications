@@ -211,7 +211,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Chat\chat.css" />
-    <Content Include="Content\Chat\draggableWindowChat.css" />
     <Content Include="Content\Chat\images\closeChat.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
