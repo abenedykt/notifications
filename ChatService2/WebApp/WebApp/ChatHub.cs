@@ -40,19 +40,17 @@ namespace WebApp
                 var employee = new Employee { ConnectionId = id, Name = userName, EmployeeId = userId };
                 ConnectedUsers.Add(employee);
 
-               if(_saving) _application.AddEmployee(employee);
+                if(_saving) _application.AddEmployee(employee);
 
-                Clients.Caller.onConnected(userId, userName, ConnectedUsers); // send list of active person to caller
-
-                Clients.AllExcept(id).onNewUserConnected(userId, userName); // send to all except caller client
-
-                Clients.All.onlineUsers(ConnectedUsers.Count - 1); //send actual number of available users
+                Clients.Caller.onConnected(userId, userName, ConnectedUsers);
+                Clients.AllExcept(id).onNewUserConnected(userId, userName);
+                Clients.All.onlineUsers(ConnectedUsers.Count - 1);
             }
             else
             {
                 ConnectedUsers.FirstOrDefault(x => x.EmployeeId == userId).ConnectionId = Context.ConnectionId;
-                Clients.Caller.onConnected(userId, userName, ConnectedUsers); // send list of active person to caller
-                Clients.Caller.onlineUsers(ConnectedUsers.Count - 1); //send actual number of available users
+                Clients.Caller.onConnected(userId, userName, ConnectedUsers);
+                Clients.Caller.onlineUsers(ConnectedUsers.Count - 1); 
             }
         }
        
@@ -61,13 +59,13 @@ namespace WebApp
             var id = Context.ConnectionId;
 
             Thread.Sleep(1000);
-            Employee item = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == id); //zobacz czy jest uzytkownik z takim id( znak ze nie dostal nowego id)
+            Employee item = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == id);
             if (item != null)
             {
                 ConnectedUsers.Remove(item);
 
                 Clients.All.onUserDisconnected(item.EmployeeId, item.Name);
-                Clients.All.onlineUsers(ConnectedUsers.Count - 1); //send actual number of available users
+                Clients.All.onlineUsers(ConnectedUsers.Count - 1);
             }
             return base.OnDisconnected();
         }
@@ -94,16 +92,11 @@ namespace WebApp
 
             DateTime date = DateTime.Now;
 
-            if (newWindow && _saving)
-            {
-                await GetHistory(toUserId);
-            }
-
+            if (newWindow && _saving) await GetHistory(toUserId);
+            
             await Clients.Caller.addMessage(toUserId, fromUserName, message, GetDateTimeString(date));
-            // send to caller user
 
             await Clients.Client(toUser.ConnectionId).addMessage(fromUser.EmployeeId, fromUserName, message, GetDateTimeString(date));
-            // send to 
         }
 
         public async Task GetHistory(int toUserId)
@@ -114,7 +107,6 @@ namespace WebApp
 
                 Employee toUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == toUserId);
                 Employee fromUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == fromUserId);
-
 
                 List<IMessage> messages = _application.GetMessages(toUser.EmployeeId, fromUser.EmployeeId);
                 foreach (IMessage m in messages)
@@ -130,7 +122,5 @@ namespace WebApp
                 return String.Format("Dzisiaj, {0}", date.ToLongTimeString());
             return String.Format("{0}r., {1}", date.ToString("dd.MM.yyyy"), date.ToLongTimeString());
         }
-    }
-
-    
+    }    
 }
