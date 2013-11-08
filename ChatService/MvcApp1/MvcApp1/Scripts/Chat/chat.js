@@ -83,7 +83,7 @@ function addClientMethods(chatHub) {
     
     chatHub.on('onConnected', function (userId, name, allUsers) {
 
-        $("#ActiveUsersChat").clear;
+        $("#ActiveUsersChat").clear();
 
         for (var i = 0; i < allUsers.length; i++)
             AddUser(chatHub, allUsers[i].EmployeeId, allUsers[i].Name, userId);

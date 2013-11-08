@@ -20,15 +20,24 @@ namespace WebApp
 
         public ChatHub()
         {
-            var mongoConnection = new MongoStringConnection
+            _saving = false;
+
+            if (_saving)
             {
-                DatabaseName = "chat",
-                DatabaseUrl = "mongodb://emp:12345@localhost/chat"
-            };
+                var mongoConnection = new MongoStringConnection
+                {
+                    DatabaseName = "chat",
+                    DatabaseUrl = "mongodb://emp:12345@localhost/chat"
+                };
 
-            _application = new ChatApplication(new Factory(new MongoRepository(mongoConnection)));
+                _application = new ChatApplication(new Factory(new MongoRepository(mongoConnection)));
+            }
+            
+        }
 
-            _saving = true;
+        public void HelloWorld()
+        {
+            Clients.Caller.addText();
         }
 
         public void Connect(string userName, int userId)
@@ -94,7 +103,6 @@ namespace WebApp
 
             if (newWindow && _saving) await GetHistory(toUserId);
             
-            //await Clients.Caller.addMessage(toUserId, fromUserName, message, GetDateTimeString(date));
             await Clients.Caller.addMessage(toUserId, fromUserName, message, date.ToShortTimeString());
             await Clients.Client(toUser.ConnectionId).addMessage(fromUser.EmployeeId, "Ja", message, date.ToShortTimeString());
         }
@@ -119,8 +127,8 @@ namespace WebApp
         private string GetDateTimeString(DateTime date)
         {
             if (date.ToShortDateString() == DateTime.Now.ToShortDateString())
-                return String.Format("Dzisiaj, {0}", date.ToLongTimeString());
-            return String.Format("{0}r., {1}", date.ToString("dd.MM.yyyy"), date.ToLongTimeString());
+                return String.Format("{0}", date.ToShortTimeString());
+            return String.Format("{0}r.,{1}", date.ToString("dd.MM.yyyy"), date.ToShortTimeString());
         }
     }    
 }

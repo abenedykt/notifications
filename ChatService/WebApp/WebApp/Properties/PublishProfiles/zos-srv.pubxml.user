@@ -6,61 +6,62 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>\\zos-srv\ChatServer</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/Microsoft.AspNet.SignalR.Core.dll">
-      <publishTime>11/08/2013 13:10:53</publishTime>
+      <publishTime>10/29/2013 08:49:20</publishTime>
     </File>
     <File Include="bin/Microsoft.AspNet.SignalR.SystemWeb.dll">
-      <publishTime>11/08/2013 13:10:53</publishTime>
+      <publishTime>10/29/2013 08:49:20</publishTime>
     </File>
     <File Include="bin/Microsoft.Owin.Cors.dll">
-      <publishTime>11/08/2013 13:10:53</publishTime>
+      <publishTime>11/05/2013 08:34:52</publishTime>
     </File>
     <File Include="bin/Microsoft.Owin.dll">
-      <publishTime>11/08/2013 13:10:53</publishTime>
+      <publishTime>10/29/2013 08:49:20</publishTime>
     </File>
     <File Include="bin/Microsoft.Owin.Host.SystemWeb.dll">
-      <publishTime>11/08/2013 13:10:53</publishTime>
+      <publishTime>10/29/2013 08:49:20</publishTime>
     </File>
     <File Include="bin/Microsoft.Owin.Security.dll">
-      <publishTime>11/08/2013 13:10:53</publishTime>
+      <publishTime>10/29/2013 08:49:20</publishTime>
     </File>
     <File Include="bin/Microsoft.Web.Infrastructure.dll">
-      <publishTime>11/08/2013 13:10:53</publishTime>
+      <publishTime>10/29/2013 08:49:56</publishTime>
     </File>
     <File Include="bin/MongoDB.Bson.dll">
-      <publishTime>11/08/2013 13:10:53</publishTime>
+      <publishTime>10/29/2013 12:46:57</publishTime>
     </File>
     <File Include="bin/MongoDB.Driver.dll">
-      <publishTime>11/08/2013 13:10:53</publishTime>
+      <publishTime>10/29/2013 12:46:57</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
-      <publishTime>11/08/2013 13:10:53</publishTime>
+      <publishTime>10/29/2013 08:49:20</publishTime>
     </File>
     <File Include="bin/Notifications.Base.dll">
-      <publishTime>11/08/2013 13:10:53</publishTime>
+      <publishTime>10/10/2013 08:09:30</publishTime>
     </File>
     <File Include="bin/Notifications.BusiessLogic.dll">
-      <publishTime>11/08/2013 13:10:53</publishTime>
+      <publishTime>10/10/2013 08:09:30</publishTime>
     </File>
     <File Include="bin/Notifications.DataAccessLayer.dll">
-      <publishTime>11/08/2013 13:10:53</publishTime>
+      <publishTime>10/10/2013 08:09:30</publishTime>
     </File>
     <File Include="bin/Owin.dll">
-      <publishTime>11/08/2013 13:10:53</publishTime>
+      <publishTime>10/29/2013 08:49:20</publishTime>
     </File>
     <File Include="bin/System.Web.Cors.dll">
-      <publishTime>11/08/2013 13:10:53</publishTime>
+      <publishTime>11/05/2013 08:34:52</publishTime>
     </File>
     <File Include="bin/WebApp.dll">
-      <publishTime>11/08/2013 13:55:38</publishTime>
+      <publishTime>11/08/2013 15:43:46</publishTime>
     </File>
     <File Include="Index.html">
-      <publishTime>11/08/2013 13:10:52</publishTime>
+      <publishTime>11/08/2013 15:43:33</publishTime>
     </File>
     <File Include="packages.config">
-      <publishTime>11/08/2013 13:55:26</publishTime>
+      <publishTime>11/08/2013 14:25:18</publishTime>
     </File>
     <File Include="Scripts/jquery-1.6.4.js">
       <publishTime>11/08/2013 13:10:52</publishTime>
@@ -68,14 +69,23 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Scripts/jquery-1.6.4.min.js">
       <publishTime>11/08/2013 13:10:52</publishTime>
     </File>
+    <File Include="Scripts/jquery-2.0.3.js">
+      <publishTime>11/08/2013 14:25:18</publishTime>
+    </File>
+    <File Include="Scripts/jquery-2.0.3.min.js">
+      <publishTime>11/08/2013 14:25:18</publishTime>
+    </File>
+    <File Include="Scripts/jquery-2.0.3.min.map">
+      <publishTime>11/08/2013 14:25:18</publishTime>
+    </File>
     <File Include="Scripts/jquery.signalR-2.0.0.js">
-      <publishTime>11/08/2013 13:10:52</publishTime>
+      <publishTime>10/29/2013 08:49:24</publishTime>
     </File>
     <File Include="Scripts/jquery.signalR-2.0.0.min.js">
-      <publishTime>11/08/2013 13:10:52</publishTime>
+      <publishTime>10/29/2013 08:49:23</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>11/08/2013 13:56:30</publishTime>
+      <publishTime>11/08/2013 15:43:47</publishTime>
     </File>
   </ItemGroup>
 </Project>

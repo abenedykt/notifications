@@ -111,9 +111,9 @@
     <Content Include="Index.html" />
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\zos-srv.pubxml" />
-    <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
-    <Content Include="Scripts\jquery-1.6.4.js" />
-    <Content Include="Scripts\jquery-1.6.4.min.js" />
+    <None Include="Scripts\jquery-2.0.3.intellisense.js" />
+    <Content Include="Scripts\jquery-2.0.3.js" />
+    <Content Include="Scripts\jquery-2.0.3.min.js" />
     <Content Include="Scripts\jquery.signalR-2.0.0.js" />
     <Content Include="Scripts\jquery.signalR-2.0.0.min.js" />
     <Content Include="Web.config" />
@@ -124,6 +124,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Scripts\jquery-2.0.3.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
