@@ -4,5 +4,5 @@ Chat & Notifications - bazowy projekt pod chat i powiadomienia, obs³uga bazy, st
 
 ChatService- WebService z chatem, aby móc prozumiewac siê miêdzy ró¿nymi aplikacjami
 
-NuGet's - NuGety z chatem (dzia³aj¹cy obecnie w obrêbie jednej aplikacji) i z powiadomieniami ( do poprawienia)
+NuGet's - NuGet z chatem (powinien dzia³aæ)
  
