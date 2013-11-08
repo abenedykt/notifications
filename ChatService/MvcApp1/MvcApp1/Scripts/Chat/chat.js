@@ -12,7 +12,7 @@
     $('#chat').prepend(div);
     $("#ActiveUsersChat").hide();
 
-    connection = $.hubConnection('http://localhost:59537/');
+    connection = $.hubConnection('http://zos-srv/chatserver/');
     chatHub = connection.createHubProxy('ChatHub');
   
     addClientMethods(chatHub);
