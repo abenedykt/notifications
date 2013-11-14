@@ -93,8 +93,8 @@ namespace WebApp
             {
                 if (_saving) _application.SendMessage(message, fromUser.EmployeeId, toUserId, date);
 
-                await Clients.Caller.addMessage(toUserId, fromUser.Name, message, date.ToShortTimeString());
-                await Clients.Client(toUser.ConnectionId).addMessage(fromUser.EmployeeId, "Ja", message, date.ToShortTimeString());
+                await Clients.Caller.addMessage(_saving, toUserId, toUser.Name, "Ja", message, date.ToShortTimeString());
+                await Clients.Client(toUser.ConnectionId).addMessage(_saving, fromUser.EmployeeId, fromUser.Name, fromUser.Name, message, date.ToShortTimeString());
             }
         }
   

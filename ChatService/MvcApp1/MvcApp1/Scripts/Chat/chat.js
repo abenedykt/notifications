@@ -111,14 +111,14 @@ function addClientMethods(chatHub) {
     });
 
 
-    chatHub.on('addMessage', function (userId, fromName, message, date) {
+    chatHub.on('addMessage', function (saving, userId, userName, fromName, message, date) {
 
         var windowId = 'private_' + userId;
 
         if ($('#' + windowId).length == 0)
             {
-                createChatWindow(chatHub, userId, windowId, fromName);
-                chatHub.invoke('getHistory', userId);
+                createChatWindow(chatHub, userId, windowId, userName);
+                if (saving) chatHub.invoke('getHistory', userId);               
             }
 
         $('#' + windowId).find('#divMessages').append('<div class="chat-messages-area-message"><span class="chat-messages-area-span1">' + date + ' ' + fromName + '</span> <span class="chat-messages-area-span2">' + message + '</span></div>');
