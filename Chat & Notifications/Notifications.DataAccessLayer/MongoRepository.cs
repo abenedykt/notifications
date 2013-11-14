@@ -68,7 +68,7 @@ namespace Notifications.DataAccessLayer
 
         }
 
-        public List<INotification> GetReceiveNotifications(int receiverId)
+        public List<INotification> GetReceiveNotifications(string receiverId)
         {
             var receiversOfNotifications = _mongoDatabase.GetCollection<MongoReceiversOfNotification>("ReceiversOfNotifications");
             var employees = _mongoDatabase.GetCollection<MongoEmployee>("Employees");
@@ -103,7 +103,7 @@ namespace Notifications.DataAccessLayer
             return listOfNotification;
         }
 
-        public List<INotification> GetSendNotifications(int senderId)
+        public List<INotification> GetSendNotifications(string senderId)
         {
             var notifications = _mongoDatabase.GetCollection<MongoNotification>("Notifications");
 
@@ -125,7 +125,7 @@ namespace Notifications.DataAccessLayer
 
 
 
-        public List<IMessage> GetMessages(int employeeId1, int employeeId2)
+        public List<IMessage> GetMessages(string employeeId1, string employeeId2)
         {
             var messages = _mongoDatabase.GetCollection<MongoMessage>("Messages");
             var employees = _mongoDatabase.GetCollection<MongoEmployee>("Employees");
@@ -187,7 +187,7 @@ namespace Notifications.DataAccessLayer
             return lista;
         }
 
-        public void AddTimeofReading(string notificationId, int receiverId)
+        public void AddTimeofReading(string notificationId, string receiverId)
         {
             var receiversOfNotifications = _mongoDatabase.GetCollection<MongoReceiversOfNotification>("ReceiversOfNotifications");
 

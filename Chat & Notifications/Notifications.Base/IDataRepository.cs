@@ -7,11 +7,11 @@ namespace Notifications.Base
        
         string AddNotification(INotification notification);
         void AddMessage(IMessage message);
-        List<INotification> GetReceiveNotifications(int receiverId);
-        List<INotification> GetSendNotifications(int senderId);
-        List<IMessage> GetMessages(int employeeId1, int employeeId2);
+        List<INotification> GetReceiveNotifications(string receiverId);
+        List<INotification> GetSendNotifications(string senderId);
+        List<IMessage> GetMessages(string employeeId1, string employeeId2);
 
-        void AddTimeofReading(string notificationId, int receiverId);
+        void AddTimeofReading(string notificationId, string receiverId);
         void AddEmployee(IEmployee employee);
     }
 }

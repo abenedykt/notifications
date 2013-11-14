@@ -29,10 +29,8 @@ namespace WebApp
                     DatabaseName = "chat",
                     DatabaseUrl = "mongodb://emp:12345@localhost/chat"
                 };
-
                 _application = new ChatApplication(new Factory(new MongoRepository(mongoConnection)));
-            }
-            
+            }          
         }
 
         public void Success()

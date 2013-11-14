@@ -60,7 +60,7 @@ namespace Notifications.DataAccessLayer
             _context.SaveChanges();
         }
 
-        public List<INotification> GetReceiveNotifications(int receiverId)
+        public List<INotification> GetReceiveNotifications(string receiverId)
         {
             List<INotification> result = (from item in _context.ReceiversOfNotifications
                 join notes in _context.Notifications on item.NotificationId equals notes.NotificationId
@@ -75,7 +75,7 @@ namespace Notifications.DataAccessLayer
             return result;
         }
 
-        public List<INotification> GetSendNotifications(int senderId)
+        public List<INotification> GetSendNotifications(string senderId)
         {
             List<INotification> result = (from notes in _context.Notifications
                 where notes.SenderId == senderId
@@ -95,7 +95,7 @@ namespace Notifications.DataAccessLayer
             return result;
         }
 
-        public List<IMessage> GetMessages(int employeeId1, int employeeId2)
+        public List<IMessage> GetMessages(string employeeId1, string employeeId2)
         {
             List<IMessage> result = (from item in _context.Messages
                 where
@@ -113,14 +113,12 @@ namespace Notifications.DataAccessLayer
             return result;
         }
 
-        public void AddTimeofReading(string notificationId, int receiverId)
+        public void AddTimeofReading(string notificationId, string receiverId)
         {
 
 
-            var noteId = Convert.ToInt32(notificationId);
-
             SqlReceiversOfNotification result = (from item in _context.ReceiversOfNotifications
-                where item.NotificationId == noteId && item.ReceiverId == receiverId
+                                                 where item.NotificationId == notificationId && item.ReceiverId == receiverId
                 select item).FirstOrDefault();
 
             result.WhenRead = DateTime.Now;
@@ -143,7 +141,7 @@ namespace Notifications.DataAccessLayer
             }
         }
 
-        public List<string> GetReceivers(int notesId)
+        public List<string> GetReceivers(string notesId)
         {
             List<string> result = (from item in _context.ReceiversOfNotifications
                 where item.NotificationId == notesId

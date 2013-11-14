@@ -17,7 +17,7 @@
   
     addClientMethods(chatHub);
     
-    connection.start().done(function ()
+    connection.start({ jsonp: true }).done(function ()
     {
         if (sessionStorage.getItem("name") != null)
             chatHub.invoke("Connect", sessionStorage.getItem("name"), sessionStorage.getItem("id"));
@@ -39,12 +39,12 @@ function show() {
         if (countUser > 0)
             $("#ActiveUsersChat").show();
         showList = true;        
-        $("#triangleIcon").css("background-position", "0px -16px");
+        $("#triangleIcon").css("background-position", "-64px -16px");
 
     } else {
         $("#ActiveUsersChat").hide();
         showList = false;
-        $("#triangleIcon").css("background-position", "-64px -16px");
+        $("#triangleIcon").css("background-position", "0px -16px");
     }
 }
 
@@ -155,6 +155,7 @@ function OpenChatWindow(chatHub, toUserId, name) {
         createChatWindow(chatHub, toUserId, windowId, name);
         $('#' + windowId).find('#chatHeader').addClass('chat-header-top').removeClass('chat-header-bottom');
         $('#' + windowId).siblings().find('#chatHeader').removeClass('chat-header-top').addClass('chat-header-bottom');
+        $('#' + windowId).find('#txtMessage').focus();
         chatHub.invoke('getHistory', toUserId);
     }
 }
@@ -167,7 +168,7 @@ function createChatWindow(chatHub, toUserId, windowId, name) {
                         '<div class="chat-header-name"> <span class="chat-header-name-span1">Rozmowa</span><span class="chat-header-name-span2"> ' + name + '</span> </div>' +
                     '</div>' +
                     '<div id="divMessages" class="chat-messages-area"> </div>' +
-                    '<div class="chat-message"><textarea id="txtMessage" type="text" rows="4"/> </div>' +
+                    '<div class="chat-message"><textarea id="txtMessage" type="text"/> </div>' +
                     '<div class="chat-send"><input id="btnSendMessage" type="button" class="chat-send-btn" value="Wyślij"/> </div>' +
                 '</div>';
 
@@ -191,8 +192,11 @@ function createChatWindow(chatHub, toUserId, windowId, name) {
         $textBox = $div.find('#txtMessage');
         var message = $textBox.val();
 
+        var tag = new RegExp('<[a-zA-Z/]{1,15}.*?>', 'g');
+        clearMessage = message.replace(tag, '');
+
         if (message.length > 0) {
-            chatHub.invoke('sendMessage', toUserId, message);
+             chatHub.invoke('sendMessage', toUserId, clearMessage);
             $textBox.val('');
         }
     });
@@ -200,8 +204,11 @@ function createChatWindow(chatHub, toUserId, windowId, name) {
     $div.find('#txtMessage').keypress(function (e) {
         if (e.which == 13) {
             $div.find('#btnSendMessage').click();
+            e.preventDefault();
         }
     });
+
+ 
 
     $('#divDraggable').prepend($div);
 

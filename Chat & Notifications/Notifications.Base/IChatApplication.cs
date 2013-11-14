@@ -5,12 +5,12 @@ namespace Notifications.Base
 {
     public interface IChatApplication
     {
-        string BrodcastNotification(string content, int senderId, List<int> receiversIds, DateTime date);
-        void SendMessage(string content, int senderId, int receiverId, DateTime date);
-        List<INotification> GetReceiveNotifications(int employeeId);
-        List<INotification> GetSendNotifications(int employeeId);
-        List<IMessage> GetMessages(int employeeId1, int employeeId2);
-        void AddTimeofReading(string notificationId, int receiverId);
+        string BrodcastNotification(string content, string senderId, List<string> receiversIds, DateTime date);
+        void SendMessage(string content, string senderId, string receiverId, DateTime date);
+        List<INotification> GetReceiveNotifications(string employeeId);
+        List<INotification> GetSendNotifications(string employeeId);
+        List<IMessage> GetMessages(string employeeId1, string employeeId2);
+        void AddTimeofReading(string notificationId, string receiverId);
         void AddEmployee(IEmployee employee);
     }
 }

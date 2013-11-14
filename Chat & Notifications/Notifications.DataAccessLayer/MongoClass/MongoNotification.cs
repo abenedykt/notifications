@@ -11,6 +11,6 @@ namespace Notifications.DataAccessLayer.MongoClass
         public DateTime Date { get; set; }
         public string Content { get; set; }
 
-        public int SenderId { get; set; }
+        public string SenderId { get; set; }
     }
 }

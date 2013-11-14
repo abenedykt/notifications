@@ -23,24 +23,24 @@ namespace Notifications.BusiessLogic
             _repository.AddMessage(message);
         }
 
-        public List<INotification> GetReceiveNotifications(int employeeId)
+        public List<INotification> GetReceiveNotifications(string employeeId)
         {
             return _repository.GetReceiveNotifications(employeeId);
         }
 
-        public List<INotification> GetSendNotifications(int employeeId)
+        public List<INotification> GetSendNotifications(string employeeId)
         {
             return _repository.GetSendNotifications(employeeId);
         }
 
-        public List<IMessage> GetMessages(int employeeId1, int employeeId2)
+        public List<IMessage> GetMessages(string employeeId1, string employeeId2)
         {
             return _repository.GetMessages(employeeId1, employeeId2);
         }
 
-  
 
-        public void AddTimeofReading(string notificationId, int receiverId)
+
+        public void AddTimeofReading(string notificationId, string receiverId)
         {
             _repository.AddTimeofReading(notificationId, receiverId);
         }

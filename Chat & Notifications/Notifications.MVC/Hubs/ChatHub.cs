@@ -25,7 +25,7 @@ namespace Notifications.Mvc.Hubs
             _application = new ChatApplication(new Factory(new MongoRepository(mongoConnection)));
         }
 
-        public void Connect(string userName, int userId)
+        public void Connect(string userName, string userId)
         {
             string id = Context.ConnectionId;
 
@@ -116,7 +116,7 @@ namespace Notifications.Mvc.Hubs
 
             var date = DateTime.Now;
 
-            var receiversIds = new List<int>();
+            var receiversIds = new List<string>();
             var receiversNames = new List<string>();
 
             foreach (string item in users)
@@ -158,8 +158,8 @@ namespace Notifications.Mvc.Hubs
             }
         }
 
-       
-        public void AddTimeofReading(string notificationId, int senderId)
+
+        public void AddTimeofReading(string notificationId, string senderId)
         {
             var userId = Context.ConnectionId;
             var user = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == userId);

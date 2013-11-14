@@ -46,7 +46,7 @@ namespace Notifications.DataAccessLayer
             }
 
 
-            foreach (int receiver in notification.ReceiversIds)
+            foreach (string receiver in notification.ReceiversIds)
             {
                 var receiverOfNotification = new RavenReceiversOfNotification
                 {
@@ -83,7 +83,7 @@ namespace Notifications.DataAccessLayer
             }
         }
 
-        public List<INotification> GetReceiveNotifications(int receiverId)
+        public List<INotification> GetReceiveNotifications(string receiverId)
         {
             var receiver = String.Format("RavenEmployees/{0}", receiverId);
 
@@ -107,7 +107,7 @@ namespace Notifications.DataAccessLayer
             }
         }
 
-        public List<INotification> GetSendNotifications(int senderId)
+        public List<INotification> GetSendNotifications(string senderId)
         {
             var sender = String.Format("RavenEmployees/{0}", senderId);
 
@@ -131,7 +131,7 @@ namespace Notifications.DataAccessLayer
             }
         }
 
-        public List<IMessage> GetMessages(int employeeId1, int employeeId2)
+        public List<IMessage> GetMessages(string employeeId1, string employeeId2)
         {
             var employee1 = String.Format("RavenEmployees/{0}", employeeId1);
             var employee2 = String.Format("RavenEmployees/{0}", employeeId2);
@@ -171,7 +171,7 @@ namespace Notifications.DataAccessLayer
 
         }
 
-        public void AddTimeofReading(string notificationId, int receiverId)
+        public void AddTimeofReading(string notificationId, string receiverId)
         {
            
             var receiver = String.Format("RavenEmployees/{0}", receiverId);

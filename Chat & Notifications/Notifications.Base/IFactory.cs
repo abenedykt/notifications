@@ -6,10 +6,10 @@ namespace Notifications.Base
     {
         string AddNotification(INotification notification);
         void AddMessage(IMessage message);
-        List<INotification> GetReceiveNotifications(int employeeId);
-        List<INotification> GetSendNotifications(int employeeId);
-        List<IMessage> GetMessages(int employeeId1, int employeeId2);
-        void AddTimeofReading(string notificationId, int receiverId);
+        List<INotification> GetReceiveNotifications(string employeeId);
+        List<INotification> GetSendNotifications(string employeeId);
+        List<IMessage> GetMessages(string employeeId1, string employeeId2);
+        void AddTimeofReading(string notificationId, string receiverId);
         void AddEmployee(IEmployee employee);
     }
 }
