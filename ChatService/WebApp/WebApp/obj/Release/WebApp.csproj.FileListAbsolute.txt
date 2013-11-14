@@ -52,3 +52,4 @@ C:\proj\ChatService\WebApp\WebApp\bin\MongoDB.Driver.xml
 C:\proj\ChatService\WebApp\WebApp\bin\Newtonsoft.Json.xml
 C:\proj\ChatService\WebApp\WebApp\obj\Release\WebApp.dll
 C:\proj\ChatService\WebApp\WebApp\obj\Release\WebApp.pdb
+C:\proj\ChatService\WebApp\WebApp\obj\Release\WebApp.csprojResolveAssemblyReference.cache

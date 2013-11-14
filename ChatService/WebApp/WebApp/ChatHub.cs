@@ -35,7 +35,7 @@ namespace WebApp
             
         }
 
-        public void HelloWorld()
+        public void Success()
         {
             Clients.Caller.addText();
         }
@@ -51,15 +51,15 @@ namespace WebApp
 
                 if(_saving) _application.AddEmployee(employee);
 
-                Clients.Caller.onConnected(userId, userName, ConnectedUsers);
-                Clients.AllExcept(id).onNewUserConnected(userId, userName);
-                Clients.All.onlineUsers(ConnectedUsers.Count - 1);
+                Clients.Caller.onConnected(userId, userName, ConnectedUsers).Wait();
+                Clients.AllExcept(id).onNewUserConnected(userId, userName).Wait();
+                Clients.All.onlineUsers(ConnectedUsers.Count - 1).Wait();
             }
             else
             {
                 ConnectedUsers.FirstOrDefault(x => x.EmployeeId == userId).ConnectionId = Context.ConnectionId;
-                Clients.Caller.onConnected(userId, userName, ConnectedUsers);
-                Clients.Caller.onlineUsers(ConnectedUsers.Count - 1); 
+                Clients.Caller.onConnected(userId, userName, ConnectedUsers).Wait();
+                Clients.Caller.onlineUsers(ConnectedUsers.Count - 1).Wait(); 
             }
         }
        
@@ -73,26 +73,13 @@ namespace WebApp
             {
                 ConnectedUsers.Remove(item);
 
-                Clients.All.onUserDisconnected(item.EmployeeId, item.Name);
-                Clients.All.onlineUsers(ConnectedUsers.Count - 1);
+                Clients.All.onUserDisconnected(item.EmployeeId, item.Name).Wait();
+                Clients.All.onlineUsers(ConnectedUsers.Count - 1).Wait();
             }
             return base.OnDisconnected();
         }
 
-        public async Task PrivateMessage(int toUserId, string message)
-        {
-            string fromUserId = Context.ConnectionId;
-
-            Employee toUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == toUserId);
-            Employee fromUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == fromUserId);
-
-            if (toUser != null && fromUser != null)
-            {
-                await Clients.Client(toUser.ConnectionId).createNewWindow(fromUser.EmployeeId, fromUser.Name, message);
-            }
-        }
-
-        public async Task SendMessage(bool newWindow, int toUserId, string fromUserName, string message)
+        public async Task SendMessage(int toUserId, string message)
         {
             string fromUserId = Context.ConnectionId;
 
@@ -101,12 +88,16 @@ namespace WebApp
 
             DateTime date = DateTime.Now;
 
-            if (newWindow && _saving) await GetHistory(toUserId);
             
-            await Clients.Caller.addMessage(toUserId, fromUserName, message, date.ToShortTimeString());
-            await Clients.Client(toUser.ConnectionId).addMessage(fromUser.EmployeeId, "Ja", message, date.ToShortTimeString());
-        }
+            if (toUser != null && fromUser != null)
+            {
+                if (_saving) _application.SendMessage(message, fromUser.EmployeeId, toUserId, date);
 
+                await Clients.Caller.addMessage(toUserId, fromUser.Name, message, date.ToShortTimeString());
+                await Clients.Client(toUser.ConnectionId).addMessage(fromUser.EmployeeId, "Ja", message, date.ToShortTimeString());
+            }
+        }
+  
         public async Task GetHistory(int toUserId)
         {
             if (_saving)
