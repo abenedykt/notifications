@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Owin;
+﻿using Microsoft.Owin;
 using Owin;
 using Microsoft.Owin.Cors;
 using Microsoft.AspNet.SignalR;

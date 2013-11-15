@@ -91,6 +91,9 @@
     <Reference Include="Owin">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
+    <Reference Include="Raize.CodeSiteLogging, Version=4.6.2.0, Culture=neutral, PublicKeyToken=5979856d688ff136, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rekord.ZOS.ZOSHelpers.1.0.71\lib\net40\Raize.CodeSiteLogging.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Cors">
       <HintPath>..\packages\Microsoft.AspNet.Cors.5.0.0\lib\net45\System.Web.Cors.dll</HintPath>
@@ -109,6 +112,18 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="ZOSHelpers">
+      <HintPath>..\packages\Rekord.ZOS.ZOSHelpers.1.0.71\lib\net40\ZOSHelpers.dll</HintPath>
+    </Reference>
+    <Reference Include="ZOSTrace">
+      <HintPath>..\packages\Rekord.ZOS.ZOSHelpers.1.0.71\lib\net40\ZOSTrace.dll</HintPath>
+    </Reference>
+    <Reference Include="ZOSTrace.Listener.CodeSite">
+      <HintPath>..\packages\Rekord.ZOS.ZOSHelpers.1.0.71\lib\net40\ZOSTrace.Listener.CodeSite.dll</HintPath>
+    </Reference>
+    <Reference Include="ZOSTrace.Listeners.Base">
+      <HintPath>..\packages\Rekord.ZOS.ZOSHelpers.1.0.71\lib\net40\ZOSTrace.Listeners.Base.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Index.html" />

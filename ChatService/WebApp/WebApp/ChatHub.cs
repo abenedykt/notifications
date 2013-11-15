@@ -6,31 +6,32 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using Notifications.Base;
 using Notifications.BusiessLogic;
-using Notifications.DataAccessLayer;
-using System.Diagnostics;
+using ZOSTrace;
+using ZOSTrace.Listeners.Base;
 
 namespace WebApp
 {
     public class ChatHub : Hub
     {
-        private static List<Employee> ConnectedUsers = new List<Employee>();
+        private static readonly List<Employee> ConnectedUsers = new List<Employee>();
         private readonly IChatApplication _application;
-        private bool _saving;
+        private readonly bool _saving;
 
 
         public ChatHub()
         {
-            _saving = false;
+            ZosTrace.Write("ChatHub starting",ZosTraceLevel.Message);
+            //_saving = false;
 
-            if (_saving)
-            {
-                var mongoConnection = new MongoStringConnection
-                {
-                    DatabaseName = "chat",
-                    DatabaseUrl = "mongodb://emp:12345@localhost/chat"
-                };
-                _application = new ChatApplication(new Factory(new MongoRepository(mongoConnection)));
-            }          
+            //if (_saving)
+            //{
+            //    var mongoConnection = new MongoStringConnection
+            //    {
+            //        DatabaseName = "chat",
+            //        DatabaseUrl = "mongodb://emp:12345@localhost/chat"
+            //    };
+                //_application = new ChatApplication(new Factory(new MongoRepository(mongoConnection)));
+            //}          
         }
 
         public void Success()
@@ -40,10 +41,15 @@ namespace WebApp
 
         public void Connect(string userName, string userId)
         {
-            string id = Context.ConnectionId;
+            ZosTrace.Write(string.Format("Connect userName {0}, userId {1}",userName,userId),ZosTraceLevel.Message);
 
+            var id = Context.ConnectionId;
+
+            ZosTrace.Write(string.Format("ConnectedUsers.Count {0}", ConnectedUsers.Count), ZosTraceLevel.Message);
+            
             if (ConnectedUsers.Count(x => x.EmployeeId == userId) == 0)
             {
+                ZosTrace.Write("User not found", ZosTraceLevel.Message);
                 var employee = new Employee { ConnectionId = id, Name = userName, EmployeeId = userId };
                 ConnectedUsers.Add(employee);
 
@@ -53,7 +59,10 @@ namespace WebApp
             }
             else
             {
-                ConnectedUsers.FirstOrDefault(x => x.EmployeeId == userId).ConnectionId = Context.ConnectionId;
+                ZosTrace.Write("user found", ZosTraceLevel.Message);
+                var user = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == userId);
+                if (user != null)
+                    user.ConnectionId = Context.ConnectionId;
                 Clients.Caller.onConnected(ConnectedUsers).Wait();
             }
         }
@@ -61,11 +70,13 @@ namespace WebApp
         public override Task OnDisconnected()
         {
             var id = Context.ConnectionId;
+            ZosTrace.Write("disconnect " + id, ZosTraceLevel.Message);
 
             Thread.Sleep(1000);
-            Employee item = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == id);
+            var item = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == id);
             if (item != null)
             {
+                ZosTrace.Write("disconnect " + item.EmployeeId + " " +item.Name, ZosTraceLevel.Message);
                 ConnectedUsers.Remove(item);
                 Clients.All.onUserDisconnected(item.EmployeeId, ConnectedUsers).Wait();
             }
@@ -74,20 +85,29 @@ namespace WebApp
 
         public async Task SendMessage(string toUserId, string message)
         {
-            string fromUserId = Context.ConnectionId;
-
-            Employee toUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == toUserId);
-            Employee fromUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == fromUserId);
-
-            DateTime date = DateTime.Now;
-
-            
-            if (toUser != null && fromUser != null)
+            ZosTrace.Write(string.Format("Send message {0}", toUserId), ZosTraceLevel.Message);
+            try
             {
-                if (_saving) _application.SendMessage(message, fromUser.EmployeeId, toUserId, date);
+                var fromUserId = Context.ConnectionId;
 
-                await Clients.Caller.addMessage(_saving, toUserId, toUser.Name, "Ja", message, date.ToShortTimeString());
-                await Clients.Client(toUser.ConnectionId).addMessage(_saving, fromUser.EmployeeId, fromUser.Name, fromUser.Name, message, date.ToShortTimeString());
+                var toUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == toUserId);
+                var fromUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == fromUserId);
+
+                var date = DateTime.Now;
+
+
+                if (toUser != null && fromUser != null)
+                {
+                    if (_saving) _application.SendMessage(message, fromUser.EmployeeId, toUserId, date);
+
+                    await Clients.Caller.addMessage(_saving, toUserId, toUser.Name, "Ja", message, date.ToShortTimeString());
+                    await Clients.Client(toUser.ConnectionId).addMessage(_saving, fromUser.EmployeeId, fromUser.Name, fromUser.Name, message, date.ToShortTimeString());
+                }
+            }
+            catch (Exception ex)
+            {
+                
+                ZosTrace.Write(ex);
             }
         }
 

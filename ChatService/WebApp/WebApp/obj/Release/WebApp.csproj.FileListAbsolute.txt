@@ -53,3 +53,17 @@ C:\proj\ChatService\WebApp\WebApp\bin\Newtonsoft.Json.xml
 C:\proj\ChatService\WebApp\WebApp\obj\Release\WebApp.dll
 C:\proj\ChatService\WebApp\WebApp\obj\Release\WebApp.pdb
 C:\proj\ChatService\WebApp\WebApp\obj\Release\WebApp.csprojResolveAssemblyReference.cache
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\WebApp.dll.config
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\Notifications.Base.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\Notifications.BusiessLogic.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\Notifications.DataAccessLayer.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\Raize.CodeSiteLogging.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\ZOSHelpers.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\ZOSTrace.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\ZOSTrace.Listener.CodeSite.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\ZOSTrace.Listeners.Base.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\ZOSHelpers.pdb
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\ZOSTrace.pdb
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\ZOSTrace.Listener.CodeSite.pdb
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\ZOSTrace.Listeners.Base.pdb
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\obj\Release\WebApp.csprojResolveAssemblyReference.cache
