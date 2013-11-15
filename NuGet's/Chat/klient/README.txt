@@ -2,13 +2,13 @@ Aby uruchomiæ fukcjê chatu, wykonaj nastêpuj¹ce czynnoœci:
 
 -> dodaj nuget 'Chat' do projektu
 
--> dodaj referencje do skryptow:
+-> dodaj referencje do skryptow: 
+	*jquery
+	*jquery-ui
+	*jquery.signalR
+	*http://zos-srv/chatserver/signalr/hubs
+	*~/Scripts/chat/chat.js
 
- <script src="~/Scripts/jquery-1.8.2.js" type="text/javascript"> </script>
-    <script src="~/Scripts/jquery-ui-1.8.24.js"> </script>
-    <script src="~/Scripts/jquery.signalR-2.0.0.js"> </script>
-    <script src="http://localhost:59537/signalr/hubs"> </script> 
-    <script src="~/Scripts/chat/chat.js" type="text/javascript"> </script>
 
 Uwaga: Nalezy ustawiæ poprawny adres url dla signalr/hubs !!!
 
@@ -16,25 +16,10 @@ Uwaga: Nalezy ustawiæ poprawny adres url dla signalr/hubs !!!
 
    <link rel="stylesheet" type="text/css" href="~/Content/chat/chat.css" />
 
--> dodaj plik startup.cs
-
-[assembly: OwinStartup(typeof(MvcApp1.Startup))]
-
-namespace MvcApp1
-{
-    public class Startup
-    {
-        public void Configuration(IAppBuilder app)
-        {
-            app.MapHubs();
-        }
-    }
-}
-
 
 -> ustaw œcie¿kê dla Huba w chat.js:
 
-connection = $.hubConnection('http://localhost:59537/'); //adres huba
+connection = $.hubConnection('http://zos-srv/chatserver'); //adres huba
 chatHub = connection.createHubProxy('ChatHub'); //nazwa huba
 
 -> na stronie, na której chcesz uruchomiæ chat dodaj texboxy :

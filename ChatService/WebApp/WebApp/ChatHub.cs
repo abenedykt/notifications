@@ -38,7 +38,7 @@ namespace WebApp
             Clients.Caller.addText();
         }
 
-        public void Connect(string userName, int userId)
+        public void Connect(string userName, string userId)
         {
             string id = Context.ConnectionId;
 
@@ -49,15 +49,12 @@ namespace WebApp
 
                 if(_saving) _application.AddEmployee(employee);
 
-                Clients.Caller.onConnected(userId, userName, ConnectedUsers).Wait();
-                Clients.AllExcept(id).onNewUserConnected(userId, userName).Wait();
-                Clients.All.onlineUsers(ConnectedUsers.Count - 1).Wait();
+                Clients.All.onConnected(ConnectedUsers).Wait();
             }
             else
             {
                 ConnectedUsers.FirstOrDefault(x => x.EmployeeId == userId).ConnectionId = Context.ConnectionId;
-                Clients.Caller.onConnected(userId, userName, ConnectedUsers).Wait();
-                Clients.Caller.onlineUsers(ConnectedUsers.Count - 1).Wait(); 
+                Clients.Caller.onConnected(ConnectedUsers).Wait();
             }
         }
        
@@ -70,14 +67,12 @@ namespace WebApp
             if (item != null)
             {
                 ConnectedUsers.Remove(item);
-
-                Clients.All.onUserDisconnected(item.EmployeeId, item.Name).Wait();
-                Clients.All.onlineUsers(ConnectedUsers.Count - 1).Wait();
+                Clients.All.onUserDisconnected(item.EmployeeId, ConnectedUsers).Wait();
             }
             return base.OnDisconnected();
         }
 
-        public async Task SendMessage(int toUserId, string message)
+        public async Task SendMessage(string toUserId, string message)
         {
             string fromUserId = Context.ConnectionId;
 
@@ -95,8 +90,8 @@ namespace WebApp
                 await Clients.Client(toUser.ConnectionId).addMessage(_saving, fromUser.EmployeeId, fromUser.Name, fromUser.Name, message, date.ToShortTimeString());
             }
         }
-  
-        public async Task GetHistory(int toUserId)
+
+        public async Task GetHistory(string toUserId)
         {
             if (_saving)
             {

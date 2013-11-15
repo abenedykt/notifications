@@ -12,7 +12,7 @@
     $('#chat').prepend(div);
     $("#ActiveUsersChat").hide();
 
-    connection = $.hubConnection('http://zos-srv/chatserver/');
+    connection = $.hubConnection('http://zos-srv/chatserver');
     chatHub = connection.createHubProxy('ChatHub');
   
     addClientMethods(chatHub);
@@ -53,46 +53,35 @@ function addToChat()
     sessionStorage.setItem("name", $('#chatName').val());
     sessionStorage.setItem("id", $('#chatId').val());
     
-    connection.start().done(function () {
+    connection.start({ jsonp: true }).done(function () {
         chatHub.invoke("Connect", sessionStorage.getItem("name"), sessionStorage.getItem("id"));
     });   
 }
 
 function addClientMethods(chatHub) {
  
-    chatHub.on('onlineUsers', function (count) {
+    chatHub.on('onConnected', function (allUsers) {
 
-        countUser = count;
-
-        if (sessionStorage.getItem("name") != null)
-            $("#counter").text('online(' + count + ')');
-
-        if (count == 0) {
-            $("#ActiveUsersChat").hide();
-            $("#counter").text('online(0)');
-            showList = false;
-        }
-    });
-     
-    chatHub.on('onNewUserConnected', function (userId, name) {
-
-        if (sessionStorage.getItem("name") != null)
-            AddUser(chatHub, userId, name, 0);
+        $("#ActiveUsersChat").empty();
+        
+        for (var i = 0; i < allUsers.length; i++)
+            if (sessionStorage.getItem("id") != null) {
+                AddUser(chatHub, allUsers[i].EmployeeId, allUsers[i].Name);
+                OnlineUsers(allUsers.length-1);
+            }   
     });
 
-    
-    chatHub.on('onConnected', function (userId, name, allUsers) {
+    chatHub.on('onUserDisconnected', function (userId, allUsers) {
 
         $("#ActiveUsersChat").empty();
 
         for (var i = 0; i < allUsers.length; i++)
-            AddUser(chatHub, allUsers[i].EmployeeId, allUsers[i].Name, userId);
-    });
+            if (sessionStorage.getItem("id") != userId && sessionStorage.getItem("name") != null) {
+                AddUser(chatHub, allUsers[i].EmployeeId, allUsers[i].Name);
+                OnlineUsers(allUsers.length-1);
+            }
 
-    chatHub.on('onUserDisconnected', function (id, name) {
-        $('#' + id).remove();
-
-        var ctrId = 'private_' + id;
+        var ctrId = 'private_' + userId;
         $('#' + ctrId).find('#divMessages').append('<div class="message"><strong>Użytkownik wylogował się!</strong></div>')
 
         var height = $('#' + ctrId).find('#divMessages')[0].scrollHeight;
@@ -110,7 +99,6 @@ function addClientMethods(chatHub) {
             chatHub.invoke('sendMessage', false, userId, fromName, message);
     });
 
-
     chatHub.on('addMessage', function (saving, userId, userName, fromName, message, date) {
 
         var windowId = 'private_' + userId;
@@ -126,20 +114,29 @@ function addClientMethods(chatHub) {
         var height = $('#' + windowId).find('#divMessages')[0].scrollHeight;
         $('#' + windowId).find('#divMessages').scrollTop(height);
     });
-
-
-
 }
 
-function AddUser(chatHub, userId, name, actualUserId) {
+function OnlineUsers(count) {
+    countUser = count;
+    if (sessionStorage.getItem("name") != null)
+        $("#counter").text('online(' + count + ')');
+
+    if (count == 0) {
+        $("#ActiveUsersChat").hide();
+        $("#counter").text('online(0)');
+        showList = false;
+    }
+};
+
+function AddUser(chatHub, userId, name) {
     var userChat = "";
-    if (actualUserId != userId)
+    if (sessionStorage.getItem("id") != userId)
     {
         userChat = $('<div class="userLink" id="' + userId + '"><span class="chat-icon chat-green-icon chat-icon-bullet"></span><a>' + name + '</a></div>');
         if (showList) $("#ActiveUsersChat").show();
 
         $(userChat).click(function () {
-            if (actualUserId != userId) {
+            if (sessionStorage.getItem("id") != userId) {
                 OpenChatWindow(chatHub, userId, name);
                 $('#private_' + userId).click();
             }
@@ -176,7 +173,7 @@ function createChatWindow(chatHub, toUserId, windowId, name) {
 
     $div.css("left", leftPosition);
     $div.css("top", topPosition);
-    $div.css("z-index", ++zIndex);
+    $div.css("z-index", zIndex++);
 
     leftPosition = leftPosition + 40;
     if (leftPosition > 600) leftPosition = 0;
