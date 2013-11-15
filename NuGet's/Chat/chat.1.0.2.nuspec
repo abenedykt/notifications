@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
         <id>chat</id>
-        <version>1.0.0</version>
+        <version>1.0.2</version>
         <title>Chat.Client</title>
         <authors>zos-srv</authors>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -17,8 +17,8 @@
         <file src="content\Content\Chat\images\greenIcons.png" target="content\Content\Chat\images\greenIcons.png" />
         <file src="content\Content\Chat\images\redIcons.png" target="content\Content\Chat\images\redIcons.png" />
         <file src="content\Content\Chat\images\whiteIcons.png" target="content\Content\Chat\images\whiteIcons.png" />
-        <file src="content\Content\Chat\chat.css" target="content\Content\Chat\chat.css" />
-        <file src="content\Scripts\Chat\chat.js" target="content\Scripts\Chat\chat.js" />
+        <file src="..\..\ChatService\MvcApp1\MvcApp1\Content\Chat\chat.css" target="content\Content\Chat\chat.css" />
+        <file src="..\..\ChatService\MvcApp1\MvcApp1\Scripts\Chat\chat.js" target="content\Scripts\Chat\chat.js" />
         <file src="README.txt" target="README.txt" />
     </files>
 </package>

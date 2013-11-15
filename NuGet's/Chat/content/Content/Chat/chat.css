@@ -1,7 +1,7 @@
 ﻿.chat-div{
     bottom: 0;
     position: fixed;
-    right: 100px;
+    right: 150px;
     width: 200px;
     display: block;
     margin:0px;
@@ -171,6 +171,8 @@
         height:16px;
         text-align: center;
         margin: 0px 0px 0px 0px;
+        right: 5px;
+        top: 5px;
     }
 
 .chat-messages-area {
@@ -201,7 +203,13 @@
             font-size: 10px;
             color: black;
             margin-left:5px;
-            text-align: justify;
+    }
+        .chat-messages-area-logout {
+            font-size: 10px;
+            color: black;
+            margin-left:5px;
+            font-weight: bold;
+            
     }
 
 .chat-message {
@@ -230,7 +238,7 @@
 .chat-send {
     height: 40px;
     width:322px; 
-    margin: 0px 0px;
+    margin: 5px 0px;
     padding: 0px 5px;
 }
 

@@ -82,7 +82,7 @@ function addClientMethods(chatHub) {
             }
 
         var ctrId = 'private_' + userId;
-        $('#' + ctrId).find('#divMessages').append('<div class="message"><strong>Użytkownik wylogował się!</strong></div>')
+        $('#' + ctrId).find('#divMessages').append('<div class="chat-messages-area-message"><span class=".chat-messages-area-logout">Użytkownik wylogował się!</span></div>')
 
         var height = $('#' + ctrId).find('#divMessages')[0].scrollHeight;
         $('#' + ctrId).find('#divMessages').scrollTop(height);;
@@ -192,7 +192,7 @@ function createChatWindow(chatHub, toUserId, windowId, name) {
         var tag = new RegExp('<[a-zA-Z/]{1,15}.*?>', 'g');
         clearMessage = message.replace(tag, '');
 
-        if (message.length > 0) {
+        if (clearMessage.length > 0) {
              chatHub.invoke('sendMessage', toUserId, clearMessage);
             $textBox.val('');
         }
