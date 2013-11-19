@@ -103,6 +103,8 @@
 
     .chat-icon-iks {
         background-position: -32px -192px;
+        right: 5px;
+        top: 5px;
     }
 
     .chat-icon-bullet {

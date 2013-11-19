@@ -67,3 +67,8 @@ D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\ZOSTrace
 D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\ZOSTrace.Listener.CodeSite.pdb
 D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\ZOSTrace.Listeners.Base.pdb
 D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\obj\Release\WebApp.csprojResolveAssemblyReference.cache
+C:\proj\ChatService\WebApp\WebApp\bin\Raize.CodeSiteLogging.dll
+C:\proj\ChatService\WebApp\WebApp\bin\ZOSHelpers.dll
+C:\proj\ChatService\WebApp\WebApp\bin\ZOSTrace.dll
+C:\proj\ChatService\WebApp\WebApp\bin\ZOSTrace.Listener.CodeSite.dll
+C:\proj\ChatService\WebApp\WebApp\bin\ZOSTrace.Listeners.Base.dll
