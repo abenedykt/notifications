@@ -15,8 +15,13 @@
     <script src="~/Scripts/jquery-1.8.2.js" type="text/javascript"> </script>
     <script src="~/Scripts/jquery-ui-1.8.24.js"> </script>
     <script src="~/Scripts/jquery.signalR-2.0.0.js"> </script>
-    <script src='@System.Configuration.ConfigurationManager.AppSettings["chatHubService"]'> </script>
+    <script src='@MvcApp1.chatConfigurationClass.GetConfig().chatHub.Url'> </script>
     <script src="~/Scripts/chat/chat.js" type="text/javascript"> </script>
+    <script>
+        addToChat("marian kowalski", "mkowalski", '@MvcApp1.chatConfigurationClass.GetConfig().service.Url')
+    </script>
+
+
     @RenderSection("scripts", required: false)
     <header>
         <div class="content-wrapper">
@@ -42,12 +47,7 @@
         <h1>APP1!!!!!!!!!!!</h1>
         
         @RenderSection("featured", required: false)
-        <section class="content-wrapper main-content clear-fix">
-  
-            <script>           
-                addToChat("adam kowalski", "akowalski", '@System.Configuration.ConfigurationManager.AppSettings["chatService"]')
-            </script>
-            
+        <section class="content-wrapper main-content clear-fix">        
         </section>
     </div>
     <footer>
@@ -58,6 +58,5 @@
             </div>
         </div>
     </footer>
-
 </body>
 </html>
