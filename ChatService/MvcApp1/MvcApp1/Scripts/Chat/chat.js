@@ -15,7 +15,7 @@
 });
 
 var showList= false;
-var zIndex = 0;
+var zIndex = 1000000;
 var leftPosition = 0;
 var topPosition = 100;
 var chatHub;

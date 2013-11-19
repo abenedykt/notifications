@@ -2,37 +2,35 @@ Aby uruchomiæ fukcjê chatu, wykonaj nastêpuj¹ce czynnoœci:
 
 -> dodaj nuget 'Chat' do projektu
 
--> dodaj referencje do skryptow: 
+-> dodaj skrypty: 
 	*jquery
 	*jquery-ui
 	*jquery.signalR
-	*http://zos-srv/chatserver/signalr/hubs
+	*<script src='@<namespace>.chatConfigurationClass.GetConfig().chatHub.Url'> </script>
 	*~/Scripts/chat/chat.js
+	*script>
+        addToChat("marian kowalski", "mkowalski", '@<namespace>.chatConfigurationClass.GetConfig().service.Url')
+    </script>
 
-
-Uwaga: Nalezy ustawiæ poprawny adres url dla signalr/hubs !!!
+gdzie <namespace> to nazwa Twojego projektu
 
 -> dodaj referencje do styli
 
    <link rel="stylesheet" type="text/css" href="~/Content/chat/chat.css" />
 
+-> w web.configu dodaj w <configSections>:
 
--> ustaw œcie¿kê dla Huba w chat.js:
+<section name="chatConfiguration" type="<namespace>.chatConfigurationClass" requirePermission="false" />
 
-connection = $.hubConnection('http://zos-srv/chatserver'); //adres huba
-chatHub = connection.createHubProxy('ChatHub'); //nazwa huba
+-> w web.configu dodaj w <configuration>:
 
--> na stronie, na której chcesz uruchomiæ chat dodaj texboxy :
- 	* <input id="chatName" type="text" >  dla nazwy u¿ytkownika
-	* <input id="chatId" type="text"/> dla id u¿ytkownika (id po którym bêdzie on wyszukiwany w bazie)
-	* <button type="button" onclick="addToChat()"> Zaloguj </button> - przycisk dodaj¹cy u¿ytkownika do chatu
+<chatConfiguration>
+    <service url="http://zos-srv/chatserver"/>
+    <chatHub url="http://zos-srv/chatserver/signalr/hubs"/>
+ </chatConfiguration>
 
-Uwaga:
-Nazwê u¿ytkownika oraz jego numer id mo¿esz równie¿ przekazywaæ w inny sposób. Wystarczy zmodyfikowaæ pocz¹tkowy fragment skryptu 'chat.js', przypisuj¹c inne wartoœci dla zmiennych sesyjnych:
+-> ustaw œcie¿kê dla serwera z hubem
 
-	sessionStorage.setItem("name", $('#chatName').val());
-    	sessionStorage.setItem("id", $('#chatId').val());
-    
 -> dodaj na stronie divy
 
 	* <div id="divDraggable"></div> - w tym divie pokaze sie okienko prywatnej wiadomosci (najlepiej div na ca³¹ stronê)

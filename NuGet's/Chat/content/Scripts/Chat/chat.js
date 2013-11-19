@@ -8,26 +8,14 @@
             '</div>';
 
     var $div = $(div);
-  
+
     $('#chat').prepend(div);
     $("#ActiveUsersChat").hide();
-
-    connection = $.hubConnection('http://zos-srv/chatserver');
-    chatHub = connection.createHubProxy('ChatHub');
-  
-    addClientMethods(chatHub);
-    
-    connection.start({ jsonp: true }).done(function ()
-    {
-        if (sessionStorage.getItem("name") != null)
-            chatHub.invoke("Connect", sessionStorage.getItem("name"), sessionStorage.getItem("id"));
-        else
-            $("#counter").text('online(0)');
-    });   
+    $("#counter").text('online(0)');
 });
 
 var showList= false;
-var zIndex = 0;
+var zIndex = 1000000;
 var leftPosition = 0;
 var topPosition = 100;
 var chatHub;
@@ -48,11 +36,15 @@ function show() {
     }
 }
 
-function addToChat()
+function addToChat(chatName, chatId, chatUrl)
 {
-    sessionStorage.setItem("name", $('#chatName').val());
-    sessionStorage.setItem("id", $('#chatId').val());
-    
+    sessionStorage.setItem("name", chatName);
+    sessionStorage.setItem("id", chatId);
+
+    connection = $.hubConnection(chatUrl);
+    chatHub = connection.createHubProxy('ChatHub');
+    addClientMethods(chatHub);
+
     connection.start({ jsonp: true }).done(function () {
         chatHub.invoke("Connect", sessionStorage.getItem("name"), sessionStorage.getItem("id"));
     });   
