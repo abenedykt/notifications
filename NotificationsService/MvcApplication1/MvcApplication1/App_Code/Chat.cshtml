@@ -1,0 +1,8 @@
+﻿@helper login(String name, String chatId){
+     
+    <script src='@ChatConfig.chatConfigurationClass.GetConfig().chatHub.Url'> </script>
+        
+    <script>
+        addToChat('@name', '@chatId', '@ChatConfig.chatConfigurationClass.GetConfig().service.Url')
+    </script>      
+}

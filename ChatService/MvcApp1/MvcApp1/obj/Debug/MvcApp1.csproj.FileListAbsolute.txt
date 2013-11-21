@@ -297,6 +297,8 @@ C:\proj\ChatService\MvcApp1\MvcApp1\bin\ko\System.Spatial.resources.dll
 C:\proj\ChatService\MvcApp1\MvcApp1\bin\ru\System.Spatial.resources.dll
 C:\proj\ChatService\MvcApp1\MvcApp1\bin\zh-Hans\System.Spatial.resources.dll
 C:\proj\ChatService\MvcApp1\MvcApp1\bin\zh-Hant\System.Spatial.resources.dll
-C:\proj\ChatService\MvcApp1\MvcApp1\obj\Debug\MvcApp1.csprojResolveAssemblyReference.cache
 C:\proj\ChatService\MvcApp1\MvcApp1\obj\Debug\MvcApp1.dll
 C:\proj\ChatService\MvcApp1\MvcApp1\obj\Debug\MvcApp1.pdb
+C:\proj\ChatService\MvcApp1\MvcApp1\bin\ChatConfig.dll
+C:\proj\ChatService\MvcApp1\MvcApp1\bin\ChatConfig.pdb
+C:\proj\ChatService\MvcApp1\MvcApp1\obj\Debug\MvcApp1.csprojResolveAssemblyReference.cache
