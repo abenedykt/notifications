@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>chat</id>
+        <version>1.0.6</version>
+        <title>Chat.Client</title>
+        <authors>zos-srv</authors>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>NuGet umożliwiający komunikacje pomiędzy użytkownikami z różnych aplikacji. Wersja dla klienta.</description>
+        <dependencies>
+            <group targetFramework=".NETFramework4.0">
+                <dependency id="jQuery" version="1.6.2" />
+                <dependency id="jQuery.UI.Combined" version="1.10.2" />
+                <dependency id="Microsoft.AspNet.SignalR.JS" version="2.0.0" />
+            </group>
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="content\App_Code\Chat.cshtml" target="content\App_Code\Chat.cshtml" />
+        <file src="content\Content\Chat\images\greenIcons.png" target="content\Content\Chat\images\greenIcons.png" />
+        <file src="content\Content\Chat\images\redIcons.png" target="content\Content\Chat\images\redIcons.png" />
+        <file src="content\Content\Chat\images\whiteIcons.png" target="content\Content\Chat\images\whiteIcons.png" />
+        <file src="content\Content\Chat\chat.css" target="content\Content\Chat\chat.css" />
+        <file src="content\Scripts\Chat\chat.js" target="content\Scripts\Chat\chat.js" />
+        <file src="lib\ChatConfig.dll" target="lib\ChatConfig.dll" />
+        <file src="lib\Notifications.Base.dll" target="lib\Notifications.Base.dll" />
+        <file src="lib\Notifications.BusiessLogic.dll" target="lib\Notifications.BusiessLogic.dll" />
+        <file src="lib\Notifications.DataAccessLayer.dll" target="lib\Notifications.DataAccessLayer.dll" />
+        <file src="README.txt" target="README.txt" />
+    </files>
+</package>

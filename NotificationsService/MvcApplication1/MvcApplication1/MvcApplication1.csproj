@@ -40,7 +40,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ChatConfig">
-      <HintPath>..\packages\chat.1.0.5\lib\ChatConfig.dll</HintPath>
+      <HintPath>..\packages\chat.1.0.6\lib\ChatConfig.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -48,13 +48,13 @@
       <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Notifications.Base">
-      <HintPath>..\packages\chat.1.0.5\lib\Notifications.Base.dll</HintPath>
+      <HintPath>..\packages\chat.1.0.6\lib\Notifications.Base.dll</HintPath>
     </Reference>
     <Reference Include="Notifications.BusiessLogic">
-      <HintPath>..\packages\chat.1.0.5\lib\Notifications.BusiessLogic.dll</HintPath>
+      <HintPath>..\packages\chat.1.0.6\lib\Notifications.BusiessLogic.dll</HintPath>
     </Reference>
     <Reference Include="Notifications.DataAccessLayer">
-      <HintPath>..\packages\chat.1.0.5\lib\Notifications.DataAccessLayer.dll</HintPath>
+      <HintPath>..\packages\chat.1.0.6\lib\Notifications.DataAccessLayer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

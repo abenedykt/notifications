@@ -1,6 +1,7 @@
 ﻿$(function () {
 
-    var div='<div class="chat-div" >' +
+    var div = '<div id="divForDraggableWindows"></div>' +
+            '<div class="chat-div" >' +
                 '<button class="chat-btn" type="button" onClick="show()">' +
                 '<span id="triangleIcon" class="chat-icon chat-white-icon chat-icon-triangle"></span> <span class="chat-btn-text">czat</span> <span class="chat-btn-counter" id="counter" />' +
                 '</button>' +
@@ -9,6 +10,7 @@
 
     var $div = $(div);
 
+    $("body").prepend('<div id="divForDraggableWindows"></div>');
     $('#chat').prepend(div);
     $("#ActiveUsersChat").hide();
     $("#counter").text('online(0)');
@@ -74,7 +76,7 @@ function addClientMethods(chatHub) {
             }
 
         var ctrId = 'private_' + userId;
-        $('#' + ctrId).find('#divMessages').append('<div class="chat-messages-area-message"><span class=".chat-messages-area-logout">Użytkownik wylogował się!</span></div>')
+        $('#' + ctrId).find('#divMessages').append('<div class="chat-messages-area-message"><span class="chat-messages-area-logout">Użytkownik wylogował się!</span></div>')
 
         var height = $('#' + ctrId).find('#divMessages')[0].scrollHeight;
         $('#' + ctrId).find('#divMessages').scrollTop(height);;
@@ -197,9 +199,10 @@ function createChatWindow(chatHub, toUserId, windowId, name) {
         }
     });
 
- 
+   
 
-    $("body").prepend($div);
+    $("#divForDraggableWindows").prepend($div);
+
 
     $div.draggable({
         start: function (event, ui) {
@@ -214,9 +217,9 @@ function createChatWindow(chatHub, toUserId, windowId, name) {
     });
 
     $('#'+windowId).click(function () {
-        $(this).addClass('chat-window-top').removeClass('chat-window-bottom');
-        $(this).siblings().removeClass('chat-window-top').addClass('chat-window-bottom');
-        $(this).css("z-index", zIndex++);
+        $('#' + windowId).addClass('chat-window-top').removeClass('chat-window-bottom');
+        $('#' + windowId).siblings().removeClass('chat-window-top').addClass('chat-window-bottom');
+        $('#' + windowId).css("z-index", zIndex++);
 
         $('#' + windowId).find('#chatHeader').addClass('chat-header-top').removeClass('chat-header-bottom');
         $('#' + windowId).siblings().find('#chatHeader').removeClass('chat-header-top').addClass('chat-header-bottom');
