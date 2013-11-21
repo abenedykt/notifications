@@ -7,33 +7,24 @@ using System.Threading.Tasks;
 
 namespace ChatConfig
 {
-    public class chatConfigurationClass : ConfigurationSection
+    public class ChatConfigurationClass : ConfigurationSection
     {
-        public static chatConfigurationClass GetConfig()
+        public static ChatConfigurationClass GetConfig()
         {
-            return ConfigurationManager.GetSection("chatConfiguration") as chatConfigurationClass;
+            return ConfigurationManager.GetSection("chatConfiguration") as ChatConfigurationClass;
         }
 
         [ConfigurationProperty("service", IsRequired = true)]
-        public chatConfigurationClassElement service
+        public ChatConfigurationClassElement Service
         {
             get
             {
-                return this["service"] as chatConfigurationClassElement;
-            }
-        }
-
-        [ConfigurationProperty("chatHub", IsRequired = true)]
-        public chatConfigurationClassElement chatHub
-        {
-            get
-            {
-                return this["chatHub"] as chatConfigurationClassElement;
+                return this["service"] as ChatConfigurationClassElement;
             }
         }
     }
 
-    public class chatConfigurationClassElement : ConfigurationElement
+    public class ChatConfigurationClassElement : ConfigurationElement
     {
         [ConfigurationProperty("url", IsRequired = true)]
         public string Url

@@ -199,7 +199,7 @@ function createChatWindow(chatHub, toUserId, windowId, name) {
 
  
 
-    $('#divDraggable').prepend($div);
+    $("body").prepend($div);
 
     $div.draggable({
         start: function (event, ui) {

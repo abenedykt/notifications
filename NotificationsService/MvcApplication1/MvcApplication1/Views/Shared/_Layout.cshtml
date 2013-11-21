@@ -7,7 +7,6 @@
         <meta name="viewport" content="width=device-width" />
         @Styles.Render("~/Content/css")
         @Scripts.Render("~/bundles/modernizr")
-        <link rel="stylesheet" type="text/css" href="~/Content/chat/chat.css" />
     </head>
     <body>
         <header>
@@ -47,14 +46,12 @@
         </footer>
 
         @Scripts.Render("~/bundles/jquery")
-                @RenderSection("scripts", required: false)
-            <script src="~/Scripts/jquery-1.8.2.js"></script>
+                        @RenderSection("scripts", required: false)
+           
+        <script src="~/Scripts/jquery-1.8.2.js"></script>
         <script src="~/Scripts/jquery-ui-1.10.3.js"></script>
-        <script src="~/Scripts/Chat/chat.js"></script>
         <script src="~/Scripts/jquery.signalR-2.0.0.js"></script>
-        @Chat.login("Emil Kania", "ekania");
 
-            <div id="divDraggable"></div>
-            <div id="chat"> </div>
+        @Chat.Login("Eryk Suski", "esuski");
     </body>
 </html>

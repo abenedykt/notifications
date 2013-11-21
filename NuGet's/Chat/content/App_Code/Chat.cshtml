@@ -1,8 +1,15 @@
-﻿@helper login(String name, String chatId){
-     
-    <script src='@ChatConfig.chatConfigurationClass.GetConfig().chatHub.Url'> </script>
-        
-    <script>
-        addToChat('@name', '@chatId', '@ChatConfig.chatConfigurationClass.GetConfig().service.Url')
-    </script>      
+﻿@helper Login(string name, string chatId)
+{
+
+    if (@ChatConfig.ChatConfigurationClass.GetConfig().Service.Url != "")
+    {
+        <link rel="stylesheet" type="text/css" href="~/Content/chat/chat.css" />
+        <div id="chat">&nbsp;</div>
+        <script src="~/Scripts/Chat/chat.js"></script>
+        <script src='@ChatConfig.ChatConfigurationClass.GetConfig().Service.Url/signalr/hubs'> </script>
+        <script>
+            addToChat('@name', '@chatId', '@ChatConfig.ChatConfigurationClass.GetConfig().Service.Url')
+        </script>
+    }
+
 }
