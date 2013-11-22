@@ -1,0 +1,16 @@
+﻿@helper Login(string name, string chatId)
+{
+
+    if (@ChatConfig.ChatConfigurationClass.GetConfig() != null && ChatConfig.ChatConfigurationClass.GetConfig().Service.Url != "")
+    {
+        <script src="~/Scripts/Chat/chat.js"></script>
+        <link rel="stylesheet" type="text/css" href="~/Content/chat/chat.css" />
+        <div id="chat">&nbsp;</div>
+        <script src='@ChatConfig.ChatConfigurationClass.GetConfig().Service.Url/signalr/hubs'> </script>
+        <script>
+            addToChat('@name', '@chatId', '@ChatConfig.ChatConfigurationClass.GetConfig().Service.Url')
+        </script>
+
+    }
+
+} 
