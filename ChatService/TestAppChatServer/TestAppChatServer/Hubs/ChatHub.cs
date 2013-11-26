@@ -16,11 +16,10 @@ namespace TestAppChatServer.Hubs
         private readonly IChatApplication _application;
         private readonly bool _saving;
 
-        public string Success()
+        public void Success()
         {
             Clients.Caller.addText();
    
-            return "Sukces!";
         }
 
         public void Connect(string userName, string userId)
@@ -34,23 +33,16 @@ namespace TestAppChatServer.Hubs
 
                 if (_saving) _application.AddEmployee(employee);
 
-                Clients.All.onConnected(ConnectedUsers).Wait();
+               Clients.All.onConnected(ConnectedUsers);
             }
             else
             {
                 var user = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == userId);
                 if (user != null)
                     user.ConnectionId = Context.ConnectionId;
-                Clients.Caller.onConnected(ConnectedUsers).Wait();
+                Clients.Caller.onConnected(ConnectedUsers);
             }
         }
-
-        public void Send(string message)
-        {
-            Clients.All.send(message);
-        }
-
-
 
         public override Task OnDisconnected()
         {
@@ -67,8 +59,7 @@ namespace TestAppChatServer.Hubs
         }
 
         public void SendMessage(string toUserId, string message)
-        {        
-            
+        {                
                 var fromUserId = Context.ConnectionId;
 
                 var toUser = ConnectedUsers.FirstOrDefault(x => x.EmployeeId == toUserId);
@@ -82,8 +73,7 @@ namespace TestAppChatServer.Hubs
                     
                     Clients.Caller.addMessage(_saving, toUserId, toUser.Name, "Ja", message, date.ToShortTimeString());
                     Clients.Client(toUser.ConnectionId).addMessage(_saving, fromUser.EmployeeId, fromUser.Name, fromUser.Name, message, date.ToShortTimeString());
-                }
-            
+                }          
         }
 
         public async Task GetHistory(string toUserId)
@@ -99,7 +89,7 @@ namespace TestAppChatServer.Hubs
                 
                 foreach (IMessage m in messages)
                 {
-                    await Clients.Caller.addMessage(toUserId, m.SenderName, m.Content, GetDateTimeString(m.Date));
+                    await Clients.Caller.addMessage(_saving, toUserId, m.SenderName, m.Content, GetDateTimeString(m.Date));
                 }
             }
         }
@@ -111,11 +101,5 @@ namespace TestAppChatServer.Hubs
             return String.Format("{0}r.,{1}", date.ToString("dd.MM.yyyy"), date.ToShortTimeString());
         }
 
-        public Employee GetLastUser()
-        {
-            var index = ConnectedUsers.Count - 1;
-
-            return index > -1 ? ConnectedUsers[index] : null;
-        }
     }    
 }

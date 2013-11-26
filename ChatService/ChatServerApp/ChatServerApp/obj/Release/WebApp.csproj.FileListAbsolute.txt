@@ -1,0 +1,109 @@
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\WebApp.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\WebApp.pdb
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\Microsoft.AspNet.SignalR.Core.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\Microsoft.AspNet.SignalR.SystemWeb.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\Microsoft.Owin.Cors.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\Microsoft.Owin.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\Microsoft.Owin.Security.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\Microsoft.Web.Infrastructure.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\MongoDB.Bson.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\MongoDB.Driver.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\Newtonsoft.Json.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\Owin.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\System.Web.Cors.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\Microsoft.AspNet.SignalR.Core.xml
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\Microsoft.AspNet.SignalR.SystemWeb.xml
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\Microsoft.Owin.xml
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\Microsoft.Owin.Cors.xml
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\Microsoft.Owin.Security.xml
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\MongoDB.Bson.xml
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\MongoDB.Driver.xml
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\Newtonsoft.Json.xml
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\obj\Release\WebApp.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\obj\Release\WebApp.pdb
+C:\proj\ChatService\WebApp\WebApp\bin\WebApp.dll.config
+C:\proj\ChatService\WebApp\WebApp\bin\WebApp.dll
+C:\proj\ChatService\WebApp\WebApp\bin\WebApp.pdb
+C:\proj\ChatService\WebApp\WebApp\bin\Microsoft.AspNet.SignalR.Core.dll
+C:\proj\ChatService\WebApp\WebApp\bin\Microsoft.AspNet.SignalR.SystemWeb.dll
+C:\proj\ChatService\WebApp\WebApp\bin\Microsoft.Owin.Cors.dll
+C:\proj\ChatService\WebApp\WebApp\bin\Microsoft.Owin.dll
+C:\proj\ChatService\WebApp\WebApp\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\proj\ChatService\WebApp\WebApp\bin\Microsoft.Owin.Security.dll
+C:\proj\ChatService\WebApp\WebApp\bin\Microsoft.Web.Infrastructure.dll
+C:\proj\ChatService\WebApp\WebApp\bin\MongoDB.Bson.dll
+C:\proj\ChatService\WebApp\WebApp\bin\MongoDB.Driver.dll
+C:\proj\ChatService\WebApp\WebApp\bin\Newtonsoft.Json.dll
+C:\proj\ChatService\WebApp\WebApp\bin\Notifications.Base.dll
+C:\proj\ChatService\WebApp\WebApp\bin\Notifications.BusiessLogic.dll
+C:\proj\ChatService\WebApp\WebApp\bin\Notifications.DataAccessLayer.dll
+C:\proj\ChatService\WebApp\WebApp\bin\Owin.dll
+C:\proj\ChatService\WebApp\WebApp\bin\System.Web.Cors.dll
+C:\proj\ChatService\WebApp\WebApp\bin\Microsoft.AspNet.SignalR.Core.xml
+C:\proj\ChatService\WebApp\WebApp\bin\Microsoft.AspNet.SignalR.SystemWeb.xml
+C:\proj\ChatService\WebApp\WebApp\bin\Microsoft.Owin.xml
+C:\proj\ChatService\WebApp\WebApp\bin\Microsoft.Owin.Cors.xml
+C:\proj\ChatService\WebApp\WebApp\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\proj\ChatService\WebApp\WebApp\bin\Microsoft.Owin.Security.xml
+C:\proj\ChatService\WebApp\WebApp\bin\MongoDB.Bson.xml
+C:\proj\ChatService\WebApp\WebApp\bin\MongoDB.Driver.xml
+C:\proj\ChatService\WebApp\WebApp\bin\Newtonsoft.Json.xml
+C:\proj\ChatService\WebApp\WebApp\obj\Release\WebApp.dll
+C:\proj\ChatService\WebApp\WebApp\obj\Release\WebApp.pdb
+C:\proj\ChatService\WebApp\WebApp\obj\Release\WebApp.csprojResolveAssemblyReference.cache
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\WebApp.dll.config
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\Notifications.Base.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\Notifications.BusiessLogic.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\Notifications.DataAccessLayer.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\Raize.CodeSiteLogging.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\ZOSHelpers.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\ZOSTrace.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\ZOSTrace.Listener.CodeSite.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\ZOSTrace.Listeners.Base.dll
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\ZOSHelpers.pdb
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\ZOSTrace.pdb
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\ZOSTrace.Listener.CodeSite.pdb
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\bin\ZOSTrace.Listeners.Base.pdb
+D:\git\praktykanci\chat - Ewelina Zemanek\ChatService\WebApp\WebApp\obj\Release\WebApp.csprojResolveAssemblyReference.cache
+C:\proj\ChatService\WebApp\WebApp\bin\Raize.CodeSiteLogging.dll
+C:\proj\ChatService\WebApp\WebApp\bin\ZOSHelpers.dll
+C:\proj\ChatService\WebApp\WebApp\bin\ZOSTrace.dll
+C:\proj\ChatService\WebApp\WebApp\bin\ZOSTrace.Listener.CodeSite.dll
+C:\proj\ChatService\WebApp\WebApp\bin\ZOSTrace.Listeners.Base.dll
+C:\proj\ChatService\ChatServerApp\WebApp\bin\ChatServerApp.dll.config
+C:\proj\ChatService\ChatServerApp\WebApp\bin\ChatServerApp.dll
+C:\proj\ChatService\ChatServerApp\WebApp\bin\ChatServerApp.pdb
+C:\proj\ChatService\ChatServerApp\WebApp\bin\Microsoft.AspNet.SignalR.Core.dll
+C:\proj\ChatService\ChatServerApp\WebApp\bin\Microsoft.AspNet.SignalR.SystemWeb.dll
+C:\proj\ChatService\ChatServerApp\WebApp\bin\Microsoft.Owin.Cors.dll
+C:\proj\ChatService\ChatServerApp\WebApp\bin\Microsoft.Owin.dll
+C:\proj\ChatService\ChatServerApp\WebApp\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\proj\ChatService\ChatServerApp\WebApp\bin\Microsoft.Owin.Security.dll
+C:\proj\ChatService\ChatServerApp\WebApp\bin\Microsoft.Web.Infrastructure.dll
+C:\proj\ChatService\ChatServerApp\WebApp\bin\MongoDB.Bson.dll
+C:\proj\ChatService\ChatServerApp\WebApp\bin\MongoDB.Driver.dll
+C:\proj\ChatService\ChatServerApp\WebApp\bin\Newtonsoft.Json.dll
+C:\proj\ChatService\ChatServerApp\WebApp\bin\Notifications.Base.dll
+C:\proj\ChatService\ChatServerApp\WebApp\bin\Notifications.BusiessLogic.dll
+C:\proj\ChatService\ChatServerApp\WebApp\bin\Notifications.DataAccessLayer.dll
+C:\proj\ChatService\ChatServerApp\WebApp\bin\Owin.dll
+C:\proj\ChatService\ChatServerApp\WebApp\bin\Raize.CodeSiteLogging.dll
+C:\proj\ChatService\ChatServerApp\WebApp\bin\System.Web.Cors.dll
+C:\proj\ChatService\ChatServerApp\WebApp\bin\ZOSHelpers.dll
+C:\proj\ChatService\ChatServerApp\WebApp\bin\ZOSTrace.dll
+C:\proj\ChatService\ChatServerApp\WebApp\bin\ZOSTrace.Listener.CodeSite.dll
+C:\proj\ChatService\ChatServerApp\WebApp\bin\ZOSTrace.Listeners.Base.dll
+C:\proj\ChatService\ChatServerApp\WebApp\bin\Microsoft.AspNet.SignalR.Core.xml
+C:\proj\ChatService\ChatServerApp\WebApp\bin\Microsoft.AspNet.SignalR.SystemWeb.xml
+C:\proj\ChatService\ChatServerApp\WebApp\bin\Microsoft.Owin.xml
+C:\proj\ChatService\ChatServerApp\WebApp\bin\Microsoft.Owin.Cors.xml
+C:\proj\ChatService\ChatServerApp\WebApp\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\proj\ChatService\ChatServerApp\WebApp\bin\Microsoft.Owin.Security.xml
+C:\proj\ChatService\ChatServerApp\WebApp\bin\MongoDB.Bson.xml
+C:\proj\ChatService\ChatServerApp\WebApp\bin\MongoDB.Driver.xml
+C:\proj\ChatService\ChatServerApp\WebApp\bin\Newtonsoft.Json.xml
+C:\proj\ChatService\ChatServerApp\WebApp\obj\Release\WebApp.csprojResolveAssemblyReference.cache
+C:\proj\ChatService\ChatServerApp\WebApp\obj\Release\ChatServerApp.dll
+C:\proj\ChatService\ChatServerApp\WebApp\obj\Release\ChatServerApp.pdb

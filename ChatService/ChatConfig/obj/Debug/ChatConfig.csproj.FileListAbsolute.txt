@@ -1,0 +1,4 @@
+C:\proj\ChatService\MvcApp1\ChatConfig\bin\Debug\ChatConfig.dll
+C:\proj\ChatService\MvcApp1\ChatConfig\bin\Debug\ChatConfig.pdb
+C:\proj\ChatService\MvcApp1\ChatConfig\obj\Debug\ChatConfig.dll
+C:\proj\ChatService\MvcApp1\ChatConfig\obj\Debug\ChatConfig.pdb

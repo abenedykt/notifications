@@ -23,8 +23,9 @@ namespace TestAppChatServer.Tests
         public Mock<IPrincipal> mockUser = new Mock<IPrincipal>();
         public IHubPipelineInvoker _pipelineInvoker ;
         public Mock<IRequest> mockRequest = new Mock<IRequest>();
-        const string connectionId = "1234";
-        const string hubName = "ChatHub";
+
+        string connectionId = "12345678";
+        string hubName = "ChatHub";
        
         public TestableChatHub()
         {           
