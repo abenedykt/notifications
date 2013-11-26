@@ -65,13 +65,13 @@
       <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Notifications.Base">
-      <HintPath>..\..\..\..\Users\zos-srv\Desktop\NuGet's\Biblioteki\Notifications.Base.dll</HintPath>
+      <HintPath>..\..\..\NuGet's\Biblioteki\Notifications.Base.dll</HintPath>
     </Reference>
     <Reference Include="Notifications.BusiessLogic">
-      <HintPath>..\..\..\..\Users\zos-srv\Desktop\NuGet's\Biblioteki\Notifications.BusiessLogic.dll</HintPath>
+      <HintPath>..\..\..\NuGet's\Biblioteki\Notifications.BusiessLogic.dll</HintPath>
     </Reference>
     <Reference Include="Notifications.DataAccessLayer">
-      <HintPath>..\..\..\..\Users\zos-srv\Desktop\NuGet's\Biblioteki\Notifications.DataAccessLayer.dll</HintPath>
+      <HintPath>..\..\..\NuGet's\Biblioteki\Notifications.DataAccessLayer.dll</HintPath>
     </Reference>
     <Reference Include="Owin">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>

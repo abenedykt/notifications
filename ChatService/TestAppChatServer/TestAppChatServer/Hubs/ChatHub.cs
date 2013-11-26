@@ -12,7 +12,7 @@ namespace TestAppChatServer.Hubs
 {
     public class ChatHub : Hub
     {
-        private static readonly List<Employee> ConnectedUsers = new List<Employee>();
+        protected static  List<Employee> ConnectedUsers = new List<Employee>();
         private readonly IChatApplication _application;
         private readonly bool _saving;
 
@@ -53,7 +53,7 @@ namespace TestAppChatServer.Hubs
             if (item != null)
             {            
                 ConnectedUsers.Remove(item);
-                Clients.All.onUserDisconnected(item.EmployeeId, ConnectedUsers).Wait();
+                Clients.All.onUserDisconnected(item.EmployeeId, ConnectedUsers);
             }
             return base.OnDisconnected();
         }

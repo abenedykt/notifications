@@ -2,6 +2,7 @@
 using Microsoft.AspNet.SignalR.Configuration;
 using Microsoft.AspNet.SignalR.Hubs;
 using Moq;
+using Notifications.BusiessLogic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace TestAppChatServer.Tests
         public IHubPipelineInvoker _pipelineInvoker ;
         public Mock<IRequest> mockRequest = new Mock<IRequest>();
 
-        string connectionId = "12345678";
+        public string connectionId = "12345678";
         string hubName = "ChatHub";
        
         public TestableChatHub()
@@ -37,6 +38,11 @@ namespace TestAppChatServer.Tests
          
            Clients = new HubConnectionContext(_pipelineInvoker, mockConnection.Object, hubName, connectionId, tracker);
            Context = new HubCallerContext(mockRequest.Object, connectionId);
+        }
+
+        public void DeleteAllConnectedUsers()
+        {
+            ConnectedUsers = new List<Employee>();
         }
     }
 

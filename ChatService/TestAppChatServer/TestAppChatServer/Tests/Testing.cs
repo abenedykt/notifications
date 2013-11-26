@@ -200,7 +200,6 @@ namespace TestAppChatServer.Tests
             Assert.True(sendCalled2);
         }
 
-
         ////HubsAreMockableViaType
         [Theory]
         [InlineData("Adam Kanarek", "akanarek", "hello world!!")]
