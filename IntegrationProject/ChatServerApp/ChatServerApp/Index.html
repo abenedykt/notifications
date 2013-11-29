@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="Scripts/jquery-2.0.3.js" type="text/javascript"> </script>
+    <script src="Scripts/jquery.signalR-2.0.0.js"> </script>
+    <script src="signalr/hubs"> </script>
+
+    <script type="text/javascript">
+        $(function () {
+
+           var chatHub = $.connection.chatHub;
+           
+           chatHub.client.addText = function () {
+               $('#test').text("ChatHub connected successfully.");
+           }
+
+            $.connection.hub.start().done(function () {  
+                chatHub.server.success();
+            });
+        });
+    </script>
+</head>
+<body>
+   <div>
+       <p id="test"></p>
+   </div>
+</body>
+</html>
+

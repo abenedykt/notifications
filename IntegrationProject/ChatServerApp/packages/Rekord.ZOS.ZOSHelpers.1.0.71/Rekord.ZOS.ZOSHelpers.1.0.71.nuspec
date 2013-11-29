@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Rekord.ZOS.ZOSHelpers</id>
+    <version>1.0.71</version>
+    <authors>Rekord SI</authors>
+    <owners>Rekord SI</owners>
+    <licenseUrl>http://www.rekord.com.pl</licenseUrl>
+    <projectUrl>http://www.rekord.com.pl</projectUrl>
+    <iconUrl>http://www.rekord.com.pl/</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Pakiet rozszerzeń działu ZOS</description>
+    <releaseNotes>Pierwsza wersja</releaseNotes>
+    <copyright>Copyright 2012</copyright>
+    <tags>Zos Dos ZosHelpers</tags>
+    <references>
+      <reference file="ZOSHelpers.dll" />
+      <reference file="ZOSTrace.dll" />
+      <reference file="ZOSTrace.Listener.CodeSite.dll" />
+      <reference file="ZOSTrace.Listeners.Base.dll" />
+      <reference file="Raize.CodeSiteLogging.dll" />
+    </references>
+  </metadata>
+</package>

@@ -1,7 +1,7 @@
 ﻿var noteHub;
 var connection;
 
-function addTouserOfNotes(noteName, noteId, noteUrl)
+function addUserToNotes(noteName, noteId, noteUrl)
 {
     sessionStorage.setItem("name", noteName);
     sessionStorage.setItem("id", noteId);
@@ -27,6 +27,7 @@ function addClientMethods(noteHub) {
                 OnlineUsers(allUsers.length-1);
             }   
     });
+
     noteHub.on('onUserDisconnected', function (userId, allUsers) {
 
         $("#ActiveUsersNotifications").empty();
@@ -40,6 +41,7 @@ function addClientMethods(noteHub) {
         var height = $('#' + ctrId).find('#divMessages')[0].scrollHeight;
         $('#' + ctrId).find('#divMessages').scrollTop(height);;
     });
+
     noteHub.on('clearHistoryOfSendNotifications', function () {
         $('#sendNotifications').empty();
     });

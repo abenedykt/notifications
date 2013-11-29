@@ -19,7 +19,7 @@ namespace Notifications.Mvc.Hubs
             var mongoConnection = new MongoStringConnection
             {
                 DatabaseName = "chat",
-                DatabaseUrl = "mongodb://localhost"
+                DatabaseUrl = "mongodb://emp:12345@192.168.2.122:27017/chat"
             };
 
             _application = new ChatApplication(new Factory(new MongoRepository(mongoConnection)));
