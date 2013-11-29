@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+name : @User.Identity.Name <br />
+
+auth type : @User.Identity.AuthenticationType<br />
+
+isauthenticated: @User.Identity.IsAuthenticated<br />
+
+ @if (ViewData.ContainsKey("me")) { <div>Auth Provider: @ViewBag.me.AuthProvider;</div> }
+
+@{
+        var cookie = new MvcApplication1.Helpers.AuthCookieProvider();
+        var user = cookie.GetAuthenticatedUserData(Request);
+
+        var username = user.UserName;
+
+        @Chat.Login(username, username.Replace(' ','a'));
+}
+
+@Html.ActionLink("wyloguj", "Logout", "Account")

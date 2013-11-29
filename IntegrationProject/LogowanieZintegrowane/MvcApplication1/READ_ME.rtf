@@ -1,0 +1,152 @@
+{\rtf1\ansi\ansicpg1250\deff0\nouicompat\deflang1045{\fonttbl{\f0\fnil\fcharset0 Calibri;}{\f1\fnil\fcharset238 Calibri;}{\f2\fnil Consolas;}{\f3\fnil\fcharset238 Consolas;}{\f4\fnil\fcharset2 Symbol;}}
+{\colortbl ;\red0\green0\blue255;\red255\green255\blue255;\red0\green0\blue0;\red43\green145\blue175;\red163\green21\blue21;}
+{\*\generator Riched20 6.2.9200}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang1033 1. Kr\'f3tki opis.\par
+\par
+Logowanie zintegrowane umo\f1\lang1045\'bfliwia autentykacj\'ea poprzez Facebooka,Google+ oraz Twitter'a. Zawiera gotowe statyczne klasy FacebookWrapper, GooglePlusWrapper oraz TwitterWrapper. Dzia\'b3anie opiera si\'ea na zasadzie przekierowania na stron\'ea logowania danego portalu spo\'b3eczno\'9cciowego oraz oczekiwania na wiadomo\'9c\'e6 zwrotn\'b9 (Callback). Informacj\'b9 zwrotn\'b9 jest Access Token, kt\f0\lang1033\'f3ry umo\f1\lang1045\'bfliwia nam komunikacj\'ea z portalami w celu np. otrzymania informacji o u\'bfytkowniku. Informacje o zautoryzowanym u\'bfytkowniku wraz z jego Access Tokenem przechowywane s\'b9 w AuthCookie.\par
+\par
+\par
+2. Potrzebne dane przed implementacj\'b9.\par
+\par
+Aby mo\'bfliwe by\'b3o korzystanie z zewn\'eatrznej autentykacji nale\'bfy utworzy\'e6 now\'b9 aplikacj\'ea na deweloperskim koncie Facebooka/Google+/Twitter'a. Tam przyznane zostan\'b9 takie informacje jak ClientID i ClientSecret (ci\'b9gi znak\f0\lang1033\'f3w), kt\'f3re s\f1\lang1045\'b9 niezb\'eadne do poprawnego dzia\'b3ania logowania. W tym samym miejscu nale\'bfy r\f0\lang1033\'f3wnie\f1\lang1045\'bf ustawi\'e6 adres hosta (najlepiej wraz z portem), z kt\f0\lang1033\'f3rego dokonywane jest przekierowanie na zewn\f1\lang1045\'eatrzn\'b9 stron\'ea logowania.\par
+Uwagi:\par
+Twitter nie pozwala na u\'bfycie nazwy "localhost" jako adresu aplikacji. Zaleca si\'ea u\'bfycie adresu 127.0.0.1 albo rzeczywistej nazwy strony.\par
+\par
+\par
+3. Opis klas\par
+a) FacebookWrapper- zawiera metody umo\'bfliwiaj\'b9ce komunikacj\'ea z Facebookiem w celu autentykacji.\par
+
+\pard{\pntext\f4\'B7\tab}{\*\pn\pnlvlblt\pnf4\pnindent0{\pntxtb\'B7}}\fi-360\li720\sa200\sl276\slmult1 Najwa\'bfniejsz\'b9 bibliotek\'b9 wykorzystywan\'b9 przez t\'ea klas\'ea jest Facebook C# SDK (obecna wersja 6.0.10.0) zawieraj\'b9ca namespace Facebook. Wykorzystywane s\'b9 r\f0\lang1033\'f3wnie\f1\lang1045\'bf System.Web oraz System.Web.Mvc. \par
+
+\pard\sa200\sl276\slmult1 Metody:\par
+- \cf1\highlight2\f2\fs19 public\cf3  \cf1 static\cf3  \cf1 string\cf3  LogIn(\cf4 HttpRequestBase\cf3  Request, \cf4 UrlHelper\cf3  Url)\cf0\highlight0\f1\fs22\par
+Zwraca unikalny (dla naszej aplikacji) adres URL do strony logowania Facebooka. Do jego stworzenia s\'b9 wykorzystywane m. in. ClientID i ClientSecret. Zawiera on r\'f3wnie\'bf adres strony (RedirectUri), do kt\'f3rej nast\'b9pi przekierowanie po udanym logowaniu. Typ odpowiedzi od serwera jest ustawiony na "code", co oznacza, \'bfe dostajemy w informacji zwrotnej unikalny kod autoryzacyjny (jest on przekazywany jako parametr do metody wywo\'b3ywanej przy otrzymaniu odpowiedzi).\par
+\cf3\highlight2 HttpRequestBase, UrlHelper Url- obiekty potrzebne do utworzenia RedirectUri\f0\lang1033\par
+\cf0\highlight0\f1\lang1045 - \cf1\highlight2\f2\fs19 public\cf3  \cf1 static\cf3  \cf1 dynamic\cf3  HandleFacebookCallback(\cf1 string\cf3  code, \cf4 HttpResponseBase\cf3  Response, \cf4 HttpRequestBase\cf3  Request, \cf4 UrlHelper\cf3  Url)\par
+\f0\fs22\lang1033 Zwraca dynamiczny obiekt zawieraj\f1\lang1045\'b9\f0\lang1033 cy informacje o u\f1\lang1045\'bf\f0\lang1033 ytkowniku, kt\f1\lang1045\'f3\f0\lang1033 ry w\f1\lang1045\'b3\f0\lang1033 a\f1\lang1045\'9c\f0\lang1033 nie si\f1\lang1045\'ea\f0\lang1033  zalogowa\f1\lang1045\'b3\f0\lang1033  do Facebooka.\f1\lang1045  Metoda ta najpierw wysy\'b3a zapytanie do Facebooka w celu uzyskania Access Tokena, p\'f3\'9fniej pobiera informacje o zalogowanym u\'bfytkowniku a na ko\'f1cu zapisuje AuthCookie, zawieraj\'b9ce informacje o u\'bfytkowniku.\par
+string code- kod otrzymany zaraz po zalogowaniu na stronie Facebooka,\par
+HttpResponseBase Response- miejsce zapisu AuthCookie,\par
+HttpRequestBase Request, UrlHelper Url- obiekty potrzebne do utworzenia RedirectUri.\f0\lang1033\par
+\cf0\f3\fs19\lang1045 -\cf1  \f2 public\cf3  \cf1 static\cf3  \cf1 string\cf3  LogOut(\cf4 HttpRequestBase\cf3  Request)\par
+\f1\fs22 Zwraca adres, kt\'f3ry wyloguje nas z Facebook'a a nast\'eapnie przekieruje nas na stron\'ea domow\'b9 aplikacji. Metoda usuwa zapami\'eatane AuthCookie oraz wylogowuje u\'bfytkownika z jego konta na Facebooku.\par
+HttpRequestBase Request- potrzebne do utworzenia adresu wylogowania oraz pobrania i usuni\'eacia zapami\'eatanego AuthCookie.\par
+\par
+Uwagi:\par
+Wewn\'eatrzna klasa prywatna CredentialsAndVariables zawiera pola z danymi niezb\'eadnymi do dzia\'b3ania logowania. \par
+ClientID, ClientSecret- stringi przyznane dla aplikacji przez Facebooka.\par
+LogOutRedirect- adres przekierowania po wylogowaniu.\par
+CallbackAction- nazwa akcji z kontrolera wywo\'b3ywanej jako callback po zalogowaniu.\par
+Scope- zestaw dzia\'b3a\'f1, na jakie otrzyma pozwolenie aplikacja (np. dost\'eap do listy znajomych, pisanie na osi czasu itp. Lista scope dost\'eapna na stronach deweloperskich Facebooka).\par
+\par
+b) GooglePlusWrapper\cf0\highlight0 - zawiera metody umo\'bfliwiaj\'b9ce komunikacj\'ea z Google+ w celu autentykacji.\par
+
+\pard{\pntext\f4\'B7\tab}{\*\pn\pnlvlblt\pnf4\pnindent0{\pntxtb\'B7}}\fi-360\li720\sa200\sl276\slmult1 W celach autentykacji korzystamy z zestawu bibliotek DotNetOpenAuth (obecna wersja 4.0.0.11165 oraz 4.3.0.0) oraz bibliotek Google.Apis (WA\'afNE! wykorzystujemy wersj\'ea 0.9.4, kt\'f3ra nie jest najnowsz\'b9 implementacj\'b9 Google Api - nowsze wersje znacznie si\'ea r\'f3\'bfni\'b9, nie wszystkie cz\'ea\'9cci tej biblioteki wyst\'eapuj\'b9 w danej wersji, co powoduje problemy kompilacyjne). Wykorzystujemy bibliotek\'ea RestSharp (obecna wersja 104.3.3.0) w celu pobrania informacji o u\'bfytkowniku.\par
+
+\pard\sa200\sl276\slmult1\cf3\highlight2 Metody:\par
+\cf1\f2\fs19 public\cf3  \cf1 static\cf3  \cf1 string\cf3  LogIn()\par
+\f1\fs22 Zwraca adres do strony domowej naszej aplikacji. Metoda tworzy serwis logowania (_service) w tym obiekt dokonuj\'b9cy autentykacji (do kt\'f3rego przekazywany jest ClientId oraz ClientSecret). Wraz z pr\'f3b\'b9 odwo\'b3ania si\'ea do konta u\'bfytkownika zostajemy przekierowani na stron\'ea logowania do konta Google+. \f3\fs19\par
+\f2\par
+\cf1 public\cf3  \cf1 static\cf3  \cf1 string\cf3  HandleGoogleCallback(\cf4 HttpResponseBase\cf3  Response)\par
+\f1\fs22 Zwraca adres do strony domowej naszej aplikacji. Z wykorzystaniem Access Token'a, za po\'9crednictwem biblioteki RestSharp wysy\'b3amy zapytanie do Google+, kt\'f3re zwraca string w formacie JSON z informacjami o u\'bfytkowniku autentykowanym przez Access Token'a. Informacje te s\'b9 zapisywane w AuthCookie analogicznie jak w przypadku Facebook'a.\par
+HttpResponseBase Response -\f3\fs19  \f1\fs22 miejsce zapisu AuthCookie.\f2\fs19\par
+\par
+\cf1 public\cf3  \cf1 static\cf3  \cf1 string\cf3  LogOut()\par
+\f1\fs22 Zwraca adres, kt\'f3ry wyloguje nas z Google+ a nast\'eapnie przekieruje nas na stron\'ea domow\'b9 aplikacji. Metoda usuwa zapami\'eatane AuthCookie oraz wylogowuje u\'bfytkownika z jego konta na Google+.\par
+\par
+Uwagi:\par
+Wewn\'eatrzna klasa prywatna CredentialsAndVariables zawiera pola z danymi niezb\'eadnymi do dzia\'b3ania logowania. \par
+ClientID, ClientSecret- stringi przyznane dla aplikacji przez Google.\par
+LogOutRedirect- adres przekierowania po wylogowaniu.\par
+CallbackActionUrl- adres wywo\'b3ywany jako callback po zalogowaniu.\par
+ReturnHome - adres strony domowej aplikacji.\par
+\par
+\par
+\cf0\highlight0 c) TwitterWrapper- zawiera metody umo\'bfliwiaj\'b9ce komunikacj\'ea z Twitter'em w celu autentykacji.\par
+
+\pard{\pntext\f4\'B7\tab}{\*\pn\pnlvlblt\pnf4\pnindent0{\pntxtb\'B7}}\fi-360\li720\sa200\sl276\slmult1 Najwa\'bfniejsz\'b9 bibliotek\'b9 wykorzystywan\'b9 przez t\'ea klas\'ea jest TweetSharp(obecna nieoficjalna wersja 2.3.1.2) zawieraj\'b9ca namespace TweetSharp. Wykorzystywane s\'b9 r\f0\lang1033\'f3wnie\f1\lang1045\'bf System.Web oraz System.Web.Mvc. \par
+
+\pard\sa200\sl276\slmult1 Metody:\par
+- \cf1\highlight2\f3\fs19 internal\cf3\f2  \cf1 static\cf3  \cf1 string\cf3  LogIn()\cf0\highlight0\f1\fs22\par
+Zwraca unikalny (dla naszej aplikacji) adres URL do strony logowania Twitter'a. Do jego stworzenia s\'b9 wykorzystywane m. in. ClientID i ClientSecret. Ustawia RequestToken'a kt\'f3ry b\'eadzie wykorzystywany do otrzymania AccessToken'a. Otrzymujemy OAuthVerifier kt\'f3ry weryfikuje u\'bfytkownika.\par
+\cf3\highlight2\f0\lang1033\par
+\cf0\highlight0\f1\lang1045 - \cf1\highlight2\f3\fs19 internal\cf3\f2  \cf1 static\cf3  \cf1\f3 string\cf3\f2  Handle\f3 Twitter\f2 Callback(\cf4 HttpResponseBase\cf3  Response, \cf4 HttpRequestBase\cf3  Request)\par
+\f1\fs22 Metoda ta najpierw wysy\'b3a zapytanie do Twitter'a w celu uzyskania Access Tokena, p\'f3\'9fniej pobiera informacje o zalogowanym u\'bfytkowniku a na ko\'f1cu zapisuje AuthCookie, zawieraj\'b9ce informacje o u\'bfytkowniku.\par
+HttpResponseBase Response- miejsce zapisu AuthCookie,\par
+HttpRequestBase Request- wykorzystywany do pobrania OAuthVerifier'a.\f0\lang1033\par
+\cf0\f3\fs19\lang1045 -\cf1  internal\cf3\f2  \cf1 static\cf3  \cf1 string\cf3  LogOut()\par
+\f1\fs22 Zwraca adres, kt\'f3ry przekieruje nas na stron\'ea domow\'b9 aplikacji. Metoda usuwa zapami\'eatane AuthCookie oraz wylogowuje u\'bfytkownika z aplikacji.\par
+\par
+Uwagi:\par
+Wewn\'eatrzna klasa prywatna CredentialsAndVariables zawiera pola z danymi niezb\'eadnymi do dzia\'b3ania logowania. \par
+ClientID, ClientSecret- stringi przyznane dla aplikacji przez Twittera.\par
+LogOutRedirect- adres powrotny po wylogowaniu z aplikacji.\par
+CallbackAction- nazwa akcji, do kt\'f3rej nastapi powr\'f3t ze strony logowania Twittera.\par
+!!!Metoda LogOut nie wylogowuje u\'bfytkownika z jego konta na Twitter'rze.\par
+\par
+\par
+4. Opis dzia\'b3ania filtra autoryzuj\'b9cego dost\'eap do aplikacji.\par
+Klasa public class CustomAuthAttribute : AuthorizeAttribute jest odpowiedzialna za filtrowanie u\'bfytkownik\'f3w, kt\'f3rzy zalogowali si\'ea pomy\'9clnie przez jeden z portali spo\'b3eczno\'9cciowych, lecz nie powinni uzyska\'e6 autoryzacji w aplikacji.\par
+Metody filtra s\'b9 wywo\'b3ywane przy ka\'bfdym odwo\'b3aniu do strony. Jest za to odpowiedzialna metoda OnAuthorization.\par
+Metod\'b9 AuthorizeCore sprawdza si\'ea, czy u\'bfytkownik powinien zosta\'e6 zautoryzowany i mie\'e6 dost\'eap do aplikacji. Na pocz\'b9tku odczytywane s\'b9 dane z AuthCookie. Nast\'eapnie powinna zosta\'e6 zaimplementowana w\'b3asna obs\'b3uga autoryzacji.  \par
+Metoda HandleUnauthorizedRequest jest wywo\'b3ywana, gdy do aplikacji pr\'f3bowa\'b3 si\'ea zalogowa\'e6 nieautoryzowany u\'bfytkownik. Je\'bfeli u\'bfytkownik jest niezalogowany, wtedy nast\'eapuje przekierowanie na stron\'ea logowania. Je\'bfeli natomiast nast\'b9pi\'b3o logowanie poprzez jeden z portali spo\'b3eczno\'9cciowych, a u\'bfytkownik nie zosta\'b3 rozpoznany, wykonywane jest wylogowanie z jego konta.\par
+\par
+5. Przyk\'b3adowa implementacja AccountController'a:\par
+\par
+
+\pard\sl240\slmult1\cf1\f2\fs19 public\cf3  \cf1 class\cf3  \cf4 AccountController\cf3  : \cf4 Controller\cf3\par
+    \{\par
+\f3\tab  \cf1\f2 public\cf3  \cf4 ActionResult\cf3  Twitter()\par
+        \{\par
+            \cf1 return\cf3  Redirect(Helpers.\cf4 TwitterWrapper\cf3 .LogIn());\par
+        \}\par
+\par
+        \cf1 public\cf3  \cf4 ActionResult\cf3  TwitterCallback()\par
+        \{\par
+            \cf1 return\cf3  Redirect(Helpers.\cf4 TwitterWrapper\cf3 .HandleTwitterCallback(Request, Response));\par
+        \}\par
+\par
+        \cf1 public\cf3  \cf4 ActionResult\cf3  Facebook()\par
+        \{\par
+            \cf1 return\cf3  Redirect(Helpers.\cf4 FacebookWrapper\cf3 .LogIn(Request,Url));\par
+        \}\par
+\par
+        \cf1 public\cf3  \cf4 ActionResult\cf3  FacebookCallback(\cf1 string\cf3  code)\par
+        \{\par
+            ViewBag.me = Helpers.\cf4 FacebookWrapper\cf3 .HandleFacebookCallback(code,Response,Request,Url);\par
+            \cf1 return\cf3  RedirectToAction(\cf5 "Index"\cf3 , \cf5 "Home"\cf3 ,ViewBag.me);\par
+        \}\par
+\par
+        \cf1 public\cf3  \cf4 ActionResult\cf3  Google()\par
+        \{\par
+            \cf1 return\cf3  Redirect(\cf4 GooglePlusWrapper\cf3 .LogIn());\par
+        \}\par
+\par
+        \cf1 public\cf3  \cf4 ActionResult\cf3  GoogleCallback()\par
+        \{\par
+            Helpers.\cf4 GooglePlusWrapper\cf3 .HandleGoogleCallback(HttpContext.Response);\par
+            \par
+            \cf1 return\cf3  RedirectToAction(\cf5 "Index"\cf3 , \cf5 "Home"\cf3 );\par
+        \}\par
+\par
+        [\cf4 AllowAnonymous\cf3 ]\par
+        \cf1 public\cf3  \cf4 ActionResult\cf3  Login()\par
+        \{\par
+            \cf1 return\cf3  View();\par
+        \}\par
+\par
+        \cf1 public\cf3  \cf4 ActionResult\cf3  Logout()\par
+        \{\par
+            Helpers.\cf4 AuthCookieProvider\cf3  cookie = \cf1 new\cf3  Helpers.\cf4 AuthCookieProvider\cf3 ();\par
+            Helpers.\cf4 AuthenticatedUserData\cf3  user = cookie.GetAuthenticatedUserData(Request);\par
+            \cf1 if\cf3 (user.AuthProvider==\cf5 "Facebook"\cf3 )\par
+                \cf1 return\cf3  Redirect(Helpers.\cf4 FacebookWrapper\cf3 .LogOut(Request));\par
+            \cf1 if\cf3  (user.AuthProvider == \cf5 "GPlus"\cf3 )\par
+                \cf1 return\cf3  Redirect(Helpers.\cf4 GooglePlusWrapper\cf3 .LogOut());\par
+\f3\tab      \cf1\f2 if\cf3  (user.AuthProvider == \cf5 "Twitter"\cf3 )\par
+                \cf1 return\cf3  Redirect(Helpers.\cf4 TwitterWrapper\cf3 .LogOut());\par
+\par
+            \cf1 return\cf3  Redirect(\cf5 "/Home/Index"\cf3 );   \par
+        \}\par
+   \}\cf0\highlight0\f0\fs22\lang1033\par
+}
+ 
